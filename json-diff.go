@@ -81,7 +81,7 @@ func compare_map(path []any, anyMap1 any, anyMap2 any) []map[string]any {
 		_, ok := map1[key]
 		if !ok {
 			diff = append(diff, map[string]any{
-				"path":      append(path, key),
+				"path":       append(path, key),
 				"rightValue": map2[key],
 			})
 		}
