@@ -65,8 +65,8 @@ func compare_map(path []interface{}, anyMap1 interface{}, anyMap2 interface{}) [
 	map2 := anyMap2.(map[string]interface{})
 	diff := []map[string]interface{}{}
 	for key, _ := range map1 {
-		_, ok := map2[key]
-		if ok {
+		_, keyInMap2 := map2[key]
+		if keyInMap2 {
 			diff = append(diff, compare_object(append(path, key), map1[key], map2[key])...)
 		} else {
 			diff = append(diff, map[string]interface{}{
@@ -76,8 +76,8 @@ func compare_map(path []interface{}, anyMap1 interface{}, anyMap2 interface{}) [
 		}
 	}
 	for key, _ := range map2 {
-		_, ok := map1[key]
-		if !ok {
+		_, keyInMap1 := map1[key]
+		if !keyInMap1 {
 			diff = append(diff, map[string]interface{}{
 				"path":       append(path, key),
 				"rightValue": map2[key],
@@ -87,7 +87,7 @@ func compare_map(path []interface{}, anyMap1 interface{}, anyMap2 interface{}) [
 	return diff
 }
 
-func compare_object(path []interface{}, json1 interface{}, json2 interface{}) []map[string]interface{} {
+func compare_object(path []interface{}, object1 interface{}, object2 interface{}) []map[string]interface{} {
 	m := map[reflect.Kind]func([]interface{}, interface{}, interface{}) []map[string]interface{}{
 		reflect.Float64: compare_simple,
 		reflect.Bool:    compare_simple,
@@ -98,30 +98,30 @@ func compare_object(path []interface{}, json1 interface{}, json2 interface{}) []
 	var type1 interface{}
 	var type2 interface{}
 
-	if json1 == nil {
+	if object1 == nil {
 		type1 = nil
 	} else {
-		type1 = reflect.TypeOf(json1).Kind()
+		type1 = reflect.TypeOf(object1).Kind()
 	}
 
-	if json2 == nil {
+	if object2 == nil {
 		type2 = nil
 	} else {
-		type2 = reflect.TypeOf(json2).Kind()
+		type2 = reflect.TypeOf(object2).Kind()
 	}
 
 	if type1 == type2 {
 		if type1 == nil {
                 return []map[string]interface{}{}
             } else {
-                return m[type1.(reflect.Kind)](path, json1, json2)
+                return m[type1.(reflect.Kind)](path, object1, object2)
             }
         } else {
             return []map[string]interface{}{
 			{
 				"path":       path,
-				"leftValue":  json1,
-				"rightValue": json2,
+				"leftValue":  object1,
+				"rightValue": object2,
 			},
 		}
 	}
@@ -139,15 +139,15 @@ func main() {
 	file2, err := ioutil.ReadFile(os.Args[2])
 	check(err)
 
-	var json1 interface{}
-	var json2 interface{}
-	err = json.Unmarshal(file1, &json1)
+	var object1 interface{}
+	var object2 interface{}
+	err = json.Unmarshal(file1, &object1)
 	check(err)
 
-	err = json.Unmarshal(file2, &json2)
+	err = json.Unmarshal(file2, &object2)
 	check(err)
 
-	diff := compare_object([]interface{}{}, json1, json2)
+	diff := compare_object([]interface{}{}, object1, object2)
 
 	output, err := json.Marshal(diff)
 	fmt.Printf("%v\n", string(output))
