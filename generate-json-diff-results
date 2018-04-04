@@ -16,12 +16,17 @@ def run_command(command, stdin):
     return output.decode("ASCII"), p.returncode
 
 def run_test(test):
+    expected_output = test["expectedOutput"]
+    expected_return_code = test["expectedReturnCode"]
     actual_output, actual_return_code = run_command(test["command"], test["input"])
+    if expected_output == actual_output and expected_return_code == actual_return_code:
+        return []
     return [{
+        "actualOutput": actual_output,
+        "actualReturnCode": actual_return_code,
         "command": test["command"],
-        "input": test["input"],
-        "output": actual_output,
-        "returnCode": actual_return_code,
+        "expectedOutput": expected_output,
+        "expectedReturnCode": expected_return_code,
     }]
 
 def main():

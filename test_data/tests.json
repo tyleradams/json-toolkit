@@ -1,90 +1,20 @@
 [
   {
-    "input": "",
-    "expectedReturnCode": 0,
-    "command": [
-      "./json-diff",
-      "test_data/null.json",
-      "test_data/null.json"
-    ],
-    "expectedOutput": "[]\n"
-  },
-  {
-    "input": "",
-    "expectedReturnCode": 0,
-    "command": [
-      "./json-diff",
-      "test_data/s1.json",
-      "test_data/s1.json"
-    ],
-    "expectedOutput": "[]\n"
-  },
-  {
-    "input": "",
-    "expectedReturnCode": 0,
-    "command": [
-      "./json-diff",
-      "test_data/s2.json",
-      "test_data/s2.json"
-    ],
-    "expectedOutput": "[]\n"
-  },
-  {
-    "input": "",
-    "expectedReturnCode": 0,
-    "command": [
-      "./json-diff",
-      "test_data/m1.json",
-      "test_data/m1.json"
-    ],
-    "expectedOutput": "[]\n"
-  },
-  {
-    "input": "",
-    "expectedReturnCode": 0,
-    "command": [
-      "./json-diff",
-      "test_data/m2.json",
-      "test_data/m2.json"
-    ],
-    "expectedOutput": "[]\n"
-  },
-  {
-    "input": "",
-    "expectedReturnCode": 1,
-    "command": [
-      "./json-diff",
-      "test_data/m1.json",
-      "test_data/m2.json"
-    ],
-    "expectedOutput": "[{\"leftValue\":1,\"path\":[\"a\"],\"rightValue\":2},{\"path\":[\"b\"],\"rightValue\":1}]\n"
-  },
-  {
-    "input": "",
-    "expectedReturnCode": 1,
-    "command": [
-      "./json-diff",
-      "test_data/a.json",
-      "test_data/b.json"
-    ],
-    "expectedOutput": "[{\"leftValue\":\"a\",\"path\":[],\"rightValue\":\"b\"}]\n"
-  },
-  {
     "input": "[]\n",
-    "expectedReturnCode": 0,
+    "returnCode": 0,
     "command": ["./json-empty"],
-    "expectedOutput": ""
+    "output": ""
   },
   {
     "input": "{}\n",
-    "expectedReturnCode": 1,
+    "returnCode": 1,
     "command": ["./json-empty"],
-    "expectedOutput": "{}\n"
+    "output": "{}\n"
   },
   {
     "input": "0\n",
-    "expectedReturnCode": 1,
+    "returnCode": 1,
     "command": ["./json-empty"],
-    "expectedOutput": "0\n"
+    "output": "0\n"
   }
 ]

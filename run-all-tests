@@ -2,4 +2,11 @@
 
 set -euo pipefail
 
-cat test_data/tests.json | ./generate-test-results | ./json-empty
+# As the rest of the test program uses json diff, we cannot test json diff using json diff.
+./run-json-diff-tests
+
+TEST_FILE=test_data/tests.json
+TMP_FILE=$(mktemp)
+cat ${TEST_FILE} | ./generate-test-results > ${TMP_FILE}
+./json-diff ${TMP_FILE} ${TEST_FILE}
+rm ${TMP_FILE}

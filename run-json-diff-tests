@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cat test_data/json-diff-tests.json | ./generate-json-diff-results | ./json-empty
