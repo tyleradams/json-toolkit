@@ -17,7 +17,8 @@ func main() {
 	if ok && len(ar) == 0 {
 		os.Exit(0)
 	} else {
-		fmt.Println(dat)
+		output, _ := json.Marshal(dat)
+		fmt.Println(string(output))
 		os.Exit(1)
 	}
 }
