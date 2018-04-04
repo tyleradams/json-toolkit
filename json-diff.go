@@ -151,7 +151,7 @@ func main() {
 
 	output, _ := json.Marshal(diff)
 	fmt.Printf("%v\n", string(output))
-	if len(output) == 0 {
+	if len(diff) == 0 {
 		os.Exit(0)
 	} else {
 		os.Exit(1)
