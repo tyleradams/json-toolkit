@@ -151,4 +151,9 @@ func main() {
 
 	output, err := json.Marshal(diff)
 	fmt.Printf("%v\n", string(output))
+	if len(output) == 0 {
+		os.Exit(0)
+	} else {
+		os.Exit(1)
+	}
 }
