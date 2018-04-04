@@ -97,11 +97,27 @@ func compare_any(path []any, json1 any, json2 any) []map[string]any {
 		reflect.Slice:   compare_slice,
 		reflect.Map:     compare_map,
 	}
-	t1 := reflect.TypeOf(json1).Kind()
-	t2 := reflect.TypeOf(json2).Kind()
+	var t1 any
+	var t2 any
+
+	if json1 == nil {
+		t1 = nil
+	} else {
+		t1 = reflect.TypeOf(json1).Kind()
+	}
+
+	if json2 == nil {
+		t2 = nil
+	} else {
+		t2 = reflect.TypeOf(json2).Kind()
+	}
 
 	if t1 == t2 {
-		return m[t1](path, json1, json2)
+		if t1 == nil {
+			return []map[string]any{}
+		} else {
+			return m[t1.(reflect.Kind)](path, json1, json2)
+		}
 	} else {
 		return []map[string]any{
 			{
