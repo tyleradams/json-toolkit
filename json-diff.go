@@ -149,7 +149,7 @@ func main() {
 
 	diff := compare_object([]interface{}{}, object1, object2)
 
-	output, err := json.Marshal(diff)
+	output, _ := json.Marshal(diff)
 	fmt.Printf("%v\n", string(output))
 	if len(output) == 0 {
 		os.Exit(0)
