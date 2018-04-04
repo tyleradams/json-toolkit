@@ -34,7 +34,8 @@ The path is the location of a particular a json value nested within a larger jso
 In json-diff, this is encoded as a json array of integers or strings.
 This notation is similar to the path notation used by (and plagarized from) jq.
 The primary difference is our paths are arrays whereas jq uses . delimited strings
-####### Example Path
+
+###### Example Path
 In the object
 ```
 [
