@@ -5,6 +5,18 @@ import "fmt"
 import "io/ioutil"
 import "encoding/json"
 
+// If the input is an empty json array.
+//   Returns exit code 0
+//   Stdout is empty
+//   Stderr is empty
+// If the input is valid json, but not an empty array
+//   Returns exit code 1
+//   Stdout is the input
+//   Stderr is empty
+// If the input is valid json, but not an empty array
+//   Returns exit code 2
+//   Stdout is empty
+//   Stderr is a go stacktrace
 func main() {
 	bytes, _ := ioutil.ReadAll(os.Stdin)
 
