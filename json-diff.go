@@ -112,12 +112,12 @@ func compare_object(path []interface{}, object1 interface{}, object2 interface{}
 
 	if type1 == type2 {
 		if type1 == nil {
-                return []map[string]interface{}{}
-            } else {
-                return m[type1.(reflect.Kind)](path, object1, object2)
-            }
-        } else {
-            return []map[string]interface{}{
+			return []map[string]interface{}{}
+		} else {
+			return m[type1.(reflect.Kind)](path, object1, object2)
+		}
+	} else {
+		return []map[string]interface{}{
 			{
 				"path":       path,
 				"leftValue":  object1,
