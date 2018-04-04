@@ -61,13 +61,13 @@
   },
   {
     "input": "",
-    "expectedReturnCode": 0,
+    "expectedReturnCode": 1,
     "command": [
       "./json-diff",
-      "test_data/s1.json",
-      "test_data/s1.json"
+      "test_data/a.json",
+      "test_data/b.json"
     ],
-    "expectedOutput": "[]\n"
+    "expectedOutput": "[{\"leftValue\":\"a\",\"path\":[],\"rightValue\":\"b\"}]\n"
   },
   {
     "input": "[]\n",
