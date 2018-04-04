@@ -140,8 +140,8 @@ func compare_object(path []interface{}, object1 interface{}, object2 interface{}
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Println("json-diff requires exactly 2 json files as arguments")
-        os.Exit(1)
+		fmt.Println("Usage: json-diff file1 file2")
+		os.Exit(1)
 	}
 
 	file1, err := ioutil.ReadFile(os.Args[1])

@@ -5,7 +5,7 @@
     "command": [
       "./json-diff"
     ],
-    "expectedOutput": "json-diff requires exactly 2 json files as arguments\n"
+    "expectedOutput": "Usage: json-diff file1 file2\n"
   },
   {
     "input": "",
@@ -14,7 +14,7 @@
       "./json-diff",
       "a.json"
     ],
-    "expectedOutput": "json-diff requires exactly 2 json files as arguments\n"
+    "expectedOutput": "Usage: json-diff file1 file2\n"
   },
   {
     "input": "",
@@ -25,7 +25,7 @@
       "a.json",
       "a.json"
     ],
-    "expectedOutput": "json-diff requires exactly 2 json files as arguments\n"
+    "expectedOutput": "Usage: json-diff file1 file2\n"
   },
   {
     "input": "",
