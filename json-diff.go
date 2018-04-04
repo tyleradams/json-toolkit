@@ -1,11 +1,20 @@
 package main
 
 import "encoding/json"
+import "errors"
 import "fmt"
 import "io/ioutil"
 import "os"
 import "reflect"
 
+// panic if e is non-nil
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+// Standard mathematical min function
 func min(a int, b int) int {
 	if a < b {
 		return a
@@ -14,6 +23,9 @@ func min(a int, b int) int {
 	}
 }
 
+// Compares two objects and returns a list of differences relative to the json path
+// If the objects are the same, an empty list is returned
+// If the objects are different, a list with a single element is returned
 func compare_simple(path []interface{}, simple1 interface{}, simple2 interface{}) []map[string]interface{} {
 	if simple1 == simple2 {
 		return []map[string]interface{}{}
@@ -28,9 +40,11 @@ func compare_simple(path []interface{}, simple1 interface{}, simple2 interface{}
 	}
 }
 
-func compare_slice(path []interface{}, anySlice1 interface{}, anySlice2 interface{}) []map[string]interface{} {
-	slice1 := anySlice1.([]interface{})
-	slice2 := anySlice2.([]interface{})
+// Compares two slices index by index and returns a list of differences relative to the json path
+// If the slices are the same, an empty list is returned
+// If the slices differ at an index, a difference is returned specifying the value in each slice
+// If one slice is longer than another, a difference is returned for each index in one slice and not the other
+func compare_slice(path []interface{}, slice1 []interface{}, slice2 []interface{}) []map[string]interface{} {
 	if len(slice1) == len(slice2) {
 		return []map[string]interface{}{}
 	} else {
@@ -60,9 +74,11 @@ func compare_slice(path []interface{}, anySlice1 interface{}, anySlice2 interfac
 	}
 }
 
-func compare_map(path []interface{}, anyMap1 interface{}, anyMap2 interface{}) []map[string]interface{} {
-	map1 := anyMap1.(map[string]interface{})
-	map2 := anyMap2.(map[string]interface{})
+// Compares two maps key by key and returns a list of differences relative to the json path
+// If the maps are the same, an empty list is returned
+// If the maps differ at a key, a difference is returned specifying the value in each map
+// If one map has keys which are not in the another, a difference is returned for each key in one map and not the other
+func compare_map(path []interface{}, map1 map[string]interface{}, map2 map[string]interface{}) []map[string]interface{} {
 	diff := []map[string]interface{}{}
 	for key, _ := range map1 {
 		_, keyInMap2 := map2[key]
@@ -87,53 +103,47 @@ func compare_map(path []interface{}, anyMap1 interface{}, anyMap2 interface{}) [
 	return diff
 }
 
+// Compares two objects and returns a list of differences relative to the json path
+// If the objects are the same, an empty list is returned
+// If the objects are different types, returns a simple difference between the objects
+// If the objects are the same type, it
 func compare_object(path []interface{}, object1 interface{}, object2 interface{}) []map[string]interface{} {
-	m := map[reflect.Kind]func([]interface{}, interface{}, interface{}) []map[string]interface{}{
-		reflect.Float64: compare_simple,
-		reflect.Bool:    compare_simple,
-		reflect.String:  compare_simple,
-		reflect.Slice:   compare_slice,
-		reflect.Map:     compare_map,
-	}
-	var type1 interface{}
-	var type2 interface{}
-
-	if object1 == nil {
-		type1 = nil
-	} else {
-		type1 = reflect.TypeOf(object1).Kind()
+	// nil does not have a reflection type kind, so it's easier to hardcode this special case
+	if object1 == nil || object2 == nil {
+		return compare_simple(path, object1, object2)
 	}
 
-	if object2 == nil {
-		type2 = nil
-	} else {
-		type2 = reflect.TypeOf(object2).Kind()
-	}
+	var type1 reflect.Kind
+	var type2 reflect.Kind
+
+	type1 = reflect.TypeOf(object1).Kind()
+	type2 = reflect.TypeOf(object2).Kind()
 
 	if type1 == type2 {
-		if type1 == nil {
-			return []map[string]interface{}{}
+		if type1 == reflect.Float64 {
+			return compare_simple(path, object1, object2)
+		} else if type1 == reflect.Bool {
+			return compare_simple(path, object1, object2)
+		} else if type1 == reflect.String {
+			return compare_simple(path, object1, object2)
+		} else if type1 == reflect.Slice {
+			return compare_slice(path, object1.([]interface{}), object2.([]interface{}))
+		} else if type1 == reflect.Map {
+			return compare_map(path, object1.(map[string]interface{}), object2.(map[string]interface{}))
 		} else {
-			return m[type1.(reflect.Kind)](path, object1, object2)
+			panic(errors.New("Type not found: " + string(type1)))
 		}
 	} else {
-		return []map[string]interface{}{
-			{
-				"path":       path,
-				"leftValue":  object1,
-				"rightValue": object2,
-			},
-		}
-	}
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
+		return compare_simple(path, object1, object2)
 	}
 }
 
 func main() {
+	if len(os.Args) != 3 {
+		fmt.Println("json-diff requires exactly 2 json files as arguments")
+        os.Exit(1)
+	}
+
 	file1, err := ioutil.ReadFile(os.Args[1])
 	check(err)
 	file2, err := ioutil.ReadFile(os.Args[2])

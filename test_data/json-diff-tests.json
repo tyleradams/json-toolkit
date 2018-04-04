@@ -1,6 +1,44 @@
 [
   {
     "input": "",
+    "expectedReturnCode": 1,
+    "command": [
+      "./json-diff"
+    ],
+    "expectedOutput": "json-diff requires exactly 2 json files as arguments\n"
+  },
+  {
+    "input": "",
+    "expectedReturnCode": 1,
+    "command": [
+      "./json-diff",
+      "a.json"
+    ],
+    "expectedOutput": "json-diff requires exactly 2 json files as arguments\n"
+  },
+  {
+    "input": "",
+    "expectedReturnCode": 1,
+    "command": [
+      "./json-diff",
+      "a.json",
+      "a.json",
+      "a.json"
+    ],
+    "expectedOutput": "json-diff requires exactly 2 json files as arguments\n"
+  },
+  {
+    "input": "",
+    "expectedReturnCode": 2,
+    "command": [
+      "./json-diff",
+      "non_existant_file",
+      "non_existant_file"
+    ],
+    "expectedOutput": ""
+  },
+  {
+    "input": "",
     "expectedReturnCode": 0,
     "command": [
       "./json-diff",
