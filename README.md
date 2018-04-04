@@ -12,7 +12,7 @@ This is a collection of CLI tools to help manipulate json files in a UNIX-like e
 
 ## Getting Started
 
-* Clone the repository
+* git clone git@github.com:tyleradams/json-toolkit.git
 * make
 * ./run-all-tests - On success this should return nothing
 * sudo make install
