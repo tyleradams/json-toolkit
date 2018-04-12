@@ -15,4 +15,5 @@ install : all
 	install json-empty /usr/local/bin
 	install json-to-csv /usr/local/bin
 	install json-to-yaml /usr/local/bin
+	install xml-to-json /usr/local/bin
 	install yaml-to-json /usr/local/bin

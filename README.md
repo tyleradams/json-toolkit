@@ -125,6 +125,14 @@ echo Multiple,cells,but,one,row | csv-to-json
 echo -e Multiple,cells\\nand\\nmultiple,rows | csv-to-json
 ```
 
+### xml-to-json
+#### Description
+xml-to-json takes xml from stdin and formats the data as json on stdout.
+#### Examples
+```
+echo '<a>b</a>' | json-to-xml
+```
+
 ### yaml-to-json
 #### Description
 yaml-to-json takes yaml from stdin and formats the data as json on stdout.
