@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+import xmltodict
+
+def main():
+    data = json.load(sys.stdin)
+    print(xmltodict.unparse({"root": data}, pretty=True))
+    exit(0)
+
+if __name__ == "__main__":
+    main()

@@ -107,6 +107,14 @@ echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
 echo '[["Multiple", "cells"], ["and"], ["multiple", "row"]]' | json-to-csv
 ```
 
+### json-to-xml
+#### Description
+json-to-xml takes json from stdin and formats the data as xml on stdout with a root tag.
+#### Examples
+```
+echo '{"a": "b"}' | json-to-xml
+```
+
 ### json-to-yaml
 #### Description
 json-to-yaml takes json from stdin and formats the data as yaml on stdout.
