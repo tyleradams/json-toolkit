@@ -52,7 +52,7 @@
       "./json-to-yaml"
     ],
     "input": "{\"a\": 1, \"b\": 2}\n",
-    "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n",
+    "output": "a: 1\nb: 2\n",
     "returnCode": 0
   },
   {
