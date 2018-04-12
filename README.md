@@ -101,9 +101,18 @@ echo 'this is not json' | json-empty
 #### Description
 json-to-csv takes a json array of array of strings from stdin and formats the data as a csv on stdout.
 #### Examples
-##### A single cell
 ```
 echo '[["Single cell"]]' | json-to-csv
 echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
 echo '[["Multiple", "cells"], ["and"], ["multiple", "row"]]' | json-to-csv
+```
+
+### csv-to-json
+#### Description
+csv-to-json takes a csv from stdin and formats the data into a json array of array of strings.
+#### Examples
+```
+echo Single cell | csv-to-json
+echo Multiple,cells,but,one,row | csv-to-json
+echo -e Multiple,cells\\nand\\nmultiple,rows | csv-to-json
 ```

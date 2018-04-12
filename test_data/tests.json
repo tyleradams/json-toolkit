@@ -46,5 +46,29 @@
     "input": "[[\"multiple\", \"cells\"], [\"multiple \", \"rows\"]]\n",
     "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n",
     "returnCode": 0
+  },
+  {
+    "command": [
+      "./csv-to-json"
+    ],
+    "input": "Single cell\n",
+    "output": "[[\"Single cell\"]]\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
+      "./csv-to-json"
+    ],
+    "input": "Multiple,cells,but,one,row\n",
+    "output": "[[\"Multiple\", \"cells\", \"but\", \"one\", \"row\"]]\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
+      "./csv-to-json"
+    ],
+    "input": "Multiple,cells\nand\nmultiple,rows",
+    "output": "[[\"Multiple\", \"cells\"], [\"and\"], [\"multiple\", \"rows\"]]\n",
+    "returnCode": 0
   }
 ]

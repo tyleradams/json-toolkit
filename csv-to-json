@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import csv
+import json
+import sys
+
+def main():
+    csv_reader = csv.reader(sys.stdin)
+    print(json.dumps(list(csv_reader)))
+    exit(0)
+
+if __name__ == "__main__":
+    main()

@@ -10,6 +10,7 @@ clean :
 	rm json-diff json-empty 2> /dev/null || true
 
 install : all
+	install csv-to-json /usr/local/bin
 	install json-diff /usr/local/bin
 	install json-empty /usr/local/bin
 	install json-to-csv /usr/local/bin
