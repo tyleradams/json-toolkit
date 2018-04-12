@@ -78,5 +78,13 @@
     "input": "Multiple,cells\nand\nmultiple,rows",
     "output": "[[\"Multiple\", \"cells\"], [\"and\"], [\"multiple\", \"rows\"]]\n",
     "returnCode": 0
+  },
+  {
+    "command": [
+      "./yaml-to-json"
+    ],
+    "input": "a: b",
+    "output": "{\"a\": \"b\"}\n",
+    "returnCode": 0
   }
 ]
