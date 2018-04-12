@@ -107,6 +107,14 @@ echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
 echo '[["Multiple", "cells"], ["and"], ["multiple", "row"]]' | json-to-csv
 ```
 
+### json-to-yaml
+#### Description
+json-to-yaml takes a json array of array of strings from stdin and formats the data as yaml on stdout.
+#### Examples
+```
+echo '{"a": 1, "b": 2}' | json-to-yaml
+```
+
 ### csv-to-json
 #### Description
 csv-to-json takes a csv from stdin and formats the data into a json array of array of strings.
