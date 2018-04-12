@@ -55,7 +55,6 @@
     "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n",
     "returnCode": 0
   },
-
   {
     "command": [
       "./csv-to-json"
