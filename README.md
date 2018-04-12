@@ -130,7 +130,7 @@ echo -e Multiple,cells\\nand\\nmultiple,rows | csv-to-json
 xml-to-json takes xml from stdin and formats the data as json on stdout.
 #### Examples
 ```
-echo '<a>b</a>' | json-to-xml
+echo '<a>b</a>' | xml-to-json
 ```
 
 ### yaml-to-json
