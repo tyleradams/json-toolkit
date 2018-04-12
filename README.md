@@ -85,7 +85,9 @@ echo '[]' | json-empty
 ```
 
 ##### Passing a non-empty JSON array into json-empty
+```
 echo '[1]' | json-empty
+```
 
 ##### Passing a JSON string into json-empty
 ```
