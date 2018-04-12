@@ -96,3 +96,14 @@ echo '"non-empty array input"' | json-empty
 ```
 echo 'this is not json' | json-empty
 ```
+
+### json-to-csv
+#### Description
+json-to-csv takes a json array of array of strings from stdin and formats the data as a csv on stdout.
+#### Examples
+##### A single cell
+```
+echo '[["Single cell"]]' | json-to-csv
+echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
+echo '[["Multiple", "cells"], ["and"], ["multiple", "row"]]' | json-to-csv
+```

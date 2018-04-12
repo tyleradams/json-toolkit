@@ -1,20 +1,38 @@
 [
   {
     "input": "[]\n",
-    "returnCode": 0,
     "command": ["./json-empty"],
+    "returnCode": 0,
     "output": ""
   },
   {
     "input": "{}\n",
-    "returnCode": 1,
     "command": ["./json-empty"],
+    "returnCode": 1,
     "output": "{}\n"
   },
   {
     "input": "0\n",
-    "returnCode": 1,
     "command": ["./json-empty"],
+    "returnCode": 1,
     "output": "0\n"
+  },
+  {
+    "input": "[[\"single cell\"]]\n",
+    "command": ["./json-to-csv"],
+    "returnCode": 0,
+    "output": "\"single cell\"\n"
+  },
+  {
+    "input": "[[\"multiple\", \"cells\", \"single\", \"row\"]]\n",
+    "command": [ "./json-to-csv" ],
+    "returnCode": 0,
+    "output": "\"multiple\",\"cells\",\"single\",\"row\"\n"
+  },
+  {
+    "input": "[[\"multiple\", \"cells\"], [\"multiple \", \"rows\"]]\n",
+    "command": [ "./json-to-csv" ],
+    "returnCode": 0,
+    "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n"
   }
 ]

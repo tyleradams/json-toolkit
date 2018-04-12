@@ -12,3 +12,4 @@ clean :
 install : all
 	install json-diff /usr/local/bin
 	install json-empty /usr/local/bin
+	install json-to-csv /usr/local/bin
