@@ -63,14 +63,14 @@ echo '[1]' > non_empty_array.json
 
 ##### Comparing equivalent files
 ```
-json_diff empty_array.json empty_array.json
-json_diff empty_array.json other_empty_array.json
-json_diff non_empty_array.json non_empty_array.json
+json-diff empty_array.json empty_array.json
+json-diff empty_array.json other_empty_array.json
+json-diff non_empty_array.json non_empty_array.json
 ```
 
 ##### Comparing different files
 ```
-json_diff empty_array.json non_empty_array.json
+json-diff empty_array.json non_empty_array.json
 ```
 
 ### json-empty
