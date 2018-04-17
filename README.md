@@ -106,7 +106,7 @@ json-to-csv takes a json array of array of strings from stdin and formats the da
 ```
 echo '[["Single cell"]]' | json-to-csv
 echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
-echo '[["Multiple", "cells"], ["and"], ["multiple", "row"]]' | json-to-csv
+echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
 ```
 
 ### json-to-xml
