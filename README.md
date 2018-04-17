@@ -111,7 +111,7 @@ echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
 
 ### json-to-xml
 #### Description
-json-to-xml takes json from stdin and formats the data as xml on stdout with a root tag.
+json-to-xml takes json from stdin and formats the data as xml on stdout with a top level "root" tag.
 #### Examples
 ```
 echo '{"a": "b"}' | json-to-xml
