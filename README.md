@@ -135,6 +135,16 @@ echo Multiple,cells,but,one,row | csv-to-json
 echo -e Multiple,cells\\nand\\nmultiple,rows | csv-to-json
 ```
 
+### dsv-to-json
+#### Description
+dsv-to-json takes a dsv file from stdin, the delimiter as the first argument, and formats the data into a json array of array of strings.
+#### Examples
+```
+echo Single cell | dsv-to-json :
+echo Multiple:cells:but:one:row | dsv-to-json :
+echo -e Multiple:cells\\nand\\nmultiple:rows | dsv-to-json :
+```
+
 ### xml-to-json
 #### Description
 xml-to-json takes xml from stdin and formats the data as json on stdout.

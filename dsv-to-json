@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+
+import csv
+import json
+import sys
+
+def main():
+    delimiter = sys.argv[1]
+    lines = sys.stdin.readlines()
+    cells = list(map(lambda l: l.strip("\n").split(delimiter), lines))
+    print(json.dumps(cells))
+    exit(0)
+
+if __name__ == "__main__":
+    main()
