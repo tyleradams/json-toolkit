@@ -49,6 +49,33 @@
   },
   {
     "command": [
+      "./json-to-dsv",
+      ","
+    ],
+    "input": "[[\"single cell\"]]\n",
+    "output": "\"single cell\"\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
+      "./json-to-dsv",
+      ","
+    ],
+    "input": "[[\"multiple\", \"cells\", \"single\", \"row\"]]\n",
+    "output": "\"multiple\",\"cells\",\"single\",\"row\"\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
+      "./json-to-dsv",
+      ","
+    ],
+    "input": "[[\"multiple\", \"cells\"], [\"multiple \", \"rows\"]]\n",
+    "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
       "./json-to-xml"
     ],
     "input": "{\"a\": 1, \"b\": 2}\n",

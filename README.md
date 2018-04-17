@@ -109,6 +109,16 @@ echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
 echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
 ```
 
+### json-to-dsv
+#### Description
+json-to-dsv takes a json array of array of strings from stdin, and a delmiter as the first argument, and formats the data as a dsv with the specified delimiter on stdout.
+#### Examples
+```
+echo '[["Single cell"]]' | json-to-dsv :
+echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-dsv :
+echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-dsv :
+```
+
 ### json-to-xml
 #### Description
 json-to-xml takes json from stdin and formats the data as xml on stdout with a top level "root" tag.
