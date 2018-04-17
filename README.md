@@ -148,5 +148,5 @@ echo '<a>b</a>' | xml-to-json
 yaml-to-json takes yaml from stdin and formats the data as json on stdout.
 #### Examples
 ```
-echo 'a: b' | json-to-yaml
+echo 'a: b' | yaml-to-json
 ```
