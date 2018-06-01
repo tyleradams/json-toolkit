@@ -33,6 +33,14 @@
   },
   {
     "command": [
+      "./json-format"
+    ],
+    "input": "{\"second\": 2, \"first\": 1}",
+    "output": "{\n  \"first\": 1,\n  \"second\": 2\n}\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
       "./json-to-csv"
     ],
     "input": "[[\"multiple\", \"cells\", \"single\", \"row\"]]\n",
