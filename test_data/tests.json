@@ -86,8 +86,8 @@
     "command": [
       "./json-to-xml"
     ],
-    "input": "{\"a\": 1, \"b\": 2}\n",
-    "output": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root>\n\t<a>1</a>\n\t<b>2</b>\n</root>\n",
+    "input": "{\"a\": 1}",
+    "output": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root>\n\t<a>1</a>\n</root>\n",
     "returnCode": 0
   },
   {
