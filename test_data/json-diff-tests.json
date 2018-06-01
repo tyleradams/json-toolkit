@@ -69,6 +69,16 @@
   },
   {
     "input": "",
+    "expectedReturnCode": 1,
+    "command": [
+      "./json-diff",
+      "test_data/s2.json",
+      "test_data/s3.json"
+    ],
+    "expectedOutput": "[{\"leftValue\":1,\"path\":[0],\"rightValue\":2}]\n"
+  },
+  {
+    "input": "",
     "expectedReturnCode": 0,
     "command": [
       "./json-diff",

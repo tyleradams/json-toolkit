@@ -45,33 +45,29 @@ func compare_simple(path []interface{}, simple1 interface{}, simple2 interface{}
 // If the slices differ at an index, a difference is returned specifying the value in each slice
 // If one slice is longer than another, a difference is returned for each index in one slice and not the other
 func compare_slice(path []interface{}, slice1 []interface{}, slice2 []interface{}) []map[string]interface{} {
-	if len(slice1) == len(slice2) {
-		return []map[string]interface{}{}
-	} else {
-		l := min(len(slice1), len(slice2))
-		m := []map[string]interface{}{}
-		for i := 0; i < l; i++ {
-			i1 := slice1[i]
-			i2 := slice2[i]
-			m = append(m, compare_object(append(path, i), i1, i2)...)
-		}
-		if len(slice1) > len(slice2) {
-			for i := l; i < len(slice1); i++ {
-				m = append(m, map[string]interface{}{
-					"path":      append(path, i),
-					"leftValue": slice1[i],
-				})
-			}
-		} else if len(slice2) > len(slice1) {
-			for i := l; i < len(slice2); i++ {
-				m = append(m, map[string]interface{}{
-					"path":       append(path, i),
-					"rightValue": slice2[i],
-				})
-			}
-		}
-		return m
+	l := min(len(slice1), len(slice2))
+	m := []map[string]interface{}{}
+	for i := 0; i < l; i++ {
+		i1 := slice1[i]
+		i2 := slice2[i]
+		m = append(m, compare_object(append(path, i), i1, i2)...)
 	}
+	if len(slice1) > len(slice2) {
+		for i := l; i < len(slice1); i++ {
+			m = append(m, map[string]interface{}{
+				"path":      append(path, i),
+				"leftValue": slice1[i],
+			})
+		}
+	} else if len(slice2) > len(slice1) {
+		for i := l; i < len(slice2); i++ {
+			m = append(m, map[string]interface{}{
+				"path":       append(path, i),
+				"rightValue": slice2[i],
+			})
+		}
+	}
+	return m
 }
 
 // Compares two maps key by key and returns a list of differences relative to the json path
