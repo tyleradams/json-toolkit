@@ -53,7 +53,7 @@
       ","
     ],
     "input": "[[\"single cell\"]]\n",
-    "output": "\"single cell\"\n",
+    "output": "single cell\n",
     "returnCode": 0
   },
   {
@@ -62,7 +62,7 @@
       ","
     ],
     "input": "[[\"multiple\", \"cells\", \"single\", \"row\"]]\n",
-    "output": "\"multiple\",\"cells\",\"single\",\"row\"\n",
+    "output": "multiple,cells,single,row\n",
     "returnCode": 0
   },
   {
@@ -71,7 +71,7 @@
       ","
     ],
     "input": "[[\"multiple\", \"cells\"], [\"multiple \", \"rows\"]]\n",
-    "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n",
+    "output": "multiple,cells\nmultiple ,rows\n",
     "returnCode": 0
   },
   {
