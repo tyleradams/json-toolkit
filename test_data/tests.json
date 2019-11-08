@@ -33,11 +33,29 @@
   },
   {
     "command": [
-      "./json-format"
+      "./json-format",
+      "-"
     ],
     "input": "{\"second\": 2, \"first\": 1}",
     "output": "{\n  \"first\": 1,\n  \"second\": 2\n}\n",
     "returnCode": 0
+  },
+  {
+    "command": [
+      "./json-format"
+    ],
+    "input": "[]",
+    "output": "Usage: ./json-format FILE\n",
+    "returnCode": 1
+  },
+  {
+    "command": [
+      "./json-format",
+      "NONEXISTANT_FILE"
+    ],
+    "input": "[]",
+    "output": "NONEXISTANT_FILE does not exist\n",
+    "returnCode": 1
   },
   {
     "command": [

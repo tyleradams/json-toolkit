@@ -1,3 +1,20 @@
 #!/usr/bin/env bash
 
-jq -S '.'
+set -eou pipefail
+
+if [[ "$#" -ne "1" ]]; then
+    echo "Usage: $0 FILE"
+    exit 1
+fi
+
+FILE="$1"
+if [[ "$FILE" == "-" ]]; then
+    jq -S '.'
+elif [[ -f "$FILE" ]]; then
+    TMP="$(mktemp)"
+    jq -S '.' $FILE > $TMP
+    mv $TMP $FILE
+else
+    echo "$FILE does not exist"
+    exit 1
+fi
