@@ -47,4 +47,4 @@ echo $DATA | jq '.data' | json-to-dsv ':' | gnuplot \
     -e "set nokey" \
     -e "set border linewidth 1.5" \
     -e "set style line 1 lc rgb '#0060ad' pt 7 ps .2 lt 1 lw 2 # --- blue" \
-    -e "plot '< cat -' using 1:2 with points ls 1"
+    -e "plot '< cat -' using 2:xticlabels(1) with lines ls 1"
