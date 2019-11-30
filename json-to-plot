@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+DATA="$(cat | jq '.')"
+TITLE="$(echo $DATA | jq '.Title')"
+XLABEL="$(echo $DATA | jq '.XLabel')"
+YLABEL="$(echo $DATA | jq '.YLabel')"
+OUTFILE="$1"
+OUTFILE_EXTENSION="$(echo $OUTFILE | cut -d '.' -f 2-)"
+
+if [ -z "$DATA" ]; then
+    echo "stdin must be valid json"
+    exit 1
+fi
+
+if [ -z "$TITLE" ]; then
+    echo ".Title must be set"
+    exit 1
+fi
+
+if [ -z "$XLABEL" ]; then
+    echo ".XLabel must be set"
+    exit 1
+fi
+
+if [ -z "$YLABEL" ]; then
+    echo ".YLabel must be set"
+    exit 1
+fi
+
+if [ -z "$OUTFILE" ]; then
+    echo "OUTFILE must be specified as argv[1]"
+    exit 1
+fi
+
+if [ "$OUTFILE_EXTENSION" != "png" ]; then
+    echo "OUTFILE must be a png"
+    exit 1
+fi
+
+echo $DATA | jq '.data' | json-to-dsv ':' | gnuplot \
+    -e "set terminal png enhanced font 'verdana,8' size 640,300" \
+    -e "set title '$TITLE'" \
+    -e "set xlabel '$XLABEL'" \
+    -e "set ylabel '$YLABEL'" \
+    -e "set output '$OUTFILE'" \
+    -e "set datafile separator ':'" \
+    -e "set nokey" \
+    -e "set border linewidth 1.5" \
+    -e "set style line 1 lc rgb '#0060ad' pt 7 ps .2 lt 1 lw 2 # --- blue" \
+    -e "plot '< cat -' using 1:2 with points ls 1"

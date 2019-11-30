@@ -17,6 +17,7 @@ install : all
 	install json-format /usr/local/bin
 	install json-to-csv /usr/local/bin
 	install json-to-dsv /usr/local/bin
+	install json-to-plot /usr/local/bin
 	install json-to-xml /usr/local/bin
 	install json-to-yaml /usr/local/bin
 	install xml-to-json /usr/local/bin
