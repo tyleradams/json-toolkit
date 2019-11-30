@@ -38,7 +38,7 @@ if [ "$OUTFILE_EXTENSION" != "png" ]; then
 fi
 
 echo $DATA | jq '.data' | json-to-dsv ':' | gnuplot \
-    -e "set terminal png enhanced font 'verdana,8' size 640,300" \
+    -e "set terminal png enhanced font 'verdana,8' size 1920,1080" \
     -e "set title '$TITLE'" \
     -e "set xlabel '$XLABEL'" \
     -e "set ylabel '$YLABEL'" \
