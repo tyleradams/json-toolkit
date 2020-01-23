@@ -1,9 +1,11 @@
 all : json-diff json-empty
 
 json-diff : json-diff.go
+	go fmt json-diff.go
 	go build json-diff.go
 
 json-empty : json-empty.go
+	go fmt json-empty.go
 	go build json-empty.go
 
 clean :
