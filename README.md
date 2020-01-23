@@ -3,7 +3,7 @@
 The JSON Toolkit is a set of CLI tools which use json as a lingua franca for working with structured data.
 Some highlights include json-diff, which structurally diffs two json files, and data converters between json and xml, yaml, csv, and dsv.
 
-## Prerequsites
+## Prerequisites
 
 * Bash
 * Go
@@ -106,7 +106,7 @@ $ echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
 
 ### json-to-dsv
 #### Description
-json-to-dsv takes a json array of array of strings from stdin, and a delmiter as the first argument, and formats the data as a dsv with the specified delimiter on stdout.
+json-to-dsv takes a json array of array of strings from stdin, and a delimiter as the first argument, and formats the data as a dsv with the specified delimiter on stdout.
 #### Examples
 ```
 $ echo '[["Single cell"]]' | json-to-dsv :
