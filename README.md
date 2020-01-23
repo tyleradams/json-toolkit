@@ -14,7 +14,7 @@ Some highlights include json-diff, which structuraly diffs two json files, and d
 
 * git clone git@github.com:tyleradams/json-toolkit.git
 * make
-* ./run-all-tests # On success this should return nothing
+* make test
 * sudo make install
 
 ## Tools
@@ -26,51 +26,37 @@ If the json are structurally the same, the output will be an empty json array.
 #### Output format
 The output is a json encoded list of difference objects describing the difference between two json files.
 ##### Difference Object
-A difference object has a required path, an optional leftValue, and an optional rightValue.
-The leftValue and rightValues are the values of the json object at the path for the left file and right files respectively.
-If there is no leftValue, this means the path does not exist for the left file, and similarly for the rightValue and right file.
+A difference object has a required **path**, an optional **leftValue**, and an optional **rightValue**.
+The **leftValue** and **rightValue** are the values of the json object at the **path** for the left file and right files respectively.
+If there is no **leftValue**, this means the **path** does not exist for the left file, and similarly for the **rightValue** and right file.
 ###### Path
-The path is the location of a particular a json value nested within a larger json value.
-In json-diff, this is encoded as a json array of integers or strings.
-This notation is similar to the path notation used by (and plagarized from) jq.
-The primary difference is our paths are arrays whereas jq uses . delimited strings
+The **path** is the location of a particular a json value nested within a larger json value. If you were to access a value in Python at:
+```
+o["first_key"][0]["second_key"]
+```
+the equivalent json-diff path is
+```
+["first_key", 0, "second_key"]
+```
 
-###### Example Path
-In the object
-```
-[
-    0,
-    {
-        "a": [
-            -1
-        ],
-    }
-]
-```
--1 can be found at [1, "a", 0].
-This path should be read as take the second element of top level array.
-For this value, which is an object, take the value corresponding to the "a" key.
-For this value, which is an array, take the first element.
-This final value is the one found at [1, "a", 0].
 #### Examples
 ##### File setup
 json-diff operates on files, so here we create a few files we can use later.
 ```
-echo '[]' > empty_array.json
-cp empty_array.json other_empty_array.json
-echo '[1]' > non_empty_array.json
+$ echo '[]' > empty_array.json
+$ echo '[1]' > single_element_array.json
 ```
 
 ##### Comparing equivalent files
 ```
-json-diff empty_array.json empty_array.json
-json-diff empty_array.json other_empty_array.json
-json-diff non_empty_array.json non_empty_array.json
+$ json-diff empty_array.json empty_array.json
+$
 ```
 
 ##### Comparing different files
 ```
-json-diff empty_array.json non_empty_array.json
+$ json-diff empty_array.json single_element_array.json
+[{"path":[0],"rightValue":1}]
 ```
 
 ### json-empty
@@ -81,22 +67,26 @@ If the input is not valid json , json-empty returns exit code 2 and throws an er
 #### Examples
 ##### Passing an empty JSON array into json-empty
 ```
-echo '[]' | json-empty
+$ echo '[]' | json-empty
+$
 ```
 
 ##### Passing a non-empty JSON array into json-empty
 ```
-echo '[1]' | json-empty
+$ echo '[1]' | json-empty
+[1]
 ```
 
 ##### Passing a JSON string into json-empty
 ```
-echo '"non-empty array input"' | json-empty
+$ echo '"non-empty array input"' | json-empty
+"non-empty array input"
 ```
 
 ##### Passing non-JSON into json-empty
 ```
-echo 'this is not json' | json-empty
+$ echo 'this is not json' | json-empty
+invalid character 'h' in literal true (expecting 'r')
 ```
 
 ### json-to-csv
@@ -104,9 +94,14 @@ echo 'this is not json' | json-empty
 json-to-csv takes a json array of array of strings from stdin and formats the data as a csv on stdout.
 #### Examples
 ```
-echo '[["Single cell"]]' | json-to-csv
-echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
-echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
+$ echo '[["Single cell"]]' | json-to-csv
+"Single Cell"
+$ echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-csv
+"Multiple","cells","but","one","row"
+$ echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
+"Multiple","cells"
+"and"
+"multiple","rows"
 ```
 
 ### json-to-dsv
@@ -114,9 +109,14 @@ echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-csv
 json-to-dsv takes a json array of array of strings from stdin, and a delmiter as the first argument, and formats the data as a dsv with the specified delimiter on stdout.
 #### Examples
 ```
-echo '[["Single cell"]]' | json-to-dsv :
-echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-dsv :
-echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-dsv :
+$ echo '[["Single cell"]]' | json-to-dsv :
+Single cell
+$ echo '[["Multiple", "cells", "but", "one", "row"]]' | json-to-dsv :
+Multiple:cells:but:one:row
+$ echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-dsv :
+Multiple:cells
+and
+multiple:rows
 ```
 
 ### json-to-xml
@@ -124,7 +124,11 @@ echo '[["Multiple", "cells"], ["and"], ["multiple", "rows"]]' | json-to-dsv :
 json-to-xml takes json from stdin and formats the data as xml on stdout with a top level "root" tag.
 #### Examples
 ```
-echo '{"a": "b"}' | json-to-xml
+$ echo '{"a": "b"}' | json-to-xml
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <a>b</a>
+</root>
 ```
 
 ### json-to-yaml
@@ -132,7 +136,9 @@ echo '{"a": "b"}' | json-to-xml
 json-to-yaml takes json from stdin and formats the data as yaml on stdout.
 #### Examples
 ```
-echo '{"a": 1, "b": 2}' | json-to-yaml
+$ echo '{"a": 1, "b": 2}' | json-to-yaml
+a: 1
+b: 2
 ```
 
 ### csv-to-json
@@ -140,19 +146,26 @@ echo '{"a": 1, "b": 2}' | json-to-yaml
 csv-to-json takes a csv from stdin and formats the data into a json array of array of strings.
 #### Examples
 ```
-echo Single cell | csv-to-json
-echo Multiple,cells,but,one,row | csv-to-json
-echo -e Multiple,cells\\nand\\nmultiple,rows | csv-to-json
+$ echo Single cell | csv-to-json
+[["Single cell"]]
+$ echo Multiple,cells,but,one,row | csv-to-json
+[["Multiple", "cells", "but", "one", "row"]]
+$ echo -e Multiple,cells\\nand\\nmultiple,rows | csv-to-json
+[["Multiple", "cells"], ["and"], ["multiple", "rows"]]
 ```
+
 
 ### dsv-to-json
 #### Description
 dsv-to-json takes a dsv file from stdin, the delimiter as the first argument, and formats the data into a json array of array of strings.
 #### Examples
 ```
-echo Single cell | dsv-to-json :
-echo Multiple:cells:but:one:row | dsv-to-json :
-echo -e Multiple:cells\\nand\\nmultiple:rows | dsv-to-json :
+$ echo Single cell | dsv-to-json :
+[["Single cell"]]
+$ echo Multiple:cells:but:one:row | dsv-to-json :
+[["Multiple", "cells", "but", "one", "row"]]
+$ echo -e Multiple:cells\\nand\\nmultiple:rows | dsv-to-json :
+[["Multiple", "cells"], ["and"], ["multiple", "rows"]]
 ```
 
 ### xml-to-json
@@ -160,7 +173,8 @@ echo -e Multiple:cells\\nand\\nmultiple:rows | dsv-to-json :
 xml-to-json takes xml from stdin and formats the data as json on stdout.
 #### Examples
 ```
-echo '<a>b</a>' | xml-to-json
+$ echo '<a>b</a>' | xml-to-json
+{"a": "b"}
 ```
 
 ### yaml-to-json
@@ -168,5 +182,6 @@ echo '<a>b</a>' | xml-to-json
 yaml-to-json takes yaml from stdin and formats the data as json on stdout.
 #### Examples
 ```
-echo 'a: b' | yaml-to-json
+$ echo 'a: b' | yaml-to-json
+{"a": "b"}
 ```
