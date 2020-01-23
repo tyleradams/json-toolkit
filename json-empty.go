@@ -21,8 +21,16 @@ func main() {
 	bytes, _ := ioutil.ReadAll(os.Stdin)
 
 	var dat interface{}
-	if err := json.Unmarshal(bytes, &dat); err != nil {
-		panic(err)
+	err := json.Unmarshal(bytes, &dat)
+
+	if err != nil {
+		switch err.(type) {
+		case *json.SyntaxError:
+			fmt.Println(err.Error())
+			os.Exit(2)
+		default:
+			panic(err)
+		}
 	}
 
 	ar, ok := dat.([]interface{})
