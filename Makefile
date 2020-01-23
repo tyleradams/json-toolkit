@@ -11,6 +11,9 @@ json-empty : json-empty.go
 clean :
 	rm json-diff json-empty 2> /dev/null || true
 
+test :
+	./run-all-tests
+
 install : all
 	install csv-to-json /usr/local/bin
 	install dsv-to-json /usr/local/bin
