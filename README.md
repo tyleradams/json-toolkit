@@ -4,7 +4,6 @@ This is a collection of CLI tools to help manipulate json files in a UNIX-like e
 
 ## Prerequsites
 
-* UNIX-like operating system
 * Bash
 * Go
 * Python3
