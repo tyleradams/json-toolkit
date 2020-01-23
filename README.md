@@ -1,7 +1,7 @@
 # JSON Toolkit
 
 The JSON Toolkit is a set of CLI tools which use json as a lingua franca for working with structured data.
-Some highlights include json-diff, which structuraly diffs two json files, and data converters between json and xml, yaml, csv, and dsv.
+Some highlights include json-diff, which structurally diffs two json files, and data converters between json and xml, yaml, csv, and dsv.
 
 ## Prerequsites
 
