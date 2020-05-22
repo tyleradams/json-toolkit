@@ -22,6 +22,7 @@ install : all
 	install json-empty /usr/local/bin
 	install json-format /usr/local/bin
 	install json-to-csv /usr/local/bin
+	install json-dicts-to-table /usr/local/bin
 	install json-to-dsv /usr/local/bin
 	install json-to-logfmt /usr/local/bin
 	install json-to-plot /usr/local/bin
