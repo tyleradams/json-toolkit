@@ -17,6 +17,7 @@ test :
 install : all
 	install csv-to-json /usr/local/bin
 	install dsv-to-json /usr/local/bin
+	install json-cat /usr/local/bin
 	install json-diff /usr/local/bin
 	install json-empty /usr/local/bin
 	install json-format /usr/local/bin
