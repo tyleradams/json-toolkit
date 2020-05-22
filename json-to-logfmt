@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+import json
+import logfmt
+import sys
+
+def main():
+    d = json.load(sys.stdin)
+    if type(d) != list:
+        raise Exception("Only lists can be converted to logfmt")
+
+    for l in logfmt.format(*d):
+        print(l)
+    exit(0)
+
+if __name__ == "__main__":
+    main()
