@@ -1,14 +1,3 @@
-#!/usr/bin/env python3
+#!/usr/bin/env jq
+'[(.[0] | keys)] + map(to_entries | map(.value))'
 
-import json
-import sys
-
-def dicts_to_table(d):
-    table = []
-    e = d[0]
-    keys = list(e)
-    table.append(keys)
-    table.extend([[e[key] for key in keys] for e in d])
-    return table
-
-print(json.dumps(dicts_to_table(json.load(sys.stdin))))
