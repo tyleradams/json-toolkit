@@ -22,6 +22,7 @@ install : all
 	install json-diff /usr/local/bin
 	install json-empty /usr/local/bin
 	install json-format /usr/local/bin
+	install json-sql /usr/local/bin
 	install json-to-csv /usr/local/bin
 	install json-to-dsv /usr/local/bin
 	install json-to-logfmt /usr/local/bin

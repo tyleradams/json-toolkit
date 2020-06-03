@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+
+import json
+import psycopg2
+import pymysql
+import sqlite3
+import sys
+
+def make_dict(keys, values):
+    if len(keys) != len(values):
+        raise Exception("Cannot make_dict: {}".format({"keys": keys, "values": values}))
+    return { keys[i]: values[i] for i in range(len(keys)) }
+
+def make_table(data, columns):
+    return [make_dict(columns, row) for row in data]
+
+class DB:
+    def read_table(self, table_name):
+        columns = self.column_names(table_name)
+
+        data = self.query("select * from {};".format(table_name))
+        return make_table(data, columns)
+
+    def read_tables(self):
+        return { name: self.read_table(name) for name in self.table_names() }
+
+    def as_json(self):
+        print(json.dumps(self.read_tables()))
+
+
+class SQLITE3(DB):
+    def __init__(self, filename):
+        self.c = sqlite3.connect(filename).cursor()
+
+    def query(self, query_string):
+        return list(self.c.execute(query_string))
+
+    def column_names(self, table_name):
+        columns = self.query("pragma table_info({});".format(table_name))
+        return [column[1] for column in columns]
+
+    def table_names(self):
+        master_table = self.read_table("sqlite_master")
+        return [e["name"] for e in master_table if e["type"] == "table"]
+
+class PSQL(DB):
+    def __init__(self, user, password, host, port, database):
+        self.connection = psycopg2.connect(
+                user = user,
+                password = password,
+                host = host,
+                port = port,
+                database = database)
+
+    def query(self, query_string):
+        cursor = self.connection.cursor()
+        cursor.execute(query_string)
+        return [list(r) for r in cursor.fetchall()]
+
+    def column_names(self, table_name):
+        return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
+
+    def table_names(self):
+        return [t[0] for t in self.query("select table_name from information_schema.tables where table_schema = 'public';")]
+
+class MYSQL(DB):
+    def __init__(self, user, password, host, database):
+        self.database = database
+        self.connection = pymysql.connect(
+                host,
+                user,
+                password,
+                database)
+
+    def query(self, query_string):
+        cursor = self.connection.cursor()
+        cursor.execute(query_string)
+        data = [list(r) for r in cursor.fetchall()]
+        return data
+
+    def column_names(self, table_name):
+        return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
+
+    def table_names(self):
+        return [t[0] for t in self.query("select table_name from information_schema.tables where table_schema = '{}';".format(self.database))]
+
+def main():
+    # read sqlite3 FILE
+    if len(sys.argv) == 4 and sys.argv[1:3] == ["read", "sqlite3"]:
+        return SQLITE3(sys.argv[3]).as_json()
+    # read psql USER PASSWORD HOST PORT DB
+    elif len(sys.argv) == 8 and sys.argv[1:3] == ["read", "psql"]:
+        return PSQL(*sys.argv[3:8]).as_json()
+    # read mysql USER PASSWORD HOST DB
+    elif len(sys.argv) == 7 and sys.argv[1:3] == ["read", "mysql"]:
+        return MYSQL(*sys.argv[3:7]).as_json()
+    else:
+        raise Exception("Invalid sys args: {}", json.dumps(sys.argv))
+
+if __name__ == "__main__":
+    main()
