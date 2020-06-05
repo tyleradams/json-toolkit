@@ -51,7 +51,6 @@ class DB:
                 value_string = ",".join([str(v) for v in write["values"]])
                 self.query("insert into {} values({})".format(write["table"], value_string))
             elif write["type"] == "create table":
-            # {"name": "a", "type": "id"
                 value_strings = ["{} {}".format(field["name"], field["type"]) for field in write["fields"]]
                 value_string = ",".join(value_strings)
                 self.query("create table {} ({})".format(write["name"], value_string))
