@@ -15,6 +15,16 @@ def make_table(data, columns):
     return [make_dict(columns, row) for row in data]
 
 class DB:
+
+    def query(self, query_string):
+        cursor = self.connection.cursor()
+        cursor.execute(query_string)
+        self.connection.commit()
+        if cursor.description is None:
+            return []
+        else:
+            return [list(r) for r in cursor.fetchall()]
+
     def read_table(self, table_name):
         columns = self.column_names(table_name)
 
@@ -41,11 +51,7 @@ class DB:
 class SQLITE3(DB):
     DB_TYPE_S = "sqlite3"
     def __init__(self, filename):
-        self.c = sqlite3.connect(filename).cursor()
-
-    def query(self, query_string):
-        data = list(self.c.execute(query_string))
-        return data
+        self.connection = sqlite3.connect(filename)
 
     def column_names(self, table_name):
         columns = self.query("pragma table_info({});".format(table_name))
@@ -66,11 +72,6 @@ class PSQL(DB):
                 port = port,
                 database = database)
 
-    def query(self, query_string):
-        cursor = self.connection.cursor()
-        cursor.execute(query_string)
-        return [list(r) for r in cursor.fetchall()]
-
     def column_names(self, table_name):
         return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
 
@@ -87,12 +88,6 @@ class MYSQL(DB):
                 user,
                 password,
                 database)
-
-    def query(self, query_string):
-        cursor = self.connection.cursor()
-        cursor.execute(query_string)
-        data = [list(r) for r in cursor.fetchall()]
-        return data
 
     def column_names(self, table_name):
         return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
