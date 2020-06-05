@@ -37,6 +37,27 @@ class DB:
     def as_json(self):
         print(json.dumps(self.read_tables()))
 
+    def validate_writes(self, writes):
+        return []
+
+    def execute_writes(self, writes):
+        write_errors = self.validate_writes(writes)
+
+        if write_errors != []:
+            raise Exception("Write errors:{}".format(json.dumps(writes)))
+
+        for write in writes:
+            if write["type"] == "insert":
+                value_string = ",".join([str(v) for v in write["values"]])
+                self.query("insert into {} values({})".format(write["table"], value_string))
+            elif write["type"] == "create table":
+            # {"name": "a", "type": "id"
+                value_strings = ["{} {}".format(field["name"], field["type"]) for field in write["fields"]]
+                value_string = ",".join(value_strings)
+                self.query("create table {} ({})".format(write["name"], value_string))
+            else:
+                raise Exception("Bad write: {}".format(json.dumps(write)))
+
     def get_type(command):
         TYPES = [SQLITE3, PSQL, MYSQL]
         possible_t = [t for t in TYPES if t.DB_TYPE_S == command]
@@ -98,6 +119,9 @@ class MYSQL(DB):
 def read(db_type_s, credentials):
     return DB.get_type(db_type_s)(*credentials).as_json()
 
+def write(data):
+    return DB.get_type(data["db_type"])(*data["credentials"]).execute_writes(data["writes"])
+
 def help_message():
     print("TODO: Implement help message")
     return None
@@ -105,6 +129,8 @@ def help_message():
 def main():
     if len(sys.argv) >= 4 and sys.argv[1] == "read":
         return read(sys.argv[2], sys.argv[3:])
+    if len(sys.argv) == 2 and sys.argv[1] == "write":
+        return write(json.load(sys.stdin))
     else:
         return help_message()
 
