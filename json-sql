@@ -60,7 +60,7 @@ class DB:
 
     def get_type(command):
         TYPES = [SQLITE3, PSQL, MYSQL]
-        possible_t = [t for t in TYPES if t.DB_TYPE_S == command]
+        possible_t = [t for t in TYPES if t.__name__ == command.upper()]
         if possible_t == []:
             raise Exception("No type found for: {}".format(command))
         elif len(possible_t) > 1:
@@ -70,7 +70,6 @@ class DB:
 
 
 class SQLITE3(DB):
-    DB_TYPE_S = "sqlite3"
     def __init__(self, filename):
         self.connection = sqlite3.connect(filename)
 
@@ -83,8 +82,6 @@ class SQLITE3(DB):
         return [e["name"] for e in master_table if e["type"] == "table"]
 
 class PSQL(DB):
-    DB_TYPE_S = "psql"
-
     def __init__(self, user, password, host, port, database):
         self.connection = psycopg2.connect(
                 user = user,
@@ -100,8 +97,6 @@ class PSQL(DB):
         return [t[0] for t in self.query("select table_name from information_schema.tables where table_schema = 'public';")]
 
 class MYSQL(DB):
-    DB_TYPE_S = "mysql"
-
     def __init__(self, user, password, host, database):
         self.database = database
         self.connection = pymysql.connect(
