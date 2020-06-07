@@ -23,7 +23,7 @@ func min(a int, b int) int {
 
 type Compare func(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{}
 
-func compare_simple(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
+func compareSimple(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
 	if v1 == v2 {
 		return []map[string]interface{}{}
 	}
@@ -37,7 +37,7 @@ func compare_simple(path []interface{}, v1 interface{}, v2 interface{}) []map[st
 	}
 }
 
-func compare_slice(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
+func compareSlice(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
 	slice1 := v1.([]interface{})
 	slice2 := v2.([]interface{})
 
@@ -46,7 +46,7 @@ func compare_slice(path []interface{}, v1 interface{}, v2 interface{}) []map[str
 	for i := 0; i < min(len(slice1), len(slice2)); i++ {
 		i1 := slice1[i]
 		i2 := slice2[i]
-		m = append(m, compare_object(append(path, i), i1, i2)...)
+		m = append(m, compareObject(append(path, i), i1, i2)...)
 	}
 
 	if len(slice1) > len(slice2) {
@@ -69,17 +69,17 @@ func compare_slice(path []interface{}, v1 interface{}, v2 interface{}) []map[str
 	return m
 }
 
-func compare_map(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
+func compareMap(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
 
 	map1 := v1.(map[string]interface{})
 	map2 := v2.(map[string]interface{})
 
 	diff := []map[string]interface{}{}
 
-	for key, _ := range map1 {
+	for key := range map1 {
 		_, keyInMap2 := map2[key]
 		if keyInMap2 {
-			diff = append(diff, compare_object(append(path, key), map1[key], map2[key])...)
+			diff = append(diff, compareObject(append(path, key), map1[key], map2[key])...)
 		} else {
 			diff = append(diff, map[string]interface{}{
 				"path":      append(path, key),
@@ -88,7 +88,7 @@ func compare_map(path []interface{}, v1 interface{}, v2 interface{}) []map[strin
 		}
 	}
 
-	for key, _ := range map2 {
+	for key := range map2 {
 		_, keyInMap1 := map1[key]
 		if !keyInMap1 {
 			diff = append(diff, map[string]interface{}{
@@ -101,26 +101,26 @@ func compare_map(path []interface{}, v1 interface{}, v2 interface{}) []map[strin
 	return diff
 }
 
-func compare_object(path []interface{}, object1 interface{}, object2 interface{}) []map[string]interface{} {
+func compareObject(path []interface{}, object1 interface{}, object2 interface{}) []map[string]interface{} {
 	// nil does not have a reflection type kind, so we need to check for this case first
 	if object1 == nil || object2 == nil {
-		return compare_simple(path, object1, object2)
+		return compareSimple(path, object1, object2)
 	}
 
 	// This cannot be defined outside because it makes an initialization loop
 	var compare = map[reflect.Kind]Compare{
-		reflect.Float64: compare_simple,
-		reflect.Bool:    compare_simple,
-		reflect.String:  compare_simple,
-		reflect.Slice:   compare_slice,
-		reflect.Map:     compare_map,
+		reflect.Float64: compareSimple,
+		reflect.Bool:    compareSimple,
+		reflect.String:  compareSimple,
+		reflect.Slice:   compareSlice,
+		reflect.Map:     compareMap,
 	}
 
 	var type1 reflect.Kind = reflect.TypeOf(object1).Kind()
 	var type2 reflect.Kind = reflect.TypeOf(object2).Kind()
 
 	if type1 != type2 {
-		return compare_simple(path, object1, object2)
+		return compareSimple(path, object1, object2)
 	} else if val, ok := compare[type1]; type1 == type2 && ok {
 		return val(path, object1, object2)
 	} else {
@@ -147,7 +147,7 @@ func main() {
 	err = json.Unmarshal(file2, &object2)
 	check(err)
 
-	diff := compare_object([]interface{}{}, object1, object2)
+	diff := compareObject([]interface{}{}, object1, object2)
 
 	output, _ := json.Marshal(diff)
 	fmt.Printf("%v\n", string(output))
