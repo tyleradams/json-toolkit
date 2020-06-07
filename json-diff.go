@@ -21,21 +21,26 @@ func min(a int, b int) int {
 	return b
 }
 
-func compare_simple(path []interface{}, simple1 interface{}, simple2 interface{}) []map[string]interface{} {
-	if simple1 == simple2 {
+type Compare func(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{}
+
+func compare_simple(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
+	if v1 == v2 {
 		return []map[string]interface{}{}
 	}
 
 	return []map[string]interface{}{
 		{
 			"path":       path,
-			"leftValue":  simple1,
-			"rightValue": simple2,
+			"leftValue":  v1,
+			"rightValue": v2,
 		},
 	}
 }
 
-func compare_slice(path []interface{}, slice1 []interface{}, slice2 []interface{}) []map[string]interface{} {
+func compare_slice(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
+	slice1 := v1.([]interface{})
+	slice2 := v2.([]interface{})
+
 	m := []map[string]interface{}{}
 
 	for i := 0; i < min(len(slice1), len(slice2)); i++ {
@@ -64,7 +69,11 @@ func compare_slice(path []interface{}, slice1 []interface{}, slice2 []interface{
 	return m
 }
 
-func compare_map(path []interface{}, map1 map[string]interface{}, map2 map[string]interface{}) []map[string]interface{} {
+func compare_map(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
+
+	map1 := v1.(map[string]interface{})
+	map2 := v2.(map[string]interface{})
+
 	diff := []map[string]interface{}{}
 
 	for key, _ := range map1 {
@@ -98,17 +107,22 @@ func compare_object(path []interface{}, object1 interface{}, object2 interface{}
 		return compare_simple(path, object1, object2)
 	}
 
+	// This cannot be defined outside because it makes an initialization loop
+	var compare = map[reflect.Kind]Compare{
+		reflect.Float64: compare_simple,
+		reflect.Bool:    compare_simple,
+		reflect.String:  compare_simple,
+		reflect.Slice:   compare_slice,
+		reflect.Map:     compare_map,
+	}
+
 	var type1 reflect.Kind = reflect.TypeOf(object1).Kind()
 	var type2 reflect.Kind = reflect.TypeOf(object2).Kind()
 
 	if type1 != type2 {
 		return compare_simple(path, object1, object2)
-	} else if type1 == type2 && (type1 == reflect.Float64 || type1 == reflect.Bool || type1 == reflect.String) {
-		return compare_simple(path, object1, object2)
-	} else if type1 == type2 && type1 == reflect.Slice {
-		return compare_slice(path, object1.([]interface{}), object2.([]interface{}))
-	} else if type1 == type2 && type1 == reflect.Map {
-		return compare_map(path, object1.(map[string]interface{}), object2.(map[string]interface{}))
+	} else if val, ok := compare[type1]; type1 == type2 && ok {
+		return val(path, object1, object2)
 	} else {
 		panic(errors.New("IncompleteIfTree:type1:" + string(type1) + ":type2:" + string(type2)))
 	}
