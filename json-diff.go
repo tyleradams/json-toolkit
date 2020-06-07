@@ -21,7 +21,7 @@ func min(a int, b int) int {
 	return b
 }
 
-type Compare func(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{}
+type compare func(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{}
 
 func compareSimple(path []interface{}, v1 interface{}, v2 interface{}) []map[string]interface{} {
 	if v1 == v2 {
@@ -108,7 +108,7 @@ func compareObject(path []interface{}, object1 interface{}, object2 interface{})
 	}
 
 	// This cannot be defined outside because it makes an initialization loop
-	var compare = map[reflect.Kind]Compare{
+	var compare = map[reflect.Kind]compare{
 		reflect.Float64: compareSimple,
 		reflect.Bool:    compareSimple,
 		reflect.String:  compareSimple,
