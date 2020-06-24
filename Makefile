@@ -11,6 +11,9 @@ json-empty : json-empty.go
 clean :
 	rm json-diff json-empty 2> /dev/null || true
 
+lint :
+	./run-linter
+
 test :
 	./run-all-tests
 
