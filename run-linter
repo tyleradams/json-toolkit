@@ -16,4 +16,7 @@ python-to-json-ast \
 xml-to-json \
 yaml-to-json \
 2>&1 | grep -v "Using config file"
+
 go vet
+
+./run-bash-linter

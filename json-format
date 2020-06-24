@@ -13,10 +13,10 @@ if [[ "$FILE" == "-" ]]; then
 elif [[ ! -f "$FILE" ]]; then
     echo "$FILE does not exist"
     exit 1
-elif ! $(jq '.' $FILE > /dev/null); then
+elif ! jq '.' "$FILE" > /dev/null; then
     exit 1
 else
     TMP="$(mktemp)"
-    jq -S '.' $FILE > $TMP
-    mv $TMP $FILE
+    jq -S '.' "$FILE" > "$TMP"
+    mv "$TMP" "$FILE"
 fi
