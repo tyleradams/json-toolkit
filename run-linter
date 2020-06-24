@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pylint3 -f json \
+pylint3 \
 csv-to-json \
 dsv-to-json \
 generate-json-diff-results \
