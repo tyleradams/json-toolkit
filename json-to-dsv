@@ -4,12 +4,14 @@ import csv
 import json
 import sys
 
+
 def main():
     rows = json.load(sys.stdin)
     delimiter = sys.argv[1]
     for row in rows:
         print(delimiter.join([str(e) for e in row]))
     exit(0)
+
 
 if __name__ == "__main__":
     main()

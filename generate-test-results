@@ -4,19 +4,24 @@ import json
 import subprocess
 import sys
 
+
 def flatten(ll):
     a = []
     for l in ll:
         a.extend(l)
     return a
 
+
 def run_command(command, stdin):
-    p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(command, stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, _ = p.communicate(stdin.encode("ASCII"))
     return output.decode("ASCII"), p.returncode
 
+
 def run_test(test):
-    actual_output, actual_return_code = run_command(test["command"], test["input"])
+    actual_output, actual_return_code = run_command(
+        test["command"], test["input"])
     return [{
         "command": test["command"],
         "input": test["input"],
@@ -24,11 +29,13 @@ def run_test(test):
         "returnCode": actual_return_code,
     }]
 
+
 def main():
     tests = json.load(sys.stdin)
     results = flatten(map(run_test, tests))
     print(json.dumps(results))
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

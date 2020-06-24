@@ -6,13 +6,17 @@ import pymysql
 import sqlite3
 import sys
 
+
 def make_dict(keys, values):
     if len(keys) != len(values):
-        raise Exception("Cannot make_dict: {}".format({"keys": keys, "values": values}))
-    return { keys[i]: values[i] for i in range(len(keys)) }
+        raise Exception("Cannot make_dict: {}".format(
+            {"keys": keys, "values": values}))
+    return {keys[i]: values[i] for i in range(len(keys))}
+
 
 def make_table(data, columns):
     return [make_dict(columns, row) for row in data]
+
 
 class DB:
     def query(self, query_string):
@@ -41,7 +45,7 @@ class DB:
         return make_table(data, columns)
 
     def read_tables(self):
-        return { name: self.read_table(name) for name in self.table_names() }
+        return {name: self.read_table(name) for name in self.table_names()}
 
     def as_json(self):
         print(json.dumps(self.read_tables()))
@@ -58,11 +62,14 @@ class DB:
         for write in writes:
             if write["type"] == "insert":
                 value_string = ",".join([str(v) for v in write["values"]])
-                self.query("insert into {} values({})".format(write["table"], value_string))
+                self.query("insert into {} values({})".format(
+                    write["table"], value_string))
             elif write["type"] == "create table":
-                value_strings = ["{} {}".format(field["name"], field["type"]) for field in write["fields"]]
+                value_strings = ["{} {}".format(
+                    field["name"], field["type"]) for field in write["fields"]]
                 value_string = ",".join(value_strings)
-                self.query("create table {} ({})".format(write["name"], value_string))
+                self.query("create table {} ({})".format(
+                    write["name"], value_string))
             else:
                 raise Exception("Bad write: {}".format(json.dumps(write)))
 
@@ -89,14 +96,15 @@ class SQLITE3(DB):
         master_table = self.read_table("sqlite_master")
         return [e["name"] for e in master_table if e["type"] == "table"]
 
+
 class PSQL(DB):
     def __init__(self, user, password, host, port, database):
         self.connection = psycopg2.connect(
-                user = user,
-                password = password,
-                host = host,
-                port = port,
-                database = database)
+            user=user,
+            password=password,
+            host=host,
+            port=port,
+            database=database)
 
     def column_names(self, table_name):
         return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
@@ -104,14 +112,15 @@ class PSQL(DB):
     def table_names(self):
         return [t[0] for t in self.query("select table_name from information_schema.tables where table_schema = 'public';")]
 
+
 class MYSQL(DB):
     def __init__(self, user, password, host, database):
         self.database = database
         self.connection = pymysql.connect(
-                host,
-                user,
-                password,
-                database)
+            host,
+            user,
+            password,
+            database)
 
     def column_names(self, table_name):
         return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
@@ -119,15 +128,19 @@ class MYSQL(DB):
     def table_names(self):
         return [t[0] for t in self.query("select table_name from information_schema.tables where table_schema = '{}';".format(self.database))]
 
+
 def read(db_type_s, credentials):
     return DB.get_type(db_type_s)(*credentials).as_json()
+
 
 def write(data):
     return DB.get_type(data["db_type"])(*data["credentials"]).execute_writes(data["writes"])
 
+
 def help_message():
     print("TODO: Implement help message")
     return None
+
 
 def main():
     if len(sys.argv) >= 4 and sys.argv[1] == "read":
@@ -136,6 +149,7 @@ def main():
         return write(json.load(sys.stdin))
     else:
         return help_message()
+
 
 if __name__ == "__main__":
     main()

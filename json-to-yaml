@@ -5,9 +5,11 @@ import json
 import sys
 import yaml
 
+
 def main():
     print(yaml.dump(json.load(sys.stdin), default_flow_style=False), end='')
     exit(0)
+
 
 if __name__ == "__main__":
     main()

@@ -4,6 +4,7 @@ import json
 import logfmt
 import sys
 
+
 def main():
     d = json.load(sys.stdin)
     if type(d) != list:
@@ -12,6 +13,7 @@ def main():
     for l in logfmt.format(*d):
         print(l)
     exit(0)
+
 
 if __name__ == "__main__":
     main()
