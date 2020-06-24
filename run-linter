@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 
-go fmt json-diff.go &
-go fmt json-empty.go &
-autopep8 -i csv-to-json &
-autopep8 -i dsv-to-json &
-autopep8 -i generate-json-diff-results &
-autopep8 -i generate-test-results &
-autopep8 -i json-sql &
-autopep8 -i json-to-csv &
-autopep8 -i json-to-dsv &
-autopep8 -i json-to-logfmt &
-autopep8 -i json-to-xml &
-autopep8 -i json-to-yaml &
-autopep8 -i logfmt-to-json &
-autopep8 -i python-to-json-ast &
-autopep8 -i xml-to-json &
-autopep8 -i yaml-to-json &
-wait
+pylint3 -f json \
+csv-to-json \
+dsv-to-json \
+generate-json-diff-results \
+generate-test-results \
+json-sql \
+json-to-csv \
+json-to-dsv \
+json-to-logfmt \
+json-to-xml \
+json-to-yaml \
+logfmt-to-json \
+python-to-json-ast \
+xml-to-json \
+yaml-to-json \
+2>&1 | grep -v "Using config file"
