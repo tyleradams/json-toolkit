@@ -105,7 +105,7 @@
       "./json-to-xml"
     ],
     "input": "{\"a\": 1}",
-    "output": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root>\n\t<a>1</a>\n</root>\n",
+    "output": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<a>1</a>\n",
     "returnCode": 0
   },
   {

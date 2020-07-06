@@ -4,12 +4,43 @@ import json
 import sys
 import xmltodict
 
+JSON_FROM_PYTHON_NAMES = {
+    dict: "object",
+    list: "array",
+    int: "Number",
+    float: "Number",
+    bool: "Boolean",
+    None: "null"
+}
+
+class InvalidXMLSerializableData(Exception):
+    pass
+
+class IncompleteIfTreeException(Exception):
+    pass
+
+def validate_data(data):
+    if type(data) == dict and len(data.keys()) == 1:
+        return
+
+    # Prefacing \n makes multierror lines easier to read
+    message = "\n    Only a json object with 1 key can be serialized to xml"
+    if type(data) != dict:
+        type_name = JSON_FROM_PYTHON_NAMES[type(data)]
+        if type_name[0] in ["a", "e", "i", "o", "u"]:
+            message += "\n    The inputted json value is not an object, it is an {}".format(type_name)
+        else:
+            message += "\n    The inputted json value is not an object, it is a {}".format(type_name)
+    elif type(data) == dict and len(data.keys()) != 1:
+        message += "\n    Input object does not have 1 key, it has {} keys".format(data.keys())
+    else:
+        raise Exception("The code cannot handle this input, to receive support, please file a bug specifying the input")
+    raise InvalidXMLSerializableData(message)
 
 def main():
     data = json.load(sys.stdin)
-    print(xmltodict.unparse({"root": data}, pretty=True))
-    exit(0)
-
+    validate_data(data)
+    print(xmltodict.unparse(data, pretty=True))
 
 if __name__ == "__main__":
     main()
