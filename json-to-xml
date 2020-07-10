@@ -38,6 +38,9 @@ def validate_data(data):
     raise InvalidXMLSerializableData(message)
 
 def main():
+    if len(sys.argv) != 1:
+        print("Usage: json-to-xml")
+
     data = json.load(sys.stdin)
     validate_data(data)
     print(xmltodict.unparse(data, pretty=True))
