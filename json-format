@@ -14,6 +14,10 @@ elif [[ ! -f "$FILE" ]]; then
     echo "$FILE does not exist"
     exit 1
 elif ! jq '.' "$FILE" > /dev/null; then
+    echo "json is invalid, aborting"
+    exit 1
+elif [[ -z "$(jq '.' "$FILE")" ]]; then
+    echo "jq output returned nothing, aborting"
     exit 1
 else
     TMP="$(mktemp)"
