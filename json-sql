@@ -107,7 +107,8 @@ class PSQL(DB):
             database=database)
 
     def column_names(self, table_name):
-        return self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
+        names = self.query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))
+        return [n[0] for n in names]
 
     def table_names(self):
         return [t[0] for t in self.query("select table_name from information_schema.tables where table_schema = 'public';")]
