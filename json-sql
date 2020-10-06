@@ -46,7 +46,7 @@ class DB:
         return {name: self.read_table(name) for name in self.table_names()}
 
     def as_json(self):
-        print(json.dumps(self.read_tables()))
+        return json.dumps(self.read_tables())
 
     def validate_writes(self, writes):
         return []
@@ -135,7 +135,8 @@ class MYSQL(DB):
 
 
 def read(db_type_s, credentials):
-    return DB.get_type(db_type_s)(*credentials).as_json()
+    print(DB.get_type(db_type_s)(*credentials).as_json())
+    return None
 
 
 def write(data):
