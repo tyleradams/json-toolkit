@@ -58,7 +58,13 @@ class DB:
             raise Exception("Write errors:{}".format(json.dumps(writes)))
 
         for write in writes:
-            if write["type"] == "insert":
+            if write["type"] == "raw_queries":
+                output = []
+                for query in write["queries"]:
+                    output.append(self.query(query))
+                print(json.dumps(output))
+                return None
+            elif write["type"] == "insert":
                 value_string = ",".join([str(v) for v in write["values"]])
                 self.query("insert into {} values({})".format(
                     write["table"], value_string))
