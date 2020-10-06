@@ -30,11 +30,9 @@ class DB:
         self.connection.commit()
 
         if cursor_has_results(cursor):
-            data = [list(r) for r in cursor.fetchall()]
-        # fetchall cannot be called if the cursor has no results as a psycopg2
-        # cursor throws an exception under such circumstances.
-        else:
-            data = []
+            return [list(r) for r in cursor.fetchall()]
+        # If the cursor does not have results, assume it returns a row count
+        return cursor.rowcount
 
         return data
 
