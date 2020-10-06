@@ -21,6 +21,7 @@ test :
 	./run-all-tests
 
 install : all
+	install binary-to-json /usr/local/bin
 	install csv-to-json /usr/local/bin
 	install dsv-to-json /usr/local/bin
 	install json-cat /usr/local/bin
@@ -29,6 +30,7 @@ install : all
 	install json-empty /usr/local/bin
 	install json-format /usr/local/bin
 	install json-sql /usr/local/bin
+	install json-to-binary /usr/local/bin
 	install json-to-csv /usr/local/bin
 	install json-to-dsv /usr/local/bin
 	install json-to-logfmt /usr/local/bin

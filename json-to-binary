@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+
+def validate_binary(data):
+    data_with_index = list(enumerate(data))
+    errors = []
+    errors.extend([{"message": "Value is not an int", "index": x[0], "value": x[1]} for x in data_with_index if type(x[1]) != int])
+    errors.extend([{"message": "Value is not within [0,255]", "index": x[0], "value": x[1]} for x in data_with_index if x[1] < 0 or x[1] > 255])
+    if len(errors) != 0:
+        raise Exception("Invalid data:{}".format(json.dumps(errors)))
+
+data = json.load(sys.stdin)
+
+validate_binary(data)
+
+a = bytearray()
+for byte in data:
+    a.append(byte)
+
+sys.stdout.buffer.write(a)

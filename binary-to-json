@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+
+data = list(sys.stdin.buffer.read())
+
+print(json.dumps(data))
