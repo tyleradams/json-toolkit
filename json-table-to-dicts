@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+
+def f(data):
+    keys = data[0]
+    values = data[1:]
+    return [{keys[i]:v[i] for i in range(len(v))} for v in values]
+
+print(json.dumps(f(json.load(sys.stdin))))
+

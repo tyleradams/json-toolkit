@@ -30,6 +30,7 @@ install : all
 	install json-empty /usr/local/bin
 	install json-format /usr/local/bin
 	install json-sql /usr/local/bin
+	install json-table-to-dicts /usr/local/bin
 	install json-to-binary /usr/local/bin
 	install json-to-csv /usr/local/bin
 	install json-to-dsv /usr/local/bin
