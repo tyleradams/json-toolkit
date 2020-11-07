@@ -1,3 +1,2 @@
-#!/usr/bin/env jq
-'[(.[0] | keys)] + map(to_entries | map(.value))'
-
+#!/usr/bin/env bash
+jq '[(.[0] | keys)] + map(to_entries | map(.value))'
