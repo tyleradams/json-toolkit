@@ -47,8 +47,6 @@ class DB:
         # If the cursor does not have results, assume it returns a row count
         return cursor.rowcount
 
-        return data
-
     def read_table(self, table_name):
         columns = self.column_names(table_name)
 
