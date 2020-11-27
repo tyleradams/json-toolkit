@@ -125,7 +125,7 @@ def help_message():
 Usage: json-sql COMMAND DB_TYPE CREDENTIALS
 
 Overview:
-    json-sql makes it easy to read/write data to/from a sql database in the command line. It intentionally lacks many features that can be easily achieved with other programs. For example, although , as the output of json-sql can be piped into another program to 
+    json-sql makes it easy to read/write data to/from a sql database in the command line. It intentionally lacks many features that can be easily achieved with other programs.
 
 COMMAND:
     read - reads the entire database and dumps it as json on stdout.
