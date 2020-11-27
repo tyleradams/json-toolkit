@@ -6,6 +6,7 @@ autopep8 -i csv-to-json &
 autopep8 -i dsv-to-json &
 autopep8 -i generate-json-diff-results &
 autopep8 -i generate-test-results &
+autopep8 -i json-make-schema &
 autopep8 -i json-sql &
 autopep8 -i json-to-csv &
 autopep8 -i json-to-dsv &

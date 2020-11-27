@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+import json
+import genson
+import sys
+
+def t(data):
+    builder = genson.SchemaBuilder()
+    builder.add_object(data)
+    return builder.to_schema()
+
+if len(sys.argv) == 1:
+    print(json.dumps(t(json.load(sys.stdin))))
+else:
+    print("""\
+Usage: json-make-schema
+
+OVERVIEW:
+    json-make-schema returns a json schema on stdout for a json value passed into stdin
+
+Example Usage:
+    cat example.json | json-make-schema
+""", end="")
