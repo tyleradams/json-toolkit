@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 go fmt json-diff.go &
-go fmt json-empty.go &
+go fmt json-empty-array.go &
 autopep8 -i csv-to-json &
 autopep8 -i dsv-to-json &
 autopep8 -i generate-json-diff-results &

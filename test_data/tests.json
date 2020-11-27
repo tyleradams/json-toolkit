@@ -1,7 +1,7 @@
 [
   {
     "command": [
-      "./json-empty"
+      "./json-empty-array"
     ],
     "input": "[]\n",
     "output": "",
@@ -9,7 +9,7 @@
   },
   {
     "command": [
-      "./json-empty"
+      "./json-empty-array"
     ],
     "input": "{}\n",
     "output": "{}\n",
@@ -17,7 +17,7 @@
   },
   {
     "command": [
-      "./json-empty"
+      "./json-empty-array"
     ],
     "input": "0\n",
     "output": "0\n",
