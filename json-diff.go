@@ -130,7 +130,7 @@ func compareObject(path []interface{}, object1 interface{}, object2 interface{})
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Println(
+		fmt.Print(
 			`Usage: json-diff FILE1 FILE2
 
 OVERVIEW:
@@ -171,13 +171,12 @@ OUTPUT SCHEMA:
           }
         },
         "required": [
-          "path",
+          "path"
         ],
         "type": "object"
       },
       "type": "array"
     }
-
 `)
 		os.Exit(1)
 	}
