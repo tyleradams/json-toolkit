@@ -42,3 +42,6 @@ install : all
 	install python-to-json-ast /usr/local/bin
 	install xml-to-json /usr/local/bin
 	install yaml-to-json /usr/local/bin
+
+deploy:
+	git push
