@@ -11,7 +11,8 @@ import sys
 def t(data):
     return data
 
-print(json.dumps(t(json.load(sys.stdin))))"""
+print(json.dumps(t(json.load(sys.stdin))))
+"""
 
 HELP_MESSAGE ="""\
 Usage: pjito
@@ -23,7 +24,7 @@ Example usage:
     pijto > fix-data && chmod +x fix-data
 """
 
-if len(sys.argv) > 1:
-    print(HELP_MESSAGE, end="")
-else:
+if len(sys.argv) == 1:
     print(PROGRAM, end="")
+else:
+    print(HELP_MESSAGE, end="")

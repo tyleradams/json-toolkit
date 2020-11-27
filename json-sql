@@ -159,12 +159,13 @@ Example advanced usage with other programs:
         json-sql read psql user password localhost 5432 db | jq '.table'
 
     Delete a list of ids from a psql DB:
-        echo '[1, 2, 3, 4]' | jq "[\"delete from json_nosql_db where id in (\" + join(\",\") + \");\"]" | json-sql query psql user password localhost 5432 db"""
+        echo '[1, 2, 3, 4]' | jq "[\"delete from json_nosql_db where id in (\" + join(\",\") + \");\"]" | json-sql query psql user password localhost 5432 db
+"""
 
 
 def main():
     if len(sys.argv) < 4:
-        print(help_message())
+        print(help_message(), end="")
         return
 
     method = sys.argv[1]
@@ -179,7 +180,7 @@ def main():
         queries = json.load(sys.stdin)
         print(json.dumps([db.execute_query(query) for query in queries]))
     else:
-        print(help_message())
+        print(help_message(), end="")
     return
 
 
