@@ -197,7 +197,7 @@ OUTPUT SCHEMA:
 	diff := compareObject([]interface{}{}, object1, object2)
 
 	output, _ := json.Marshal(diff)
-	fmt.Printf("%v\n", string(output))
+	fmt.Println(string(output))
 	if len(diff) == 0 {
 		os.Exit(0)
 	}
