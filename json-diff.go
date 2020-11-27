@@ -130,7 +130,55 @@ func compareObject(path []interface{}, object1 interface{}, object2 interface{})
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Println("Usage: json-diff file1 file2")
+		fmt.Println(
+			`Usage: json-diff FILE1 FILE2
+
+OVERVIEW:
+    json-diff reports differences between two json files as json.
+
+    For each difference, json-diff reports the path in the json of the difference, the value in FILE1 (leftValue) (if present), and the value in FILE2 (rightValue) (if present).
+    If a value is only present in FILE1, rightValue will not be present.
+    If a value is only present in FILE2, leftValue will not be present.
+
+PATH NOTATION:
+    The path for a difference is an array of numbers and strings. Each number refers to an array index and each string refers to an object key.
+
+    For example, [0, "a", 2] would refer to "foo" in the json value:
+        [
+            {
+                "a": [
+                    null,
+                    null,
+                    "foo"
+                    ]
+            }
+        ]
+
+OUTPUT SCHEMA:
+    {
+      "$schema": "http://json-schema.org/schema#",
+      "items": {
+        "properties": {
+          "leftValue": {
+            "type": ["null", "boolean", "object", "array", "number", "string"]
+          },
+          "path": {
+            "type": "array",
+            "contains": ["number", "string"]
+          },
+          "rightValue": {
+            "type": ["null", "boolean", "object", "array", "number", "string"]
+          }
+        },
+        "required": [
+          "path",
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+
+`)
 		os.Exit(1)
 	}
 
