@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 shellcheck -e SC2002 \
-json-cat \
 json-format \
 json-to-plot \
 run-all-tests \
