@@ -1,15 +1,15 @@
-all : json-diff json-empty
+all : json-diff json-empty-array
 
 json-diff : json-diff.go
 	go fmt json-diff.go
 	go build json-diff.go
 
-json-empty : json-empty.go
-	go fmt json-empty.go
-	go build json-empty.go
+json-empty-array : json-empty-array.go
+	go fmt json-empty-array.go
+	go build json-empty-array.go
 
 clean :
-	rm json-diff json-empty 2> /dev/null || true
+	rm json-diff json-empty-array 2> /dev/null || true
 
 lint:
 	./run-linter
@@ -26,7 +26,7 @@ install : all
 	install dsv-to-json /usr/local/bin
 	install json-objs-to-table /usr/local/bin
 	install json-diff /usr/local/bin
-	install json-empty /usr/local/bin
+	install json-empty-array /usr/local/bin
 	install json-format /usr/local/bin
 	install json-sql /usr/local/bin
 	install json-table-to-objs /usr/local/bin
