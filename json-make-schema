@@ -4,10 +4,12 @@ import json
 import genson
 import sys
 
+
 def t(data):
     builder = genson.SchemaBuilder()
     builder.add_object(data)
     return builder.to_schema()
+
 
 if len(sys.argv) == 1:
     print(json.dumps(t(json.load(sys.stdin))))

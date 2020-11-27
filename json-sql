@@ -7,6 +7,7 @@ import pymysql
 import sqlite3
 import sys
 
+
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
         return o
@@ -17,8 +18,8 @@ def jsonable(o):
     elif type(o) in [decimal.Decimal]:
         return float(o)
     else:
-        raise Exception("Cannot make object jsonable:{}:{}".format(str(type(o)),str(o)))
-
+        raise Exception(
+            "Cannot make object jsonable:{}:{}".format(str(type(o)), str(o)))
 
 
 def make_table(data, columns):
@@ -27,7 +28,6 @@ def make_table(data, columns):
             raise Exception("Cannot make_dict: {}".format(
                 {"keys": keys, "values": values}))
         return {keys[i]: values[i] for i in range(len(keys))}
-
 
     return [make_dict(columns, row) for row in data]
 
@@ -76,7 +76,8 @@ class SQLITE3(DB):
         self.connection = sqlite3.connect(filename)
 
     def column_names(self, table_name):
-        columns = self.execute_query("pragma table_info({});".format(table_name))
+        columns = self.execute_query(
+            "pragma table_info({});".format(table_name))
         return [column[1] for column in columns]
 
     def table_names(self):
@@ -94,7 +95,8 @@ class PSQL(DB):
             database=database)
 
     def column_names(self, table_name):
-        names = self.execute_query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))
+        names = self.execute_query(
+            "select column_name from information_schema.columns where table_name = '{}';".format(table_name))
         return [n[0] for n in names]
 
     def table_names(self):
@@ -119,7 +121,7 @@ class MYSQL(DB):
 
 def help_message():
     return \
-"""
+        """
 Usage: json-sql COMMAND DB_TYPE CREDENTIALS
 
 Overview:
