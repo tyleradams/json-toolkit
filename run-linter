@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pylint3 \
+pylint \
 csv-to-json \
 dsv-to-json \
 generate-json-diff-results \
@@ -15,7 +15,7 @@ logfmt-to-json \
 python-to-json-ast \
 xml-to-json \
 yaml-to-json \
-2>&1 | grep -v "Using config file"
+2>&1
 
 go vet
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import ast
-import ast2json
 import json
 import sys
+
+import ast2json
 
 print(json.dumps(ast2json.ast2json(ast.parse(sys.stdin.read()))))

@@ -2,11 +2,11 @@
 
 import decimal
 import json
-import psycopg2
-import pymysql
 import sqlite3
 import sys
 
+import pymysql
+import psycopg2
 
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
@@ -33,6 +33,8 @@ def make_table(data, columns):
 
 
 class DB:
+    connection = None
+
     def execute_query(self, query_string):
         def cursor_has_results(cursor):
             # DB API 2.0 states that when the cursor does not return results
@@ -49,20 +51,23 @@ class DB:
         return cursor.rowcount
 
     def read_table(self, table_name):
-        columns = self.column_names(table_name)
+        columns = self._column_names(table_name)
 
         data = self.execute_query("select * from {};".format(table_name))
         return make_table(data, columns)
 
     def read_tables(self):
-        return {name: self.read_table(name) for name in self.table_names()}
+        # pylint: disable=not-an-iterable
+        return {name: self.read_table(name) for name in self._table_names()}
 
     def read(self):
         return jsonable(self.read_tables())
 
+    @staticmethod
     def get_type(command):
         TYPES = [SQLITE3, PSQL, MYSQL]
         possible_t = [t for t in TYPES if t.__name__ == command.upper()]
+
         if possible_t == []:
             raise Exception("No type found for: {}".format(command))
         elif len(possible_t) > 1:
@@ -70,22 +75,31 @@ class DB:
 
         return possible_t[0]
 
+    # pylint: disable=unused-argument,no-self-use
+    def _column_names(self, table_name):
+        return NotImplementedError
+
+    # pylint: disable=no-self-use
+    def _table_names(self):
+        return NotImplementedError
+
 
 class SQLITE3(DB):
     def __init__(self, filename):
         self.connection = sqlite3.connect(filename)
 
-    def column_names(self, table_name):
+    def _column_names(self, table_name):
         columns = self.execute_query(
             "pragma table_info({});".format(table_name))
         return [column[1] for column in columns]
 
-    def table_names(self):
+    def _table_names(self):
         master_table = self.read_table("sqlite_master")
         return [e["name"] for e in master_table if e["type"] == "table"]
 
 
 class PSQL(DB):
+    # pylint: disable=not-an-iterable
     def __init__(self, user, password, host, port, database):
         self.connection = psycopg2.connect(
             user=user,
@@ -94,12 +108,12 @@ class PSQL(DB):
             port=port,
             database=database)
 
-    def column_names(self, table_name):
+    def _column_names(self, table_name):
         names = self.execute_query(
             "select column_name from information_schema.columns where table_name = '{}';".format(table_name))
         return [n[0] for n in names]
 
-    def table_names(self):
+    def _table_names(self):
         return [t[0] for t in self.execute_query("select table_name from information_schema.tables where table_schema = 'public';")]
 
 
@@ -112,10 +126,10 @@ class MYSQL(DB):
             password,
             database)
 
-    def column_names(self, table_name):
+    def _column_names(self, table_name):
         return self.execute_query("select column_name from information_schema.columns where table_name = '{}';".format(table_name))[0]
 
-    def table_names(self):
+    def _table_names(self):
         return [t[0] for t in self.execute_query("select table_name from information_schema.tables where table_schema = '{}';".format(self.database))]
 
 

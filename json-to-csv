@@ -9,7 +9,6 @@ def main():
     rows = json.load(sys.stdin)
     csv_writer = csv.writer(sys.stdout, dialect='unix')
     csv_writer.writerows(rows)
-    exit(0)
 
 
 if __name__ == "__main__":

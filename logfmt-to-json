@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 import json
-import logfmt
 import sys
 
+import logfmt
 
 def main():
     for l in logfmt.parse(sys.stdin):
         print(json.dumps(l))
-    exit(0)
 
 
 if __name__ == "__main__":
