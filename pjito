@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import sys
+
+PROGRAM="""\
+#!/usr/bin/env python3
+
+import json
+import sys
+
+def t(data):
+    return data
+
+print(json.dumps(t(json.load(sys.stdin))))"""
+
+HELP_MESSAGE ="""\
+Usage: pjito
+
+Overview:
+    pjito returns a Python JSON "Input-Transform-Output" (PJITO) template.
+
+Example usage:
+    pijto > fix-data && chmod +x fix-data
+"""
+
+if len(sys.argv) > 1:
+    print(HELP_MESSAGE, end="")
+else:
+    print(PROGRAM, end="")
