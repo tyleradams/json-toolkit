@@ -5,6 +5,7 @@ import sys
 
 import logfmt
 
+
 def main():
     d = json.load(sys.stdin)
     if type(d) != list:

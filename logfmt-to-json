@@ -5,6 +5,7 @@ import sys
 
 import logfmt
 
+
 def main():
     for l in logfmt.parse(sys.stdin):
         print(json.dumps(l))

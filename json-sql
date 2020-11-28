@@ -8,6 +8,7 @@ import sys
 import pymysql
 import psycopg2
 
+
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
         return o
