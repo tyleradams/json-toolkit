@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+N=$1
+M=$2
+MN=$((M-1))
+
+go build ../json-diff.go
+
+cat original.json | jq ".[$MN:$M]" > o.json
+cat updated.json | jq ".[$MN:$M]" > u.json
+
+../json-diff o.json u.json 2>&1 || true
+
+cat original.json | jq ".[$N:$M]" > so.json
+cat updated.json | jq ".[$N:$M]" > su.json
+
+../json-diff so.json su.json 2>&1

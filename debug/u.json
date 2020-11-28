@@ -1,0 +1,2405 @@
+[
+  {
+    "driver": false,
+    "name": "test_backtest",
+    "parameters": {
+      "data": [
+        {
+          "endDate": "2020-11-01",
+          "startDate": "2016-01-01",
+          "ticker": "CACHED_SPY.csv"
+        }
+      ],
+      "numberOfRandomSamples": 50,
+      "randomSeed": 0,
+      "stakeSize": 1,
+      "startValue": 10000,
+      "strategy": {
+        "buy": {
+          "conditions": [
+            {
+              "kwargs": {
+                "1": true
+              },
+              "name": "DayOfWeek"
+            }
+          ]
+        },
+        "longShort": "long",
+        "maximumHoldDuration": 1,
+        "minimumHoldDuration": 0,
+        "sell": {
+          "conditions": []
+        }
+      }
+    },
+    "result": {
+      "analysis": {
+        "maxLoss": 9.770000000000039,
+        "maxProfit": 20.200000000000017,
+        "openPositions": 0,
+        "total": 227,
+        "wins": 133
+      },
+      "backtest_d": {
+        "clearance": 0,
+        "data": [
+          {
+            "endDate": "2020-11-01",
+            "startDate": "2016-01-01",
+            "ticker": "CACHED_SPY.csv"
+          }
+        ],
+        "numberOfRandomSamples": 50,
+        "randomSeed": 0,
+        "stakeSize": 1,
+        "startValue": 10000,
+        "strategy": {
+          "buy": {
+            "conditions": [
+              {
+                "kwargs": {
+                  "1": true
+                },
+                "name": "DayOfWeek"
+              },
+              {
+                "kwargs": {
+                  "endDate": "2020-11-01",
+                  "startDate": "2016-01-01"
+                },
+                "name": "DateFilter"
+              }
+            ]
+          },
+          "longShort": "long",
+          "maximumHoldDuration": 1,
+          "minimumHoldDuration": 0,
+          "sell": {
+            "conditions": [
+              {
+                "kwargs": {
+                  "b": false
+                },
+                "name": "Bool"
+              },
+              {
+                "kwargs": {
+                  "endDate": "2020-11-01",
+                  "startDate": "2016-01-01"
+                },
+                "name": "DateFilter"
+              }
+            ]
+          }
+        }
+      },
+      "name": "New Backtest",
+      "parameters": {
+        "data": [
+          {
+            "endDate": "2020-11-01",
+            "startDate": "2016-01-01",
+            "ticker": "CACHED_SPY.csv"
+          }
+        ],
+        "numberOfRandomSamples": 50,
+        "randomSeed": 0,
+        "stakeSize": 1,
+        "startValue": 10000,
+        "strategy": {
+          "buy": {
+            "conditions": [
+              {
+                "kwargs": {
+                  "1": true
+                },
+                "name": "DayOfWeek"
+              }
+            ]
+          },
+          "longShort": "long",
+          "maximumHoldDuration": 1,
+          "minimumHoldDuration": 0,
+          "sell": {
+            "conditions": []
+          }
+        }
+      },
+      "tTest1Samp": "(1.807738195866628,)",
+      "transactions": [
+        {
+          "date": "2016-01-04",
+          "price": 201.02,
+          "quantity": 1
+        },
+        {
+          "date": "2016-01-05",
+          "price": 201.36,
+          "quantity": -1
+        },
+        {
+          "date": "2016-01-11",
+          "price": 192.11,
+          "quantity": 1
+        },
+        {
+          "date": "2016-01-12",
+          "price": 193.66,
+          "quantity": -1
+        },
+        {
+          "date": "2016-01-25",
+          "price": 187.64,
+          "quantity": 1
+        },
+        {
+          "date": "2016-01-26",
+          "price": 190.2,
+          "quantity": -1
+        },
+        {
+          "date": "2016-02-01",
+          "price": 193.65,
+          "quantity": 1
+        },
+        {
+          "date": "2016-02-02",
+          "price": 190.16,
+          "quantity": -1
+        },
+        {
+          "date": "2016-02-08",
+          "price": 185.42,
+          "quantity": 1
+        },
+        {
+          "date": "2016-02-09",
+          "price": 185.43,
+          "quantity": -1
+        },
+        {
+          "date": "2016-02-22",
+          "price": 194.78,
+          "quantity": 1
+        },
+        {
+          "date": "2016-02-23",
+          "price": 192.32,
+          "quantity": -1
+        },
+        {
+          "date": "2016-02-29",
+          "price": 193.56,
+          "quantity": 1
+        },
+        {
+          "date": "2016-03-01",
+          "price": 198.11,
+          "quantity": -1
+        },
+        {
+          "date": "2016-03-07",
+          "price": 200.59,
+          "quantity": 1
+        },
+        {
+          "date": "2016-03-08",
+          "price": 198.4,
+          "quantity": -1
+        },
+        {
+          "date": "2016-03-14",
+          "price": 202.5,
+          "quantity": 1
+        },
+        {
+          "date": "2016-03-15",
+          "price": 202.17,
+          "quantity": -1
+        },
+        {
+          "date": "2016-03-21",
+          "price": 204.67,
+          "quantity": 1
+        },
+        {
+          "date": "2016-03-22",
+          "price": 204.56,
+          "quantity": -1
+        },
+        {
+          "date": "2016-03-28",
+          "price": 203.24,
+          "quantity": 1
+        },
+        {
+          "date": "2016-03-29",
+          "price": 205.12,
+          "quantity": -1
+        },
+        {
+          "date": "2016-04-04",
+          "price": 206.25,
+          "quantity": 1
+        },
+        {
+          "date": "2016-04-05",
+          "price": 204.19,
+          "quantity": -1
+        },
+        {
+          "date": "2016-04-11",
+          "price": 204.02,
+          "quantity": 1
+        },
+        {
+          "date": "2016-04-12",
+          "price": 205.92,
+          "quantity": -1
+        },
+        {
+          "date": "2016-04-18",
+          "price": 209.24,
+          "quantity": 1
+        },
+        {
+          "date": "2016-04-19",
+          "price": 209.9,
+          "quantity": -1
+        },
+        {
+          "date": "2016-04-25",
+          "price": 208.61,
+          "quantity": 1
+        },
+        {
+          "date": "2016-04-26",
+          "price": 208.92,
+          "quantity": -1
+        },
+        {
+          "date": "2016-05-02",
+          "price": 207.97,
+          "quantity": 1
+        },
+        {
+          "date": "2016-05-03",
+          "price": 206.16,
+          "quantity": -1
+        },
+        {
+          "date": "2016-05-09",
+          "price": 205.89,
+          "quantity": 1
+        },
+        {
+          "date": "2016-05-10",
+          "price": 208.45,
+          "quantity": -1
+        },
+        {
+          "date": "2016-05-16",
+          "price": 206.78,
+          "quantity": 1
+        },
+        {
+          "date": "2016-05-17",
+          "price": 204.85,
+          "quantity": -1
+        },
+        {
+          "date": "2016-05-23",
+          "price": 205.21,
+          "quantity": 1
+        },
+        {
+          "date": "2016-05-24",
+          "price": 207.87,
+          "quantity": -1
+        },
+        {
+          "date": "2016-06-06",
+          "price": 211.35,
+          "quantity": 1
+        },
+        {
+          "date": "2016-06-07",
+          "price": 211.68,
+          "quantity": -1
+        },
+        {
+          "date": "2016-06-13",
+          "price": 208.45,
+          "quantity": 1
+        },
+        {
+          "date": "2016-06-14",
+          "price": 208.04,
+          "quantity": -1
+        },
+        {
+          "date": "2016-06-20",
+          "price": 207.85,
+          "quantity": 1
+        },
+        {
+          "date": "2016-06-21",
+          "price": 208.44,
+          "quantity": -1
+        },
+        {
+          "date": "2016-06-27",
+          "price": 199.6,
+          "quantity": 1
+        },
+        {
+          "date": "2016-06-28",
+          "price": 203.2,
+          "quantity": -1
+        },
+        {
+          "date": "2016-07-11",
+          "price": 213.4,
+          "quantity": 1
+        },
+        {
+          "date": "2016-07-12",
+          "price": 214.95,
+          "quantity": -1
+        },
+        {
+          "date": "2016-07-18",
+          "price": 216.41,
+          "quantity": 1
+        },
+        {
+          "date": "2016-07-19",
+          "price": 216.19,
+          "quantity": -1
+        },
+        {
+          "date": "2016-07-25",
+          "price": 216.65,
+          "quantity": 1
+        },
+        {
+          "date": "2016-07-26",
+          "price": 216.75,
+          "quantity": -1
+        },
+        {
+          "date": "2016-08-01",
+          "price": 216.94,
+          "quantity": 1
+        },
+        {
+          "date": "2016-08-02",
+          "price": 215.55,
+          "quantity": -1
+        },
+        {
+          "date": "2016-08-08",
+          "price": 218.05,
+          "quantity": 1
+        },
+        {
+          "date": "2016-08-09",
+          "price": 218.18,
+          "quantity": -1
+        },
+        {
+          "date": "2016-08-15",
+          "price": 219.09,
+          "quantity": 1
+        },
+        {
+          "date": "2016-08-16",
+          "price": 217.96,
+          "quantity": -1
+        },
+        {
+          "date": "2016-08-22",
+          "price": 218.53,
+          "quantity": 1
+        },
+        {
+          "date": "2016-08-23",
+          "price": 218.97,
+          "quantity": -1
+        },
+        {
+          "date": "2016-08-29",
+          "price": 218.36,
+          "quantity": 1
+        },
+        {
+          "date": "2016-08-30",
+          "price": 218,
+          "quantity": -1
+        },
+        {
+          "date": "2016-09-12",
+          "price": 216.34,
+          "quantity": 1
+        },
+        {
+          "date": "2016-09-13",
+          "price": 213.23,
+          "quantity": -1
+        },
+        {
+          "date": "2016-09-19",
+          "price": 213.41,
+          "quantity": 1
+        },
+        {
+          "date": "2016-09-20",
+          "price": 213.42,
+          "quantity": -1
+        },
+        {
+          "date": "2016-09-26",
+          "price": 214.24,
+          "quantity": 1
+        },
+        {
+          "date": "2016-09-27",
+          "price": 215.57,
+          "quantity": -1
+        },
+        {
+          "date": "2016-10-03",
+          "price": 215.78,
+          "quantity": 1
+        },
+        {
+          "date": "2016-10-04",
+          "price": 214.68,
+          "quantity": -1
+        },
+        {
+          "date": "2016-10-10",
+          "price": 216.16,
+          "quantity": 1
+        },
+        {
+          "date": "2016-10-11",
+          "price": 213.43,
+          "quantity": -1
+        },
+        {
+          "date": "2016-10-17",
+          "price": 212.38,
+          "quantity": 1
+        },
+        {
+          "date": "2016-10-18",
+          "price": 213.71,
+          "quantity": -1
+        },
+        {
+          "date": "2016-10-24",
+          "price": 214.89,
+          "quantity": 1
+        },
+        {
+          "date": "2016-10-25",
+          "price": 214.17,
+          "quantity": -1
+        },
+        {
+          "date": "2016-10-31",
+          "price": 212.55,
+          "quantity": 1
+        },
+        {
+          "date": "2016-11-01",
+          "price": 211.01,
+          "quantity": -1
+        },
+        {
+          "date": "2016-11-07",
+          "price": 213.15,
+          "quantity": 1
+        },
+        {
+          "date": "2016-11-08",
+          "price": 214.11,
+          "quantity": -1
+        },
+        {
+          "date": "2016-11-14",
+          "price": 216.59,
+          "quantity": 1
+        },
+        {
+          "date": "2016-11-15",
+          "price": 218.28,
+          "quantity": -1
+        },
+        {
+          "date": "2016-11-21",
+          "price": 220.15,
+          "quantity": 1
+        },
+        {
+          "date": "2016-11-22",
+          "price": 220.58,
+          "quantity": -1
+        },
+        {
+          "date": "2016-11-28",
+          "price": 220.48,
+          "quantity": 1
+        },
+        {
+          "date": "2016-11-29",
+          "price": 220.91,
+          "quantity": -1
+        },
+        {
+          "date": "2016-12-05",
+          "price": 221,
+          "quantity": 1
+        },
+        {
+          "date": "2016-12-06",
+          "price": 221.7,
+          "quantity": -1
+        },
+        {
+          "date": "2016-12-12",
+          "price": 226.25,
+          "quantity": 1
+        },
+        {
+          "date": "2016-12-13",
+          "price": 227.76,
+          "quantity": -1
+        },
+        {
+          "date": "2016-12-19",
+          "price": 225.53,
+          "quantity": 1
+        },
+        {
+          "date": "2016-12-20",
+          "price": 226.4,
+          "quantity": -1
+        },
+        {
+          "date": "2017-01-09",
+          "price": 226.46,
+          "quantity": 1
+        },
+        {
+          "date": "2017-01-10",
+          "price": 226.46,
+          "quantity": -1
+        },
+        {
+          "date": "2017-01-23",
+          "price": 226.15,
+          "quantity": 1
+        },
+        {
+          "date": "2017-01-24",
+          "price": 227.6,
+          "quantity": -1
+        },
+        {
+          "date": "2017-01-30",
+          "price": 227.55,
+          "quantity": 1
+        },
+        {
+          "date": "2017-01-31",
+          "price": 227.53,
+          "quantity": -1
+        },
+        {
+          "date": "2017-02-06",
+          "price": 228.93,
+          "quantity": 1
+        },
+        {
+          "date": "2017-02-07",
+          "price": 228.94,
+          "quantity": -1
+        },
+        {
+          "date": "2017-02-13",
+          "price": 232.77,
+          "quantity": 1
+        },
+        {
+          "date": "2017-02-14",
+          "price": 233.7,
+          "quantity": -1
+        },
+        {
+          "date": "2017-02-27",
+          "price": 237.11,
+          "quantity": 1
+        },
+        {
+          "date": "2017-02-28",
+          "price": 236.47,
+          "quantity": -1
+        },
+        {
+          "date": "2017-03-06",
+          "price": 237.71,
+          "quantity": 1
+        },
+        {
+          "date": "2017-03-07",
+          "price": 237,
+          "quantity": -1
+        },
+        {
+          "date": "2017-03-13",
+          "price": 237.81,
+          "quantity": 1
+        },
+        {
+          "date": "2017-03-14",
+          "price": 236.9,
+          "quantity": -1
+        },
+        {
+          "date": "2017-03-20",
+          "price": 236.77,
+          "quantity": 1
+        },
+        {
+          "date": "2017-03-21",
+          "price": 233.73,
+          "quantity": -1
+        },
+        {
+          "date": "2017-03-27",
+          "price": 233.62,
+          "quantity": 1
+        },
+        {
+          "date": "2017-03-28",
+          "price": 235.32,
+          "quantity": -1
+        },
+        {
+          "date": "2017-04-03",
+          "price": 235.33,
+          "quantity": 1
+        },
+        {
+          "date": "2017-04-04",
+          "price": 235.48,
+          "quantity": -1
+        },
+        {
+          "date": "2017-04-10",
+          "price": 235.34,
+          "quantity": 1
+        },
+        {
+          "date": "2017-04-11",
+          "price": 235.06,
+          "quantity": -1
+        },
+        {
+          "date": "2017-04-17",
+          "price": 234.57,
+          "quantity": 1
+        },
+        {
+          "date": "2017-04-18",
+          "price": 233.87,
+          "quantity": -1
+        },
+        {
+          "date": "2017-04-24",
+          "price": 237.17,
+          "quantity": 1
+        },
+        {
+          "date": "2017-04-25",
+          "price": 238.55,
+          "quantity": -1
+        },
+        {
+          "date": "2017-05-01",
+          "price": 238.68,
+          "quantity": 1
+        },
+        {
+          "date": "2017-05-02",
+          "price": 238.77,
+          "quantity": -1
+        },
+        {
+          "date": "2017-05-08",
+          "price": 239.66,
+          "quantity": 1
+        },
+        {
+          "date": "2017-05-09",
+          "price": 239.44,
+          "quantity": -1
+        },
+        {
+          "date": "2017-05-15",
+          "price": 240.3,
+          "quantity": 1
+        },
+        {
+          "date": "2017-05-16",
+          "price": 240.08,
+          "quantity": -1
+        },
+        {
+          "date": "2017-05-22",
+          "price": 239.52,
+          "quantity": 1
+        },
+        {
+          "date": "2017-05-23",
+          "price": 240.05,
+          "quantity": -1
+        },
+        {
+          "date": "2017-06-05",
+          "price": 243.99,
+          "quantity": 1
+        },
+        {
+          "date": "2017-06-06",
+          "price": 243.21,
+          "quantity": -1
+        },
+        {
+          "date": "2017-06-12",
+          "price": 243.36,
+          "quantity": 1
+        },
+        {
+          "date": "2017-06-13",
+          "price": 244.55,
+          "quantity": -1
+        },
+        {
+          "date": "2017-06-19",
+          "price": 244.66,
+          "quantity": 1
+        },
+        {
+          "date": "2017-06-20",
+          "price": 243.01,
+          "quantity": -1
+        },
+        {
+          "date": "2017-06-26",
+          "price": 243.29,
+          "quantity": 1
+        },
+        {
+          "date": "2017-06-27",
+          "price": 241.33,
+          "quantity": -1
+        },
+        {
+          "date": "2017-07-03",
+          "price": 242.21,
+          "quantity": 1
+        },
+        {
+          "date": "2017-07-05",
+          "price": 242.77,
+          "quantity": -1
+        },
+        {
+          "date": "2017-07-10",
+          "price": 242.37,
+          "quantity": 1
+        },
+        {
+          "date": "2017-07-11",
+          "price": 242.19,
+          "quantity": -1
+        },
+        {
+          "date": "2017-07-17",
+          "price": 245.53,
+          "quantity": 1
+        },
+        {
+          "date": "2017-07-18",
+          "price": 245.66,
+          "quantity": -1
+        },
+        {
+          "date": "2017-07-24",
+          "price": 246.82,
+          "quantity": 1
+        },
+        {
+          "date": "2017-07-25",
+          "price": 247.42,
+          "quantity": -1
+        },
+        {
+          "date": "2017-07-31",
+          "price": 246.77,
+          "quantity": 1
+        },
+        {
+          "date": "2017-08-01",
+          "price": 247.32,
+          "quantity": -1
+        },
+        {
+          "date": "2017-08-07",
+          "price": 247.87,
+          "quantity": 1
+        },
+        {
+          "date": "2017-08-08",
+          "price": 247.26,
+          "quantity": -1
+        },
+        {
+          "date": "2017-08-14",
+          "price": 246.54,
+          "quantity": 1
+        },
+        {
+          "date": "2017-08-15",
+          "price": 246.51,
+          "quantity": -1
+        },
+        {
+          "date": "2017-08-21",
+          "price": 242.9,
+          "quantity": 1
+        },
+        {
+          "date": "2017-08-22",
+          "price": 245.44,
+          "quantity": -1
+        },
+        {
+          "date": "2017-08-28",
+          "price": 244.57,
+          "quantity": 1
+        },
+        {
+          "date": "2017-08-29",
+          "price": 244.85,
+          "quantity": -1
+        },
+        {
+          "date": "2017-09-11",
+          "price": 249.21,
+          "quantity": 1
+        },
+        {
+          "date": "2017-09-12",
+          "price": 250.05,
+          "quantity": -1
+        },
+        {
+          "date": "2017-09-18",
+          "price": 249.72,
+          "quantity": 1
+        },
+        {
+          "date": "2017-09-19",
+          "price": 249.97,
+          "quantity": -1
+        },
+        {
+          "date": "2017-09-25",
+          "price": 248.93,
+          "quantity": 1
+        },
+        {
+          "date": "2017-09-26",
+          "price": 249.08,
+          "quantity": -1
+        },
+        {
+          "date": "2017-10-02",
+          "price": 252.32,
+          "quantity": 1
+        },
+        {
+          "date": "2017-10-03",
+          "price": 252.86,
+          "quantity": -1
+        },
+        {
+          "date": "2017-10-09",
+          "price": 253.95,
+          "quantity": 1
+        },
+        {
+          "date": "2017-10-10",
+          "price": 254.62,
+          "quantity": -1
+        },
+        {
+          "date": "2017-10-16",
+          "price": 255.29,
+          "quantity": 1
+        },
+        {
+          "date": "2017-10-17",
+          "price": 255.47,
+          "quantity": -1
+        },
+        {
+          "date": "2017-10-23",
+          "price": 256.11,
+          "quantity": 1
+        },
+        {
+          "date": "2017-10-24",
+          "price": 256.56,
+          "quantity": -1
+        },
+        {
+          "date": "2017-10-30",
+          "price": 256.75,
+          "quantity": 1
+        },
+        {
+          "date": "2017-10-31",
+          "price": 257.15,
+          "quantity": -1
+        },
+        {
+          "date": "2017-11-06",
+          "price": 258.85,
+          "quantity": 1
+        },
+        {
+          "date": "2017-11-07",
+          "price": 258.67,
+          "quantity": -1
+        },
+        {
+          "date": "2017-11-13",
+          "price": 258.33,
+          "quantity": 1
+        },
+        {
+          "date": "2017-11-14",
+          "price": 257.73,
+          "quantity": -1
+        },
+        {
+          "date": "2017-11-20",
+          "price": 258.3,
+          "quantity": 1
+        },
+        {
+          "date": "2017-11-21",
+          "price": 259.99,
+          "quantity": -1
+        },
+        {
+          "date": "2017-11-27",
+          "price": 260.23,
+          "quantity": 1
+        },
+        {
+          "date": "2017-11-28",
+          "price": 262.87,
+          "quantity": -1
+        },
+        {
+          "date": "2017-12-04",
+          "price": 264.14,
+          "quantity": 1
+        },
+        {
+          "date": "2017-12-05",
+          "price": 263.19,
+          "quantity": -1
+        },
+        {
+          "date": "2017-12-11",
+          "price": 266.31,
+          "quantity": 1
+        },
+        {
+          "date": "2017-12-12",
+          "price": 266.78,
+          "quantity": -1
+        },
+        {
+          "date": "2017-12-18",
+          "price": 268.2,
+          "quantity": 1
+        },
+        {
+          "date": "2017-12-19",
+          "price": 267.17,
+          "quantity": -1
+        },
+        {
+          "date": "2018-01-08",
+          "price": 273.92,
+          "quantity": 1
+        },
+        {
+          "date": "2018-01-09",
+          "price": 274.54,
+          "quantity": -1
+        },
+        {
+          "date": "2018-01-22",
+          "price": 282.69,
+          "quantity": 1
+        },
+        {
+          "date": "2018-01-23",
+          "price": 283.29,
+          "quantity": -1
+        },
+        {
+          "date": "2018-01-29",
+          "price": 284.68,
+          "quantity": 1
+        },
+        {
+          "date": "2018-01-30",
+          "price": 281.76,
+          "quantity": -1
+        },
+        {
+          "date": "2018-02-05",
+          "price": 263.93,
+          "quantity": 1
+        },
+        {
+          "date": "2018-02-06",
+          "price": 269.13,
+          "quantity": -1
+        },
+        {
+          "date": "2018-02-12",
+          "price": 265.34,
+          "quantity": 1
+        },
+        {
+          "date": "2018-02-13",
+          "price": 266,
+          "quantity": -1
+        },
+        {
+          "date": "2018-02-26",
+          "price": 277.9,
+          "quantity": 1
+        },
+        {
+          "date": "2018-02-27",
+          "price": 274.43,
+          "quantity": -1
+        },
+        {
+          "date": "2018-03-05",
+          "price": 272.19,
+          "quantity": 1
+        },
+        {
+          "date": "2018-03-06",
+          "price": 272.88,
+          "quantity": -1
+        },
+        {
+          "date": "2018-03-12",
+          "price": 278.52,
+          "quantity": 1
+        },
+        {
+          "date": "2018-03-13",
+          "price": 276.72,
+          "quantity": -1
+        },
+        {
+          "date": "2018-03-19",
+          "price": 270.49,
+          "quantity": 1
+        },
+        {
+          "date": "2018-03-20",
+          "price": 270.95,
+          "quantity": -1
+        },
+        {
+          "date": "2018-03-26",
+          "price": 265.11,
+          "quantity": 1
+        },
+        {
+          "date": "2018-03-27",
+          "price": 260.6,
+          "quantity": -1
+        },
+        {
+          "date": "2018-04-02",
+          "price": 257.47,
+          "quantity": 1
+        },
+        {
+          "date": "2018-04-03",
+          "price": 260.77,
+          "quantity": -1
+        },
+        {
+          "date": "2018-04-09",
+          "price": 261,
+          "quantity": 1
+        },
+        {
+          "date": "2018-04-10",
+          "price": 265.15,
+          "quantity": -1
+        },
+        {
+          "date": "2018-04-16",
+          "price": 267.33,
+          "quantity": 1
+        },
+        {
+          "date": "2018-04-17",
+          "price": 270.19,
+          "quantity": -1
+        },
+        {
+          "date": "2018-04-23",
+          "price": 266.57,
+          "quantity": 1
+        },
+        {
+          "date": "2018-04-24",
+          "price": 262.98,
+          "quantity": -1
+        },
+        {
+          "date": "2018-04-30",
+          "price": 264.51,
+          "quantity": 1
+        },
+        {
+          "date": "2018-05-01",
+          "price": 264.98,
+          "quantity": -1
+        },
+        {
+          "date": "2018-05-07",
+          "price": 266.92,
+          "quantity": 1
+        },
+        {
+          "date": "2018-05-08",
+          "price": 266.92,
+          "quantity": -1
+        },
+        {
+          "date": "2018-05-14",
+          "price": 272.98,
+          "quantity": 1
+        },
+        {
+          "date": "2018-05-15",
+          "price": 271.1,
+          "quantity": -1
+        },
+        {
+          "date": "2018-05-21",
+          "price": 273.37,
+          "quantity": 1
+        },
+        {
+          "date": "2018-05-22",
+          "price": 272.61,
+          "quantity": -1
+        },
+        {
+          "date": "2018-06-04",
+          "price": 274.9,
+          "quantity": 1
+        },
+        {
+          "date": "2018-06-05",
+          "price": 275.1,
+          "quantity": -1
+        },
+        {
+          "date": "2018-06-11",
+          "price": 278.56,
+          "quantity": 1
+        },
+        {
+          "date": "2018-06-12",
+          "price": 278.92,
+          "quantity": -1
+        },
+        {
+          "date": "2018-06-18",
+          "price": 276.56,
+          "quantity": 1
+        },
+        {
+          "date": "2018-06-19",
+          "price": 275.5,
+          "quantity": -1
+        },
+        {
+          "date": "2018-06-25",
+          "price": 271,
+          "quantity": 1
+        },
+        {
+          "date": "2018-06-26",
+          "price": 271.6,
+          "quantity": -1
+        },
+        {
+          "date": "2018-07-02",
+          "price": 271.86,
+          "quantity": 1
+        },
+        {
+          "date": "2018-07-03",
+          "price": 270.9,
+          "quantity": -1
+        },
+        {
+          "date": "2018-07-09",
+          "price": 277.9,
+          "quantity": 1
+        },
+        {
+          "date": "2018-07-10",
+          "price": 278.9,
+          "quantity": -1
+        },
+        {
+          "date": "2018-07-16",
+          "price": 279.34,
+          "quantity": 1
+        },
+        {
+          "date": "2018-07-17",
+          "price": 280.47,
+          "quantity": -1
+        },
+        {
+          "date": "2018-07-23",
+          "price": 280.2,
+          "quantity": 1
+        },
+        {
+          "date": "2018-07-24",
+          "price": 281.61,
+          "quantity": -1
+        },
+        {
+          "date": "2018-07-30",
+          "price": 279.95,
+          "quantity": 1
+        },
+        {
+          "date": "2018-07-31",
+          "price": 281.33,
+          "quantity": -1
+        },
+        {
+          "date": "2018-08-06",
+          "price": 284.64,
+          "quantity": 1
+        },
+        {
+          "date": "2018-08-07",
+          "price": 285.58,
+          "quantity": -1
+        },
+        {
+          "date": "2018-08-13",
+          "price": 282.1,
+          "quantity": 1
+        },
+        {
+          "date": "2018-08-14",
+          "price": 283.9,
+          "quantity": -1
+        },
+        {
+          "date": "2018-08-20",
+          "price": 285.67,
+          "quantity": 1
+        },
+        {
+          "date": "2018-08-21",
+          "price": 286.34,
+          "quantity": -1
+        },
+        {
+          "date": "2018-08-27",
+          "price": 289.78,
+          "quantity": 1
+        },
+        {
+          "date": "2018-08-28",
+          "price": 289.92,
+          "quantity": -1
+        },
+        {
+          "date": "2018-09-10",
+          "price": 288.1,
+          "quantity": 1
+        },
+        {
+          "date": "2018-09-11",
+          "price": 289.05,
+          "quantity": -1
+        },
+        {
+          "date": "2018-09-17",
+          "price": 289.34,
+          "quantity": 1
+        },
+        {
+          "date": "2018-09-18",
+          "price": 290.91,
+          "quantity": -1
+        },
+        {
+          "date": "2018-09-24",
+          "price": 291.02,
+          "quantity": 1
+        },
+        {
+          "date": "2018-09-25",
+          "price": 290.75,
+          "quantity": -1
+        },
+        {
+          "date": "2018-10-01",
+          "price": 291.73,
+          "quantity": 1
+        },
+        {
+          "date": "2018-10-02",
+          "price": 291.56,
+          "quantity": -1
+        },
+        {
+          "date": "2018-10-08",
+          "price": 287.82,
+          "quantity": 1
+        },
+        {
+          "date": "2018-10-09",
+          "price": 287.4,
+          "quantity": -1
+        },
+        {
+          "date": "2018-10-15",
+          "price": 274.4,
+          "quantity": 1
+        },
+        {
+          "date": "2018-10-16",
+          "price": 280.4,
+          "quantity": -1
+        },
+        {
+          "date": "2018-10-22",
+          "price": 275.01,
+          "quantity": 1
+        },
+        {
+          "date": "2018-10-23",
+          "price": 273.61,
+          "quantity": -1
+        },
+        {
+          "date": "2018-10-29",
+          "price": 263.86,
+          "quantity": 1
+        },
+        {
+          "date": "2018-10-30",
+          "price": 267.77,
+          "quantity": -1
+        },
+        {
+          "date": "2018-11-05",
+          "price": 273.39,
+          "quantity": 1
+        },
+        {
+          "date": "2018-11-06",
+          "price": 275.12,
+          "quantity": -1
+        },
+        {
+          "date": "2018-11-12",
+          "price": 272.57,
+          "quantity": 1
+        },
+        {
+          "date": "2018-11-13",
+          "price": 272.06,
+          "quantity": -1
+        },
+        {
+          "date": "2018-11-19",
+          "price": 269.1,
+          "quantity": 1
+        },
+        {
+          "date": "2018-11-20",
+          "price": 264.12,
+          "quantity": -1
+        },
+        {
+          "date": "2018-11-26",
+          "price": 267.5,
+          "quantity": 1
+        },
+        {
+          "date": "2018-11-27",
+          "price": 268.4,
+          "quantity": -1
+        },
+        {
+          "date": "2018-12-03",
+          "price": 279.3,
+          "quantity": 1
+        },
+        {
+          "date": "2018-12-04",
+          "price": 270.25,
+          "quantity": -1
+        },
+        {
+          "date": "2018-12-10",
+          "price": 264.07,
+          "quantity": 1
+        },
+        {
+          "date": "2018-12-11",
+          "price": 264.13,
+          "quantity": -1
+        },
+        {
+          "date": "2018-12-17",
+          "price": 255.36,
+          "quantity": 1
+        },
+        {
+          "date": "2018-12-18",
+          "price": 255.08,
+          "quantity": -1
+        },
+        {
+          "date": "2018-12-24",
+          "price": 234.34,
+          "quantity": 1
+        },
+        {
+          "date": "2018-12-26",
+          "price": 246.18,
+          "quantity": -1
+        },
+        {
+          "date": "2018-12-31",
+          "price": 249.92,
+          "quantity": 1
+        },
+        {
+          "date": "2019-01-02",
+          "price": 250.18,
+          "quantity": -1
+        },
+        {
+          "date": "2019-01-07",
+          "price": 254.38,
+          "quantity": 1
+        },
+        {
+          "date": "2019-01-08",
+          "price": 256.77,
+          "quantity": -1
+        },
+        {
+          "date": "2019-01-14",
+          "price": 257.4,
+          "quantity": 1
+        },
+        {
+          "date": "2019-01-15",
+          "price": 260.35,
+          "quantity": -1
+        },
+        {
+          "date": "2019-01-28",
+          "price": 263.76,
+          "quantity": 1
+        },
+        {
+          "date": "2019-01-29",
+          "price": 263.41,
+          "quantity": -1
+        },
+        {
+          "date": "2019-02-04",
+          "price": 271.96,
+          "quantity": 1
+        },
+        {
+          "date": "2019-02-05",
+          "price": 273.1,
+          "quantity": -1
+        },
+        {
+          "date": "2019-02-11",
+          "price": 270.62,
+          "quantity": 1
+        },
+        {
+          "date": "2019-02-12",
+          "price": 274.1,
+          "quantity": -1
+        },
+        {
+          "date": "2019-02-25",
+          "price": 279.52,
+          "quantity": 1
+        },
+        {
+          "date": "2019-02-26",
+          "price": 279.32,
+          "quantity": -1
+        },
+        {
+          "date": "2019-03-04",
+          "price": 279.4,
+          "quantity": 1
+        },
+        {
+          "date": "2019-03-05",
+          "price": 279.02,
+          "quantity": -1
+        },
+        {
+          "date": "2019-03-11",
+          "price": 278.44,
+          "quantity": 1
+        },
+        {
+          "date": "2019-03-12",
+          "price": 279.49,
+          "quantity": -1
+        },
+        {
+          "date": "2019-03-18",
+          "price": 282.33,
+          "quantity": 1
+        },
+        {
+          "date": "2019-03-19",
+          "price": 282.4,
+          "quantity": -1
+        },
+        {
+          "date": "2019-03-25",
+          "price": 279.04,
+          "quantity": 1
+        },
+        {
+          "date": "2019-03-26",
+          "price": 281.12,
+          "quantity": -1
+        },
+        {
+          "date": "2019-04-01",
+          "price": 285.83,
+          "quantity": 1
+        },
+        {
+          "date": "2019-04-02",
+          "price": 285.97,
+          "quantity": -1
+        },
+        {
+          "date": "2019-04-08",
+          "price": 288.79,
+          "quantity": 1
+        },
+        {
+          "date": "2019-04-09",
+          "price": 287.31,
+          "quantity": -1
+        },
+        {
+          "date": "2019-04-15",
+          "price": 289.97,
+          "quantity": 1
+        },
+        {
+          "date": "2019-04-16",
+          "price": 290.16,
+          "quantity": -1
+        },
+        {
+          "date": "2019-04-22",
+          "price": 290.27,
+          "quantity": 1
+        },
+        {
+          "date": "2019-04-23",
+          "price": 292.88,
+          "quantity": -1
+        },
+        {
+          "date": "2019-04-29",
+          "price": 293.87,
+          "quantity": 1
+        },
+        {
+          "date": "2019-04-30",
+          "price": 294.02,
+          "quantity": -1
+        },
+        {
+          "date": "2019-05-06",
+          "price": 292.82,
+          "quantity": 1
+        },
+        {
+          "date": "2019-05-07",
+          "price": 287.93,
+          "quantity": -1
+        },
+        {
+          "date": "2019-05-13",
+          "price": 280.86,
+          "quantity": 1
+        },
+        {
+          "date": "2019-05-14",
+          "price": 283.4,
+          "quantity": -1
+        },
+        {
+          "date": "2019-05-20",
+          "price": 283.95,
+          "quantity": 1
+        },
+        {
+          "date": "2019-05-21",
+          "price": 286.51,
+          "quantity": -1
+        },
+        {
+          "date": "2019-06-03",
+          "price": 274.57,
+          "quantity": 1
+        },
+        {
+          "date": "2019-06-04",
+          "price": 280.53,
+          "quantity": -1
+        },
+        {
+          "date": "2019-06-10",
+          "price": 288.97,
+          "quantity": 1
+        },
+        {
+          "date": "2019-06-11",
+          "price": 288.9,
+          "quantity": -1
+        },
+        {
+          "date": "2019-06-17",
+          "price": 289.37,
+          "quantity": 1
+        },
+        {
+          "date": "2019-06-18",
+          "price": 292.4,
+          "quantity": -1
+        },
+        {
+          "date": "2019-06-24",
+          "price": 293.64,
+          "quantity": 1
+        },
+        {
+          "date": "2019-06-25",
+          "price": 290.76,
+          "quantity": -1
+        },
+        {
+          "date": "2019-07-01",
+          "price": 295.66,
+          "quantity": 1
+        },
+        {
+          "date": "2019-07-02",
+          "price": 296.43,
+          "quantity": -1
+        },
+        {
+          "date": "2019-07-08",
+          "price": 296.82,
+          "quantity": 1
+        },
+        {
+          "date": "2019-07-09",
+          "price": 297.19,
+          "quantity": -1
+        },
+        {
+          "date": "2019-07-15",
+          "price": 300.75,
+          "quantity": 1
+        },
+        {
+          "date": "2019-07-16",
+          "price": 299.78,
+          "quantity": -1
+        },
+        {
+          "date": "2019-07-22",
+          "price": 297.9,
+          "quantity": 1
+        },
+        {
+          "date": "2019-07-23",
+          "price": 300.03,
+          "quantity": -1
+        },
+        {
+          "date": "2019-07-29",
+          "price": 301.46,
+          "quantity": 1
+        },
+        {
+          "date": "2019-07-30",
+          "price": 300.72,
+          "quantity": -1
+        },
+        {
+          "date": "2019-08-05",
+          "price": 283.82,
+          "quantity": 1
+        },
+        {
+          "date": "2019-08-06",
+          "price": 287.8,
+          "quantity": -1
+        },
+        {
+          "date": "2019-08-12",
+          "price": 288.07,
+          "quantity": 1
+        },
+        {
+          "date": "2019-08-13",
+          "price": 292.55,
+          "quantity": -1
+        },
+        {
+          "date": "2019-08-19",
+          "price": 292.33,
+          "quantity": 1
+        },
+        {
+          "date": "2019-08-20",
+          "price": 290.09,
+          "quantity": -1
+        },
+        {
+          "date": "2019-08-26",
+          "price": 288,
+          "quantity": 1
+        },
+        {
+          "date": "2019-08-27",
+          "price": 286.87,
+          "quantity": -1
+        },
+        {
+          "date": "2019-09-09",
+          "price": 298.2,
+          "quantity": 1
+        },
+        {
+          "date": "2019-09-10",
+          "price": 298.13,
+          "quantity": -1
+        },
+        {
+          "date": "2019-09-16",
+          "price": 300.16,
+          "quantity": 1
+        },
+        {
+          "date": "2019-09-17",
+          "price": 300.92,
+          "quantity": -1
+        },
+        {
+          "date": "2019-09-23",
+          "price": 298.21,
+          "quantity": 1
+        },
+        {
+          "date": "2019-09-24",
+          "price": 295.87,
+          "quantity": -1
+        },
+        {
+          "date": "2019-09-30",
+          "price": 296.77,
+          "quantity": 1
+        },
+        {
+          "date": "2019-10-01",
+          "price": 293.24,
+          "quantity": -1
+        },
+        {
+          "date": "2019-10-07",
+          "price": 293.08,
+          "quantity": 1
+        },
+        {
+          "date": "2019-10-08",
+          "price": 288.53,
+          "quantity": -1
+        },
+        {
+          "date": "2019-10-14",
+          "price": 295.95,
+          "quantity": 1
+        },
+        {
+          "date": "2019-10-15",
+          "price": 298.88,
+          "quantity": -1
+        },
+        {
+          "date": "2019-10-21",
+          "price": 299.99,
+          "quantity": 1
+        },
+        {
+          "date": "2019-10-22",
+          "price": 299.01,
+          "quantity": -1
+        },
+        {
+          "date": "2019-10-28",
+          "price": 303.3,
+          "quantity": 1
+        },
+        {
+          "date": "2019-10-29",
+          "price": 303.21,
+          "quantity": -1
+        },
+        {
+          "date": "2019-11-04",
+          "price": 307.37,
+          "quantity": 1
+        },
+        {
+          "date": "2019-11-05",
+          "price": 307.03,
+          "quantity": -1
+        },
+        {
+          "date": "2019-11-11",
+          "price": 308.35,
+          "quantity": 1
+        },
+        {
+          "date": "2019-11-12",
+          "price": 309,
+          "quantity": -1
+        },
+        {
+          "date": "2019-11-18",
+          "price": 312.02,
+          "quantity": 1
+        },
+        {
+          "date": "2019-11-19",
+          "price": 311.93,
+          "quantity": -1
+        },
+        {
+          "date": "2019-11-25",
+          "price": 313.37,
+          "quantity": 1
+        },
+        {
+          "date": "2019-11-26",
+          "price": 314.08,
+          "quantity": -1
+        },
+        {
+          "date": "2019-12-02",
+          "price": 311.64,
+          "quantity": 1
+        },
+        {
+          "date": "2019-12-03",
+          "price": 309.55,
+          "quantity": -1
+        },
+        {
+          "date": "2019-12-09",
+          "price": 313.88,
+          "quantity": 1
+        },
+        {
+          "date": "2019-12-10",
+          "price": 313.53,
+          "quantity": -1
+        },
+        {
+          "date": "2019-12-16",
+          "price": 319.5,
+          "quantity": 1
+        },
+        {
+          "date": "2019-12-17",
+          "price": 319.57,
+          "quantity": -1
+        },
+        {
+          "date": "2019-12-23",
+          "price": 321.22,
+          "quantity": 1
+        },
+        {
+          "date": "2019-12-24",
+          "price": 321.23,
+          "quantity": -1
+        },
+        {
+          "date": "2019-12-30",
+          "price": 321.08,
+          "quantity": 1
+        },
+        {
+          "date": "2019-12-31",
+          "price": 321.86,
+          "quantity": -1
+        },
+        {
+          "date": "2020-01-06",
+          "price": 323.64,
+          "quantity": 1
+        },
+        {
+          "date": "2020-01-07",
+          "price": 322.73,
+          "quantity": -1
+        },
+        {
+          "date": "2020-01-13",
+          "price": 327.95,
+          "quantity": 1
+        },
+        {
+          "date": "2020-01-14",
+          "price": 327.45,
+          "quantity": -1
+        },
+        {
+          "date": "2020-01-27",
+          "price": 323.5,
+          "quantity": 1
+        },
+        {
+          "date": "2020-01-28",
+          "price": 326.89,
+          "quantity": -1
+        },
+        {
+          "date": "2020-02-03",
+          "price": 324.12,
+          "quantity": 1
+        },
+        {
+          "date": "2020-02-04",
+          "price": 329.06,
+          "quantity": -1
+        },
+        {
+          "date": "2020-02-10",
+          "price": 334.68,
+          "quantity": 1
+        },
+        {
+          "date": "2020-02-11",
+          "price": 335.26,
+          "quantity": -1
+        },
+        {
+          "date": "2020-02-24",
+          "price": 322.42,
+          "quantity": 1
+        },
+        {
+          "date": "2020-02-25",
+          "price": 312.65,
+          "quantity": -1
+        },
+        {
+          "date": "2020-03-02",
+          "price": 309.09,
+          "quantity": 1
+        },
+        {
+          "date": "2020-03-03",
+          "price": 300.24,
+          "quantity": -1
+        },
+        {
+          "date": "2020-03-09",
+          "price": 274.23,
+          "quantity": 1
+        },
+        {
+          "date": "2020-03-10",
+          "price": 288.42,
+          "quantity": -1
+        },
+        {
+          "date": "2020-03-16",
+          "price": 239.85,
+          "quantity": 1
+        },
+        {
+          "date": "2020-03-17",
+          "price": 252.8,
+          "quantity": -1
+        },
+        {
+          "date": "2020-03-23",
+          "price": 222.95,
+          "quantity": 1
+        },
+        {
+          "date": "2020-03-24",
+          "price": 243.15,
+          "quantity": -1
+        },
+        {
+          "date": "2020-03-30",
+          "price": 261.65,
+          "quantity": 1
+        },
+        {
+          "date": "2020-03-31",
+          "price": 257.75,
+          "quantity": -1
+        },
+        {
+          "date": "2020-04-06",
+          "price": 264.86,
+          "quantity": 1
+        },
+        {
+          "date": "2020-04-07",
+          "price": 265.13,
+          "quantity": -1
+        },
+        {
+          "date": "2020-04-13",
+          "price": 275.66,
+          "quantity": 1
+        },
+        {
+          "date": "2020-04-14",
+          "price": 283.79,
+          "quantity": -1
+        },
+        {
+          "date": "2020-04-20",
+          "price": 281.59,
+          "quantity": 1
+        },
+        {
+          "date": "2020-04-21",
+          "price": 273.04,
+          "quantity": -1
+        },
+        {
+          "date": "2020-04-27",
+          "price": 287.05,
+          "quantity": 1
+        },
+        {
+          "date": "2020-04-28",
+          "price": 285.73,
+          "quantity": -1
+        },
+        {
+          "date": "2020-05-04",
+          "price": 283.57,
+          "quantity": 1
+        },
+        {
+          "date": "2020-05-05",
+          "price": 286.19,
+          "quantity": -1
+        },
+        {
+          "date": "2020-05-11",
+          "price": 292.5,
+          "quantity": 1
+        },
+        {
+          "date": "2020-05-12",
+          "price": 286.67,
+          "quantity": -1
+        },
+        {
+          "date": "2020-05-18",
+          "price": 295,
+          "quantity": 1
+        },
+        {
+          "date": "2020-05-19",
+          "price": 291.97,
+          "quantity": -1
+        },
+        {
+          "date": "2020-06-01",
+          "price": 305.55,
+          "quantity": 1
+        },
+        {
+          "date": "2020-06-02",
+          "price": 308.08,
+          "quantity": -1
+        },
+        {
+          "date": "2020-06-08",
+          "price": 323.2,
+          "quantity": 1
+        },
+        {
+          "date": "2020-06-09",
+          "price": 320.79,
+          "quantity": -1
+        },
+        {
+          "date": "2020-06-15",
+          "price": 307.05,
+          "quantity": 1
+        },
+        {
+          "date": "2020-06-16",
+          "price": 312.96,
+          "quantity": -1
+        },
+        {
+          "date": "2020-06-22",
+          "price": 310.62,
+          "quantity": 1
+        },
+        {
+          "date": "2020-06-23",
+          "price": 312.05,
+          "quantity": -1
+        },
+        {
+          "date": "2020-06-29",
+          "price": 304.46,
+          "quantity": 1
+        },
+        {
+          "date": "2020-06-30",
+          "price": 308.36,
+          "quantity": -1
+        },
+        {
+          "date": "2020-07-06",
+          "price": 317.05,
+          "quantity": 1
+        },
+        {
+          "date": "2020-07-07",
+          "price": 313.78,
+          "quantity": -1
+        },
+        {
+          "date": "2020-07-13",
+          "price": 314.84,
+          "quantity": 1
+        },
+        {
+          "date": "2020-07-14",
+          "price": 318.92,
+          "quantity": -1
+        },
+        {
+          "date": "2020-07-20",
+          "price": 324.32,
+          "quantity": 1
+        },
+        {
+          "date": "2020-07-21",
+          "price": 325.01,
+          "quantity": -1
+        },
+        {
+          "date": "2020-07-27",
+          "price": 323.22,
+          "quantity": 1
+        },
+        {
+          "date": "2020-07-28",
+          "price": 321.17,
+          "quantity": -1
+        },
+        {
+          "date": "2020-08-03",
+          "price": 328.79,
+          "quantity": 1
+        },
+        {
+          "date": "2020-08-04",
+          "price": 330.06,
+          "quantity": -1
+        },
+        {
+          "date": "2020-08-10",
+          "price": 335.57,
+          "quantity": 1
+        },
+        {
+          "date": "2020-08-11",
+          "price": 332.8,
+          "quantity": -1
+        },
+        {
+          "date": "2020-08-17",
+          "price": 337.91,
+          "quantity": 1
+        },
+        {
+          "date": "2020-08-18",
+          "price": 338.64,
+          "quantity": -1
+        },
+        {
+          "date": "2020-08-24",
+          "price": 342.92,
+          "quantity": 1
+        },
+        {
+          "date": "2020-08-25",
+          "price": 344.12,
+          "quantity": -1
+        },
+        {
+          "date": "2020-08-31",
+          "price": 349.31,
+          "quantity": 1
+        },
+        {
+          "date": "2020-09-01",
+          "price": 352.6,
+          "quantity": -1
+        },
+        {
+          "date": "2020-09-14",
+          "price": 338.46,
+          "quantity": 1
+        },
+        {
+          "date": "2020-09-15",
+          "price": 340.17,
+          "quantity": -1
+        },
+        {
+          "date": "2020-09-21",
+          "price": 326.97,
+          "quantity": 1
+        },
+        {
+          "date": "2020-09-22",
+          "price": 330.3,
+          "quantity": -1
+        },
+        {
+          "date": "2020-09-28",
+          "price": 334.19,
+          "quantity": 1
+        },
+        {
+          "date": "2020-09-29",
+          "price": 332.37,
+          "quantity": -1
+        },
+        {
+          "date": "2020-10-05",
+          "price": 339.76,
+          "quantity": 1
+        },
+        {
+          "date": "2020-10-06",
+          "price": 334.93,
+          "quantity": -1
+        },
+        {
+          "date": "2020-10-12",
+          "price": 352.43,
+          "quantity": 1
+        },
+        {
+          "date": "2020-10-13",
+          "price": 350.13,
+          "quantity": -1
+        },
+        {
+          "date": "2020-10-19",
+          "price": 342.01,
+          "quantity": 1
+        },
+        {
+          "date": "2020-10-20",
+          "price": 343.38,
+          "quantity": -1
+        },
+        {
+          "date": "2020-10-26",
+          "price": 339.39,
+          "quantity": 1
+        },
+        {
+          "date": "2020-10-27",
+          "price": 338.22,
+          "quantity": -1
+        }
+      ]
+    },
+    "skip": false
+  }
+]
