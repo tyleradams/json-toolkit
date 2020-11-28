@@ -51,8 +51,10 @@ func compareSlice(path []interface{}, v1 interface{}, v2 interface{}) []map[stri
 
 	if len(slice1) > len(slice2) {
 		for i := len(slice2); i < len(slice1); i++ {
+			new_path := make([]interface{}, len(path))
+			copy(new_path, path)
 			m = append(m, map[string]interface{}{
-				"path":      append(path, i),
+				"path":      append(new_path, i),
 				"leftValue": slice1[i],
 			})
 		}
@@ -60,8 +62,10 @@ func compareSlice(path []interface{}, v1 interface{}, v2 interface{}) []map[stri
 
 	if len(slice2) > len(slice1) {
 		for i := len(slice1); i < len(slice2); i++ {
+			new_path := make([]interface{}, len(path))
+			copy(new_path, path)
 			m = append(m, map[string]interface{}{
-				"path":       append(path, i),
+				"path":       append(new_path, i),
 				"rightValue": slice2[i],
 			})
 		}
@@ -81,8 +85,10 @@ func compareMap(path []interface{}, v1 interface{}, v2 interface{}) []map[string
 		if keyInMap2 {
 			diff = append(diff, compareObject(append(path, key), map1[key], map2[key])...)
 		} else {
+			new_path := make([]interface{}, len(path))
+			copy(new_path, path)
 			diff = append(diff, map[string]interface{}{
-				"path":      append(path, key),
+				"path":      append(new_path, key),
 				"leftValue": map1[key],
 			})
 		}
@@ -91,8 +97,10 @@ func compareMap(path []interface{}, v1 interface{}, v2 interface{}) []map[string
 	for key := range map2 {
 		_, keyInMap1 := map1[key]
 		if !keyInMap1 {
+			new_path := make([]interface{}, len(path))
+			copy(new_path, path)
 			diff = append(diff, map[string]interface{}{
-				"path":       append(path, key),
+				"path":       append(new_path, key),
 				"rightValue": map2[key],
 			})
 		}
