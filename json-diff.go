@@ -116,7 +116,7 @@ func compareObject(path []interface{}, object1 interface{}, object2 interface{})
 	}
 
 	// This cannot be defined outside because it makes an initialization loop
-	var compare = map[reflect.Kind]compare{
+	var compares = map[reflect.Kind]compare{
 		reflect.Float64: compareSimple,
 		reflect.Bool:    compareSimple,
 		reflect.String:  compareSimple,
@@ -129,10 +129,10 @@ func compareObject(path []interface{}, object1 interface{}, object2 interface{})
 
 	if type1 != type2 {
 		return compareSimple(path, object1, object2)
-	} else if val, ok := compare[type1]; type1 == type2 && ok {
+	} else if val, ok := compares[type1]; type1 == type2 && ok {
 		return val(path, object1, object2)
 	} else {
-		panic(errors.New("IncompleteIfTree:type1:" + string(type1) + ":type2:" + string(type2)))
+		panic(errors.New(fmt.Sprintf("IncompleteIfTree:type1:%v:type2:%v", type1, type2)))
 	}
 }
 
