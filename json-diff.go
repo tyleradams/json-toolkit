@@ -46,7 +46,9 @@ func compareSlice(path []interface{}, v1 interface{}, v2 interface{}) []map[stri
 	for i := 0; i < min(len(slice1), len(slice2)); i++ {
 		i1 := slice1[i]
 		i2 := slice2[i]
-		m = append(m, compareObject(append(path, i), i1, i2)...)
+		new_path := make([]interface{}, len(path))
+		copy(new_path, path)
+		m = append(m, compareObject(append(new_path, i), i1, i2)...)
 	}
 
 	if len(slice1) > len(slice2) {
@@ -83,7 +85,9 @@ func compareMap(path []interface{}, v1 interface{}, v2 interface{}) []map[string
 	for key := range map1 {
 		_, keyInMap2 := map2[key]
 		if keyInMap2 {
-			diff = append(diff, compareObject(append(path, key), map1[key], map2[key])...)
+			new_path := make([]interface{}, len(path))
+			copy(new_path, path)
+			diff = append(diff, compareObject(append(new_path, key), map1[key], map2[key])...)
 		} else {
 			new_path := make([]interface{}, len(path))
 			copy(new_path, path)
