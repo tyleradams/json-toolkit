@@ -5,4 +5,4 @@ import sys
 import yaml
 
 
-print(json.dumps(yaml.load(sys.stdin)))
+print(json.dumps(yaml.load(sys.stdin, Loader=yaml.SafeLoader)))
