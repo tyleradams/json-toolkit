@@ -1,4 +1,4 @@
-all : json-diff json-empty-array
+all : json-diff json-empty-array python-dependencies
 
 json-diff : json-diff.go
 	go fmt json-diff.go
@@ -7,6 +7,9 @@ json-diff : json-diff.go
 json-empty-array : json-empty-array.go
 	go fmt json-empty-array.go
 	go build json-empty-array.go
+
+python-dependencies : requirements.txt
+	python3 -m pip install -r requirements.txt
 
 clean :
 	rm json-diff json-empty-array 2> /dev/null || true
@@ -20,7 +23,7 @@ fmt :
 test :
 	./run-all-tests
 
-install : all
+install :
 	install binary-to-json /usr/local/bin
 	install csv-to-json /usr/local/bin
 	install diff-to-json /usr/local/bin
