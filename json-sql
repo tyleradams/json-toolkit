@@ -191,7 +191,7 @@ CREDENTIALS:
         psql - user password host port database
         mysql - user password host port database
         sqlite3 - filename
-        oracleadb - user password schemaname tnsname path_to_instant_client
+        oracleadb - user password schemaname tnsname path_to_instant_client (optional - used on MacOS, otherwise set ENV var as appropriate)
 
 Example usages:
     Read from a psql DB:
