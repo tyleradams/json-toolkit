@@ -91,6 +91,12 @@ class DB:
 
 class ORACLEADB(DB):
     def __init__(self, user, password, schema, tnsname, lib_dir=None):
+        # check for TNS_ADMIN environment variable
+        # this should be the path to the wallet directory
+        # and must be set. I'm checking it manually and 
+        # raising an exception if it is missing to avoid the 
+        # somewhat misleading and ambiguous exception that Oracle
+        # would otherwise throw (ORA-12154: TNS:could not resolve the connect identifier specified)
         if os.environ['TNS_ADMIN'] == "":
             raise Exception("Please set the TNS_ADMIN environment variable to the path of your Autonomous DB wallet.")
         if lib_dir is not None and platform.platform()[:6] == 'Darwin':
