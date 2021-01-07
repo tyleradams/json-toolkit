@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-import cx_Oracle
-import decimal
+
 import datetime
+import decimal
 import json
 import os
 import platform 
-import pymysql
-import psycopg2
 import sqlite3
 import sys
+
+import cx_Oracle
+import pymysql
+import psycopg2
 
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
@@ -88,7 +90,6 @@ class DB:
         return NotImplementedError
 
 class ORACLEADB(DB):
-    schema = None
     def __init__(self, user, password, schema, tnsname, lib_dir=None):
         if os.environ['TNS_ADMIN'] == "":
             raise Exception("Please set the TNS_ADMIN environment variable to the path of your Autonomous DB wallet.")
