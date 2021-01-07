@@ -1,23 +1,15 @@
 #!/usr/bin/env python3
 
+import cx_Oracle
 import decimal
 import datetime
 import json
-import sqlite3
-import sys
-
+import os
+import platform 
 import pymysql
 import psycopg2
-import cx_Oracle
-import platform 
-import os
-
-# to avoid "TypeError: Object of type datetime is not JSON serializable"
-# per https://stackoverflow.com/a/35870294
-def datetime_handler(x):
-    if isinstance(x, datetime.datetime):
-        return x.isoformat()
-    raise TypeError("Unknown type")
+import sqlite3
+import sys
 
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
@@ -47,7 +39,6 @@ def make_table(data, columns):
 
 class DB:
     connection = None
-    db_type = None
 
     def execute_query(self, query_string):
         def cursor_has_results(cursor):
@@ -66,10 +57,7 @@ class DB:
 
     def read_table(self, table_name):
         columns = self._column_names(table_name)
-        if self.__class__.__name__ == 'ORACLEADB':
-            data = self.execute_query("select * from {}".format(table_name))
-        else:
-            data = self.execute_query("select * from {};".format(table_name))
+        data = self.execute_query("select * from {};".format(table_name))
         return make_table(data, columns)
 
     def read_tables(self):
@@ -109,6 +97,11 @@ class ORACLEADB(DB):
         self.connection = cx_Oracle.connect(user, password, tnsname)
         self.schema = schema
    
+    def read_table(self, table_name):
+        columns = self._column_names(table_name)
+        data = self.execute_query("select * from {}".format(table_name))
+        return make_table(data, columns)
+
     def _column_names(self, table_name):
         names = self.execute_query(
             "select column_name from all_tab_columns where table_name = '{}'".format(table_name))
@@ -207,10 +200,10 @@ Example usages:
         json-sql read oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
 
     Insert data into Oracle Autonomous DB:
-        echo '["insert into table (a,b,c) values (1,2,3)"]' | json-sql query oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low $LD_LIBRARY_PATH
+        echo ["insert into table (a,b,c) values (1,2,3)"] | json-sql query oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
 
     Insert data into a mysql DB:
-        echo '["insert into table (a,b,c) values(1, 2, 3);"]' | json-sql query mysql user password localhost 3306 db
+        echo ["insert into table (a,b,c) values(1, 2, 3);"] | json-sql query mysql user password localhost 3306 db
 
 Example advanced usage with other programs:
     Read a specific table from a psql DB:
@@ -236,7 +229,7 @@ def main():
         print(json.dumps(db.read()))
     elif method == "query":
         queries = json.load(sys.stdin)
-        print(json.dumps([db.execute_query(query) for query in queries], default=datetime_handler))
+        print(json.dumps([db.execute_query(query) for query in queries], default=jsonable))
     else:
         print(help_message(), end="")
     return
