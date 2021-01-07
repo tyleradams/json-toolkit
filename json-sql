@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
 
+
+import datetime
 import decimal
 import json
+import os
+import platform 
 import sqlite3
 import sys
 
+import cx_Oracle
 import pymysql
 import psycopg2
-
 
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
         return o
+    elif type(o) in [datetime.datetime]:
+        return o.isoformat()
     elif type(o) in [list]:
         return [jsonable(e) for e in o]
     elif type(o) in [dict]:
@@ -53,7 +59,6 @@ class DB:
 
     def read_table(self, table_name):
         columns = self._column_names(table_name)
-
         data = self.execute_query("select * from {};".format(table_name))
         return make_table(data, columns)
 
@@ -66,7 +71,7 @@ class DB:
 
     @staticmethod
     def get_type(command):
-        TYPES = [SQLITE3, PSQL, MYSQL]
+        TYPES = [SQLITE3, PSQL, MYSQL, ORACLEADB]
         possible_t = [t for t in TYPES if t.__name__ == command.upper()]
 
         if possible_t == []:
@@ -83,6 +88,34 @@ class DB:
     # pylint: disable=no-self-use
     def _table_names(self):
         return NotImplementedError
+
+class ORACLEADB(DB):
+    def __init__(self, user, password, schema, tnsname, lib_dir=None):
+        # check for TNS_ADMIN environment variable
+        # this should be the path to the wallet directory
+        # and must be set. I'm checking it manually and 
+        # raising an exception if it is missing to avoid the 
+        # somewhat misleading and ambiguous exception that Oracle
+        # would otherwise throw (ORA-12154: TNS:could not resolve the connect identifier specified)
+        if os.environ['TNS_ADMIN'] == "":
+            raise Exception("Please set the TNS_ADMIN environment variable to the path of your Autonomous DB wallet.")
+        if lib_dir is not None and platform.platform()[:6] == 'Darwin':
+            cx_Oracle.init_oracle_client(lib_dir)
+        self.connection = cx_Oracle.connect(user, password, tnsname)
+        self.schema = schema
+   
+    def read_table(self, table_name):
+        columns = self._column_names(table_name)
+        data = self.execute_query("select * from {}".format(table_name))
+        return make_table(data, columns)
+
+    def _column_names(self, table_name):
+        names = self.execute_query(
+            "select column_name from all_tab_columns where table_name = '{}'".format(table_name))
+        return [n[0] for n in names]
+
+    def _table_names(self):
+        return [t[0] for t in self.execute_query("select table_name from all_tables where num_rows > 1 and tablespace_name = '{}'".format(self.schema))]
 
 
 class SQLITE3(DB):
@@ -151,12 +184,14 @@ DB_TYPE:
     psql - PostgreSQL
     mysql - MySQL
     sqlite3 - Sqlite3
+    oracleadb - Oracle Autonomous DB (requires Oracle Instant Client https://www.oracle.com/database/technologies/instant-client.html)
 
 CREDENTIALS:
     The credentials depends on the db type:
         psql - user password host port database
         mysql - user password host port database
         sqlite3 - filename
+        oracleadb - user password schemaname tnsname path_to_instant_client (optional - used on MacOS, otherwise set ENV var as appropriate)
 
 Example usages:
     Read from a psql DB:
@@ -167,6 +202,12 @@ Example usages:
 
     Read from a sqlite3 DB:
         json-sql read sqlite3 db.sqlite
+
+    Read from an Oracle Autonomous DB:
+        json-sql read oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
+
+    Insert data into Oracle Autonomous DB:
+        echo ["insert into table (a,b,c) values (1,2,3)"] | json-sql query oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
 
     Insert data into a mysql DB:
         echo ["insert into table (a,b,c) values(1, 2, 3);"] | json-sql query mysql user password localhost 3306 db
@@ -195,7 +236,7 @@ def main():
         print(json.dumps(db.read()))
     elif method == "query":
         queries = json.load(sys.stdin)
-        print(json.dumps([db.execute_query(query) for query in queries]))
+        print(json.dumps([db.execute_query(query) for query in queries], default=jsonable))
     else:
         print(help_message(), end="")
     return
