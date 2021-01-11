@@ -2,9 +2,14 @@
 
 set -eou pipefail
 
-if [[ "$#" -ne "1" ]]; then
-    echo "Usage: $0 FILE"
+if [[ "$#" -gt "1" ]]; then
+    echo "Usage: $0 [FILE]"
     exit 1
+fi
+
+if [[ "$#" == "0" ]]; then
+    jq -S '.'
+    exit 0
 fi
 
 FILE="$1"
