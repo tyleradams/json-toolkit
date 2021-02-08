@@ -1,4 +1,4 @@
-all : json-diff json-empty-array python-dependencies
+all : json-diff json-empty-array dependencies
 
 json-diff : json-diff.go
 	go fmt json-diff.go
@@ -7,6 +7,9 @@ json-diff : json-diff.go
 json-empty-array : json-empty-array.go
 	go fmt json-empty-array.go
 	go build json-empty-array.go
+
+dependencies : python-dependencies
+	sudo apt install -y libpq-dev
 
 python-dependencies : requirements.txt
 	python3 -m pip install -r requirements.txt
