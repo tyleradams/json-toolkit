@@ -8,13 +8,13 @@ if [[ "$#" -gt "1" ]]; then
 fi
 
 if [[ "$#" == "0" ]]; then
-    jq -S '.'
+    jq -S
     exit 0
 fi
 
 FILE="$1"
 if [[ "$FILE" == "-" ]]; then
-    jq -S '.'
+    jq -S
 elif [[ ! -f "$FILE" ]]; then
     echo "$FILE does not exist"
     exit 1
