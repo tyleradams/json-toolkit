@@ -8,8 +8,10 @@ json-empty-array : json-empty-array.go
 	go fmt json-empty-array.go
 	go build json-empty-array.go
 
+# Only install if apt is on system, otherwise do nothing
+# Using oneliner to avoid messing around with makefile if statements
 dependencies : python-dependencies
-	sudo apt install -y libpq-dev
+	(! command -v apt > /dev/null;) || sudo apt install -y libpq-dev
 
 python-dependencies : requirements.txt
 	python3 -m pip install -r requirements.txt
