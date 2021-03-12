@@ -134,13 +134,19 @@ class SQLITE3(DB):
 
 class PSQL(DB):
     # pylint: disable=not-an-iterable
-    def __init__(self, user, password, host, port, database):
-        self.connection = psycopg2.connect(
-            user=user,
-            password=password,
-            host=host,
-            port=port,
-            database=database)
+    # If 1 arg passed to constructor, its a connection string, otherwise it's a user
+    def __init__(self, user_or_connection_string, password = None, host = None, port = None, database = None):
+        if password is None:
+            connection_string = user_or_connection_string
+            self.connection = psycopg2.connect(connection_string)
+        else:
+            user = user_or_connection_string
+            self.connection = psycopg2.connect(
+                user=user,
+                password=password,
+                host=host,
+                port=port,
+                database=database)
 
     def _column_names(self, table_name):
         names = self.execute_query(
@@ -187,15 +193,21 @@ DB_TYPE:
     oracleadb - Oracle Autonomous DB (requires Oracle Instant Client https://www.oracle.com/database/technologies/instant-client.html)
 
 CREDENTIALS:
-    The credentials depends on the db type:
-        psql - user password host port database
-        mysql - user password host port database
-        sqlite3 - filename
-        oracleadb - user password schemaname tnsname path_to_instant_client (optional - used on MacOS, otherwise set ENV var as appropriate)
+    The credentials depends on the db type and some take more than one credential type:
+        psql
+            user password host port database
+            connection-url
+        mysql
+            user password host port database
+        sqlite3
+            filename
+        oracleadb
+            user password schemaname tnsname path_to_instant_client (optional - used on MacOS, otherwise set ENV var as appropriate)
 
 Example usages:
     Read from a psql DB:
         json-sql read psql user password localhost 5432 db
+        json-sql read psql postgres://postgres:password@localhost:5432/postgres
 
     Read from a mysql DB:
         json-sql read mysql user password localhost 3306 db
