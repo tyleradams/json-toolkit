@@ -218,11 +218,11 @@ Example usages:
     Read from an Oracle Autonomous DB:
         json-sql read oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
 
-    Insert data into Oracle Autonomous DB:
-        echo ["insert into table (a,b,c) values (1,2,3)"] | json-sql query oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
-
     Insert data into a mysql DB:
         echo ["insert into table (a,b,c) values(1, 2, 3);"] | json-sql query mysql user password localhost 3306 db
+
+    Insert data into Oracle Autonomous DB:
+        echo ["insert into table (a,b,c) values (1,2,3)"] | json-sql query oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
 
 Example advanced usage with other programs:
     Read a specific table from a psql DB:
