@@ -40,6 +40,7 @@ install :
 	install json-empty-array /usr/local/bin
 	install json-format /usr/local/bin
 	install json-make-schema /usr/local/bin
+	install json-run /usr/local/bin
 	install json-sql /usr/local/bin
 	install json-table-to-objs /usr/local/bin
 	install json-to-binary /usr/local/bin

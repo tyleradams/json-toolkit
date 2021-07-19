@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import json
+import subprocess
+import sys
+
+PROPS = [
+    "args",
+    "returncode",
+    "stdout",
+    "stderr"
+]
+DECODES = [
+    "stdout",
+    "stderr",
+]
+
+def f(c):
+    o = subprocess.run(c, capture_output=True)
+    retu = {k: getattr(o, k) for k in PROPS}
+    for k in DECODES:
+        retu[k] = retu[k].decode("UTF-8")
+    return retu
+
+def main():
+    commands = json.load(sys.stdin)
+    print(json.dumps([f(c) for c in commands]))
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
