@@ -1,9 +1,10 @@
 # JSON Toolkit
+"the best opensource converter I've found across the Internet" -- dene14
 
-The JSON Toolkit is a set of CLI tools that can be used to work with structured data.
+The JSON Toolkit is a collection of JSON tools, including ones that convert between data formats like JSON, XML, YAML, CSV, etc.
 
 Some highlights include:
-* json-diff - structurally diffs two json files
+* json-diff - structurally diffs two json files and returns the output as json.
 * xml-to-json  - xml from stdin is converted to json on stdout
 
 ## Prerequisites
