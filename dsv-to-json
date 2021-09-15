@@ -6,6 +6,8 @@ import sys
 
 def main():
     delimiter = sys.argv[1]
+    if delimiter == "-z":
+        delimiter = chr(0)
     lines = sys.stdin.readlines()
     cells = [l.strip("\n").split(delimiter) for l in lines]
 
