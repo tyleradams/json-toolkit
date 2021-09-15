@@ -35,6 +35,7 @@ install :
 	install csv-to-json /usr/local/bin
 	install diff-to-json /usr/local/bin
 	install dsv-to-json /usr/local/bin
+	install jargs /usr/local/bin
 	install json-objs-to-table /usr/local/bin
 	install json-diff /usr/local/bin
 	install json-empty-array /usr/local/bin
