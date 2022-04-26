@@ -2,7 +2,7 @@ ast2json==0.2.1
 cx_Oracle==8.1.0
 genson==1.2.2
 logfmt==0.4
-psycopg2==2.8.6
+psycopg2-binary==2.8.6
 PyMySQL==0.10.1
 PyYAML==5.4
 unidiff==0.6.0
