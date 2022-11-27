@@ -45,8 +45,8 @@
       "./json-format"
     ],
     "input": "[]",
-    "output": "Usage: ./json-format FILE\n",
-    "returnCode": 1
+    "output": "[]\n",
+    "returnCode": 0
   },
   {
     "command": [
