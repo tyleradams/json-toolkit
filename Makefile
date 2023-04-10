@@ -47,6 +47,7 @@ install :
 	install json-to-binary /usr/local/bin
 	install json-to-csv /usr/local/bin
 	install json-to-dsv /usr/local/bin
+	install json-to-env /usr/local/bin
 	install json-to-logfmt /usr/local/bin
 	install json-to-plot /usr/local/bin
 	install json-to-xml /usr/local/bin

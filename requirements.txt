@@ -4,6 +4,7 @@ genson==1.2.2
 logfmt==0.4
 psycopg2-binary==2.8.6
 PyMySQL==0.10.1
+python-dotenv==0.21.0
 PyYAML==5.4
 unidiff==0.6.0
 xmltodict==0.12.0
