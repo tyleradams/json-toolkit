@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+import json
+import dotenv
+import dotenv.main
+import sys
+
+def escape_value(v):
+    return v.replace("\n","\\n")
+
+def main():
+    d = json.load(sys.stdin)
+    for k,v in d.items():
+        v2 = escape_value(v)
+        print(f"{k}=\"{v2}\"")
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
