@@ -1,3 +1,5 @@
+args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
+
 all : json-diff json-empty-array dependencies
 
 json-diff : json-diff.go
@@ -56,6 +58,34 @@ install :
 	install python-to-json-ast /usr/local/bin
 	install xml-to-json /usr/local/bin
 	install yaml-to-json /usr/local/bin
-
-deploy:
-	git push
+package:
+	mkdir -p json-toolkit/usr/local/bin
+	install binary-to-json json-toolkit/usr/local/bin
+	install csv-to-json json-toolkit/usr/local/bin
+	install diff-to-json json-toolkit/usr/local/bin
+	install dsv-to-json json-toolkit/usr/local/bin
+	install env-to-json json-toolkit/usr/local/bin
+	install json-objs-to-table json-toolkit/usr/local/bin
+	install json-diff json-toolkit/usr/local/bin
+	install json-empty-array json-toolkit/usr/local/bin
+	install json-format json-toolkit/usr/local/bin
+	install json-make-schema json-toolkit/usr/local/bin
+	install json-run json-toolkit/usr/local/bin
+	install json-sql json-toolkit/usr/local/bin
+	install json-table-to-objs json-toolkit/usr/local/bin
+	install json-to-binary json-toolkit/usr/local/bin
+	install json-to-csv json-toolkit/usr/local/bin
+	install json-to-dsv json-toolkit/usr/local/bin
+	install json-to-env json-toolkit/usr/local/bin
+	install json-to-logfmt json-toolkit/usr/local/bin
+	install json-to-plot json-toolkit/usr/local/bin
+	install json-to-xml json-toolkit/usr/local/bin
+	install json-to-yaml json-toolkit/usr/local/bin
+	install logfmt-to-json json-toolkit/usr/local/bin
+	install python-to-json-ast json-toolkit/usr/local/bin
+	install xml-to-json json-toolkit/usr/local/bin
+	install yaml-to-json json-toolkit/usr/local/bin
+	tar czf json-toolkit_${version}.orig.tar.gz --exclude=debian json-toolkit
+	(cd json-toolkit && debuild -S -sa;)
+publish:
+	dput -f code-faster ./json-toolkit_${version}_source.changes
