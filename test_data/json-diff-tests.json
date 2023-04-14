@@ -1,7 +1,7 @@
 [
   {
     "command": [
-      "./json-diff"
+      "./src/json-diff"
     ],
     "expectedOutput": "Usage: json-diff FILE1 FILE2\n\nOVERVIEW:\n    json-diff reports differences between two json files as json.\n\n    For each difference, json-diff reports the path in the json of the difference, the value in FILE1 (leftValue) (if present), and the value in FILE2 (rightValue) (if present).\n    If a value is only present in FILE1, rightValue will not be present.\n    If a value is only present in FILE2, leftValue will not be present.\n\nPATH NOTATION:\n    The path for a difference is an array of numbers and strings. Each number refers to an array index and each string refers to an object key.\n\n    For example, [0, \"a\", 2] would refer to \"foo\" in the json value:\n        [\n            {\n                \"a\": [\n                    null,\n                    null,\n                    \"foo\"\n                    ]\n            }\n        ]\n\nOUTPUT SCHEMA:\n    {\n      \"$schema\": \"http://json-schema.org/schema#\",\n      \"items\": {\n        \"properties\": {\n          \"leftValue\": {\n            \"type\": [\"null\", \"boolean\", \"object\", \"array\", \"number\", \"string\"]\n          },\n          \"path\": {\n            \"type\": \"array\",\n            \"contains\": [\"number\", \"string\"]\n          },\n          \"rightValue\": {\n            \"type\": [\"null\", \"boolean\", \"object\", \"array\", \"number\", \"string\"]\n          }\n        },\n        \"required\": [\n          \"path\"\n        ],\n        \"type\": \"object\"\n      },\n      \"type\": \"array\"\n    }\n",
     "expectedReturnCode": 1,
@@ -9,7 +9,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "a.json"
     ],
     "expectedOutput": "Usage: json-diff FILE1 FILE2\n\nOVERVIEW:\n    json-diff reports differences between two json files as json.\n\n    For each difference, json-diff reports the path in the json of the difference, the value in FILE1 (leftValue) (if present), and the value in FILE2 (rightValue) (if present).\n    If a value is only present in FILE1, rightValue will not be present.\n    If a value is only present in FILE2, leftValue will not be present.\n\nPATH NOTATION:\n    The path for a difference is an array of numbers and strings. Each number refers to an array index and each string refers to an object key.\n\n    For example, [0, \"a\", 2] would refer to \"foo\" in the json value:\n        [\n            {\n                \"a\": [\n                    null,\n                    null,\n                    \"foo\"\n                    ]\n            }\n        ]\n\nOUTPUT SCHEMA:\n    {\n      \"$schema\": \"http://json-schema.org/schema#\",\n      \"items\": {\n        \"properties\": {\n          \"leftValue\": {\n            \"type\": [\"null\", \"boolean\", \"object\", \"array\", \"number\", \"string\"]\n          },\n          \"path\": {\n            \"type\": \"array\",\n            \"contains\": [\"number\", \"string\"]\n          },\n          \"rightValue\": {\n            \"type\": [\"null\", \"boolean\", \"object\", \"array\", \"number\", \"string\"]\n          }\n        },\n        \"required\": [\n          \"path\"\n        ],\n        \"type\": \"object\"\n      },\n      \"type\": \"array\"\n    }\n",
@@ -18,7 +18,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "a.json",
       "a.json",
       "a.json"
@@ -29,7 +29,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "non_existant_file",
       "non_existant_file"
     ],
@@ -39,7 +39,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/null.json",
       "test_data/null.json"
     ],
@@ -49,7 +49,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/s1.json",
       "test_data/s1.json"
     ],
@@ -59,7 +59,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/s2.json",
       "test_data/s2.json"
     ],
@@ -69,7 +69,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/s2.json",
       "test_data/s3.json"
     ],
@@ -79,7 +79,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/m1.json",
       "test_data/m1.json"
     ],
@@ -89,7 +89,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/m2.json",
       "test_data/m2.json"
     ],
@@ -99,7 +99,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/m1.json",
       "test_data/m2.json"
     ],
@@ -109,7 +109,7 @@
   },
   {
     "command": [
-      "./json-diff",
+      "./src/json-diff",
       "test_data/a.json",
       "test_data/b.json"
     ],

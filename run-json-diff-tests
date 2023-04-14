@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-cat test_data/json-diff-tests.json | ./generate-json-diff-results | ./json-empty-array
+cat test_data/json-diff-tests.json | ./src/generate-json-diff-results | ./src/json-empty-array
