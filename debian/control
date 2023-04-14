@@ -1,0 +1,15 @@
+Source: json-toolkit
+Section: utils
+Priority: optional
+Maintainer: Tyler Adams <tyler@blitzblitzblitz.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.0
+Homepage: https://github.com/tyleradams/json-toolkit
+Vcs-Browser: https://github.com/tyleradams/json-toolkit
+Vcs-Git: https://github.com/tyleradams/json-toolkit.git
+Rules-Requires-Root: no
+
+Package: json-toolkit
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Work with json data and convert non-json data to/from json
