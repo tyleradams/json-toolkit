@@ -11,5 +11,5 @@ Rules-Requires-Root: no
 
 Package: json-toolkit
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}
 Description: Work with json data and convert non-json data to/from json

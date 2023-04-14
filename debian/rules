@@ -2,4 +2,9 @@
 
 %:
 	dh $@
-
+DESTDIR=debian/json-toolkit
+export DESTDIR
+prefix=/usr
+export prefix
+override_dh_auto_install:
+	make install
