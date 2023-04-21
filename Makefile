@@ -32,16 +32,18 @@ fmt :
 test :
 	./run-all-tests
 
-movet :
-	mkdir -p target/json-toolkit-${version}
-	cp src/binary-to-json target
+install :
+	prefix=/usr/local
+	export prefix
+	(cd src; prefix=/usr/local make install)
 package :
-	mkdir -p target
-	tar czf target/json-toolkit_${version}.orig.tar.gz src --transform "s/src/json-toolkit-${version}/"
+	mkdir -p target/bin
+	(cd src; make)
+	tar czf target/json-toolkit_${version}.orig.tar.gz src --transform "s#src#json-toolkit-${version}#"
 	(cd target; tar xf json-toolkit_${version}.orig.tar.gz;)
 	cp -r debian target/json-toolkit-${version}/debian
-	(cd target/json-toolkit-${version}; debuild -us -uc;)
+	(cd target/json-toolkit-${version}; debuild -S -us -uc;)
 
 publish:
-	debsign -k 5DB475563E94EEAC666956FD31CA7EECE167B1C8 ./target/json-toolkit_${version}_amd64.changes
-	dput -f code-faster ./target/json-toolkit_${version}_amd64.changes
+	debsign -k ${DEBSIGN_KEY} ./target/json-toolkit_${version}_source.changes
+	dput -f code-faster ./target/json-toolkit_${version}_source.changes

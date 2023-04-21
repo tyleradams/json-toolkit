@@ -3,8 +3,13 @@
 %:
 	dh $@
 DESTDIR=debian/json-toolkit
+DEB_STRIP_EXCLUDE := /usr/bin/json-empty-array
 export DESTDIR
 prefix=/usr
 export prefix
+override_dh_strip:
+	echo don\'t strip
+override_dh_auto_build:
+	echo don\'t build yet
 override_dh_auto_install:
 	make install

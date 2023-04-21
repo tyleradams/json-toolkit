@@ -1,4 +1,3 @@
-
 all : json-diff json-empty-array
 
 json-diff : json-diff.go
@@ -16,12 +15,9 @@ install :
 	install diff-to-json $(DESTDIR)$(prefix)/bin
 	install dsv-to-json $(DESTDIR)$(prefix)/bin
 	install env-to-json $(DESTDIR)$(prefix)/bin
-	install generate-json-diff-results $(DESTDIR)$(prefix)/bin
-	install generate-test-results $(DESTDIR)$(prefix)/bin
 	install json-diff $(DESTDIR)$(prefix)/bin
 	install json-empty-array $(DESTDIR)$(prefix)/bin
 	install json-make-schema $(DESTDIR)$(prefix)/bin
-	install json-run $(DESTDIR)$(prefix)/bin
 	install json-sql $(DESTDIR)$(prefix)/bin
 	install json-table-to-objs $(DESTDIR)$(prefix)/bin
 	install json-to-binary $(DESTDIR)$(prefix)/bin
