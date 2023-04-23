@@ -25,6 +25,13 @@ JSON-to-Delimited Converter: Output JSON data as delimited strings.
 
 With the JSON Toolkit, you'll save time and effort on a variety of data processing tasks, and you'll be able to focus on what matters most - making sense of your data.
 
+# Installing
+```
+sudo add-apt-repository ppa:code-faster/ppa
+sudo apt update
+sudo apt install json-toolkit
+```
+# Developing
 ## Prerequisites
 
 * Bash
