@@ -42,8 +42,8 @@ package :
 	tar czf target/json-toolkit_${version}.orig.tar.gz src --transform "s#src#json-toolkit-${version}#"
 	(cd target; tar xf json-toolkit_${version}.orig.tar.gz;)
 	cp -r debian target/json-toolkit-${version}/debian
-	(cd target/json-toolkit-${version}; debuild -S -us -uc;)
+	(cd target/json-toolkit-${version}; debuild -S -sa;)
 
 publish:
 	debsign -k ${DEBSIGN_KEY} ./target/json-toolkit_${version}_source.changes
-	dput -f code-faster ./target/json-toolkit_${version}_source.changes
+	dput code-faster ./target/json-toolkit_${version}_source.changes
