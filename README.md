@@ -1,11 +1,29 @@
 # JSON Toolkit
 "the best opensource converter I've found across the Internet" -- dene14
 
-The JSON Toolkit is a collection of JSON tools, including ones that convert between data formats like JSON, XML, YAML, CSV, etc.
+The JSON Toolkit is a comprehensive suite of command-line utilities designed to make it easy to work with JSON and other data formats. Whether you need to convert data, manipulate it, or extract information, this toolkit has got you covered.
 
-Some highlights include:
-* json-diff - structurally diffs two json files and returns the output as json.
-* xml-to-json  - xml from stdin is converted to json on stdout
+Here's a glimpse of what the JSON Toolkit offers:
+
+CSV-to-JSON Converter: Convert CSV data to JSON with ease.
+
+unidiff-to-JSON Converter: Turn unidiff PatchSets into JSON objects.
+
+Delimiter-based Parser: Split data by specified delimiter and output as JSON.
+
+Environment Variable Parser: Read environment variables from input and output them in JSON format.
+
+JSON Formatter: Keep your JSON files neat and tidy with the built-in JSON formatter.
+
+JSON Schema Generator: Automatically generate JSON schemas based on input JSON data.
+
+Database-to-JSON Connector: Easily read data from various SQL databases and output it as JSON.
+
+JSON-to-CSV Converter: Convert JSON data to CSV format in a snap.
+
+JSON-to-Delimited Converter: Output JSON data as delimited strings.
+
+With the JSON Toolkit, you'll save time and effort on a variety of data processing tasks, and you'll be able to focus on what matters most - making sense of your data.
 
 ## Prerequisites
 

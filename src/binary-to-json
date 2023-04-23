@@ -2,7 +2,14 @@
 
 import json
 import sys
+import click
 
-data = list(sys.stdin.buffer.read())
+@click.command()
+@click.help_option()
+def main():
+    """Converts input data to JSON format"""
+    data = list(sys.stdin.buffer.read())
+    print(json.dumps(data))
 
-print(json.dumps(data))
+if __name__ == "__main__":
+    main()
