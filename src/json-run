@@ -3,6 +3,9 @@
 import json
 import subprocess
 import sys
+import click
+
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
 PROPS = [
     "args",
@@ -15,18 +18,43 @@ DECODES = [
     "stderr",
 ]
 
-def f(c):
+def run_command(c):
     o = subprocess.run(c, capture_output=True)
     retu = {k: getattr(o, k) for k in PROPS}
     for k in DECODES:
         retu[k] = retu[k].decode("UTF-8")
     return retu
 
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="json-run")
 def main():
-    commands = json.load(sys.stdin)
-    print(json.dumps([f(c) for c in commands]))
-    sys.exit(0)
+    """
+    Execute commands from JSON array and return results as JSON.
 
+    Reads a JSON array of commands from stdin, executes each command,
+    and outputs a JSON array with the results including args, returncode,
+    stdout, and stderr for each command.
+
+    \b
+    Examples:
+      echo '[["echo", "hello"], ["ls", "-la"]]' | json-run
+      json-run < commands.json > results.json
+      cat tasks.json | json-run | jq '.'
+    """
+    try:
+        commands = json.load(sys.stdin)
+        results = [run_command(c) for c in commands]
+        print(json.dumps(results))
+        sys.exit(0)
+    except json.JSONDecodeError as e:
+        click.echo(f"Error: Invalid JSON: {e}", err=True)
+        sys.exit(1)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

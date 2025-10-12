@@ -1,16 +1,37 @@
 #!/usr/bin/env python3
 
 import json
-import dotenv
 import sys
+import click
+import dotenv
 
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="env-to-json")
 def main():
+    """
+    Convert environment variable file from stdin to JSON.
 
-    d = dotenv.dotenv_values(stream=sys.stdin)
-    print(json.dumps(d))
-    sys.exit(0)
+    Reads .env format data from standard input and outputs a JSON object
+    with key-value pairs.
 
+    \b
+    Examples:
+      echo "FOO=bar" | env-to-json
+      env-to-json < .env > config.json
+      cat variables.env | env-to-json | jq '.'
+    """
+    try:
+        d = dotenv.dotenv_values(stream=sys.stdin)
+        print(json.dumps(d))
+        sys.exit(0)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 
-
 import datetime
 import decimal
 import json
 import os
-import platform 
+import platform
 import sqlite3
 import sys
 
+import click
 import cx_Oracle
 import pymysql
 import psycopg2
+
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
+
 
 def jsonable(o):
     if type(o) in [str, int, float, bool, type(None)]:
@@ -44,8 +47,6 @@ class DB:
 
     def execute_query(self, query_string):
         def cursor_has_results(cursor):
-            # DB API 2.0 states that when the cursor does not return results
-            # exactly when cursor.description is None.
             return bool(cursor.description)
 
         cursor = self.connection.cursor()
@@ -54,7 +55,6 @@ class DB:
 
         if cursor_has_results(cursor):
             return [list(r) for r in cursor.fetchall()]
-        # If the cursor does not have results, assume it returns a row count
         return cursor.rowcount
 
     def read_table(self, table_name):
@@ -63,7 +63,6 @@ class DB:
         return make_table(data, columns)
 
     def read_tables(self):
-        # pylint: disable=not-an-iterable
         return {name: self.read_table(name) for name in self._table_names()}
 
     def read(self):
@@ -81,29 +80,22 @@ class DB:
 
         return possible_t[0]
 
-    # pylint: disable=unused-argument,no-self-use
     def _column_names(self, table_name):
         return NotImplementedError
 
-    # pylint: disable=no-self-use
     def _table_names(self):
         return NotImplementedError
 
+
 class ORACLEADB(DB):
     def __init__(self, user, password, schema, tnsname, lib_dir=None):
-        # check for TNS_ADMIN environment variable
-        # this should be the path to the wallet directory
-        # and must be set. I'm checking it manually and 
-        # raising an exception if it is missing to avoid the 
-        # somewhat misleading and ambiguous exception that Oracle
-        # would otherwise throw (ORA-12154: TNS:could not resolve the connect identifier specified)
-        if os.environ['TNS_ADMIN'] == "":
+        if os.environ.get('TNS_ADMIN', '') == "":
             raise Exception("Please set the TNS_ADMIN environment variable to the path of your Autonomous DB wallet.")
         if lib_dir is not None and platform.platform()[:6] == 'Darwin':
             cx_Oracle.init_oracle_client(lib_dir)
         self.connection = cx_Oracle.connect(user, password, tnsname)
         self.schema = schema
-   
+
     def read_table(self, table_name):
         columns = self._column_names(table_name)
         data = self.execute_query("select * from {}".format(table_name))
@@ -133,9 +125,7 @@ class SQLITE3(DB):
 
 
 class PSQL(DB):
-    # pylint: disable=not-an-iterable
-    # If 1 arg passed to constructor, its a connection string, otherwise it's a user
-    def __init__(self, user_or_connection_string, password = None, host = None, port = None, database = None):
+    def __init__(self, user_or_connection_string, password=None, host=None, port=None, database=None):
         if password is None:
             connection_string = user_or_connection_string
             self.connection = psycopg2.connect(connection_string)
@@ -173,86 +163,86 @@ class MYSQL(DB):
         return [t[0] for t in self.execute_query("select table_name from information_schema.tables where table_schema = '{}';".format(self.database))]
 
 
-def help_message():
-    return \
-        """
-Usage: json-sql COMMAND DB_TYPE CREDENTIALS
+@click.group(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="json-sql")
+def cli():
+    """
+    Read from or write to SQL databases as JSON.
 
-Overview:
-    json-sql makes it easy to read/write data to/from a sql database in the command line. It intentionally lacks many features that can be easily achieved with other programs.
-
-COMMAND:
-    read - reads the entire database and dumps it as json on stdout.
-
-    query - execute queries passed in as a json array on stdin and returns the results as a json array on stdout. For queries with results, the output is the result. For queries without result, the output is the number of rows affected.
-
-DB_TYPE:
-    psql - PostgreSQL
-    mysql - MySQL
-    sqlite3 - Sqlite3
-    oracleadb - Oracle Autonomous DB (requires Oracle Instant Client https://www.oracle.com/database/technologies/instant-client.html)
-
-CREDENTIALS:
-    The credentials depends on the db type and some take more than one credential type:
-        psql
-            user password host port database
-            connection-url
-        mysql
-            user password host port database
-        sqlite3
-            filename
-        oracleadb
-            user password schemaname tnsname path_to_instant_client (optional - used on MacOS, otherwise set ENV var as appropriate)
-
-Example usages:
-    Read from a psql DB:
-        json-sql read psql user password localhost 5432 db
-        json-sql read psql postgres://postgres:password@localhost:5432/postgres
-
-    Read from a mysql DB:
-        json-sql read mysql user password localhost 3306 db
-
-    Read from a sqlite3 DB:
-        json-sql read sqlite3 db.sqlite
-
-    Read from an Oracle Autonomous DB:
-        json-sql read oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
-
-    Insert data into a mysql DB:
-        echo ["insert into table (a,b,c) values(1, 2, 3);"] | json-sql query mysql user password localhost 3306 db
-
-    Insert data into Oracle Autonomous DB:
-        echo ["insert into table (a,b,c) values (1,2,3)"] | json-sql query oracleadb demo MyStr0ngPa$$w0rd DATA demodb_low /projects/resources/instantclient_19_3
-
-Example advanced usage with other programs:
-    Read a specific table from a psql DB:
-        json-sql read psql user password localhost 5432 db | jq '.table'
-
-    Delete a list of ids from a psql DB:
-        echo '[1, 2, 3, 4]' | jq "[\"delete from json_nosql_db where id in (\" + join(\",\") + \");\"]" | json-sql query psql user password localhost 5432 db
-"""
+    Supports PostgreSQL, MySQL, SQLite3, and Oracle Autonomous Database.
+    """
+    pass
 
 
-def main():
-    if len(sys.argv) < 4:
-        print(help_message(), end="")
-        return
+@cli.command()
+@click.argument('db_type', type=click.Choice(['psql', 'mysql', 'sqlite3', 'oracleadb'], case_sensitive=False))
+@click.argument('credentials', nargs=-1, required=True)
+def read(db_type, credentials):
+    """
+    Read entire database and output as JSON.
 
-    method = sys.argv[1]
-    db_type_s = sys.argv[2]
-    # Credential length varies depending on db type
-    credentials = sys.argv[3:]
-    db = DB.get_type(db_type_s)(*credentials)
+    \b
+    DB_TYPE: psql, mysql, sqlite3, or oracleadb
 
-    if method == "read":
+    \b
+    CREDENTIALS (varies by DB_TYPE):
+      psql:      user password host port database
+                 OR connection-url
+      mysql:     user password host port database
+      sqlite3:   filename
+      oracleadb: user password schemaname tnsname [path_to_instant_client]
+
+    \b
+    Examples:
+      json-sql read psql user password localhost 5432 mydb
+      json-sql read psql postgres://user:pass@localhost:5432/db
+      json-sql read mysql user password localhost 3306 mydb
+      json-sql read sqlite3 database.db
+      json-sql read oracleadb user pass SCHEMA tns_name
+    """
+    try:
+        db = DB.get_type(db_type)(*credentials)
         print(json.dumps(db.read()))
-    elif method == "query":
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument('db_type', type=click.Choice(['psql', 'mysql', 'sqlite3', 'oracleadb'], case_sensitive=False))
+@click.argument('credentials', nargs=-1, required=True)
+def query(db_type, credentials):
+    """
+    Execute queries from stdin (JSON array) and output results as JSON.
+
+    Reads a JSON array of query strings from stdin and executes them.
+    For queries with results, outputs the result rows. For queries without
+    results (INSERT, UPDATE, DELETE), outputs the number of rows affected.
+
+    \b
+    DB_TYPE: psql, mysql, sqlite3, or oracleadb
+
+    \b
+    CREDENTIALS: Same as read command (varies by DB_TYPE)
+
+    \b
+    Examples:
+      echo '["SELECT * FROM users WHERE id = 1"]' | json-sql query psql user pass localhost 5432 db
+      echo '["INSERT INTO logs VALUES (1, 2, 3)"]' | json-sql query sqlite3 db.sqlite
+      cat queries.json | json-sql query mysql user pass localhost 3306 db
+    """
+    try:
+        db = DB.get_type(db_type)(*credentials)
         queries = json.load(sys.stdin)
-        print(json.dumps([db.execute_query(query) for query in queries], default=jsonable))
-    else:
-        print(help_message(), end="")
-    return
+        results = [db.execute_query(q) for q in queries]
+        print(json.dumps(results, default=jsonable))
+    except json.JSONDecodeError as e:
+        click.echo(f"Error: Invalid JSON input: {e}", err=True)
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    main()
+    cli()

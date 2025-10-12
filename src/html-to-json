@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+import click
+from html.parser import HTMLParser
+
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
+
+class JSONEncoderHTMLParser(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.document = []
+        self.stack = [self.document]
+
+    def handle_starttag(self, tag, attrs):
+        new_tag = {'tag': tag, 'attrs': dict(attrs), 'children': []}
+        self.stack[-1].append(new_tag)
+        self.stack.append(new_tag['children'])
+
+    def handle_endtag(self, tag):
+        if len(self.stack) > 1:
+            self.stack.pop()
+
+    def handle_data(self, data):
+        trimmed_data = data.strip()
+        if trimmed_data:
+            self.stack[-1].append(trimmed_data)
+
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="html-to-json")
+def main():
+    """
+    Convert HTML from stdin to JSON structure.
+
+    Reads HTML data from standard input and outputs a JSON representation
+    where each HTML tag is an object with 'tag', 'attrs', and 'children' keys.
+
+    \b
+    Examples:
+      echo '<p class="content">Hello</p>' | html-to-json
+      html-to-json < page.html > page.json
+      cat index.html | html-to-json | jq '.'
+    """
+    try:
+        parser = JSONEncoderHTMLParser()
+        html = sys.stdin.read()
+        parser.feed(html)
+        print(json.dumps(parser.document, indent=4))
+        sys.exit(0)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

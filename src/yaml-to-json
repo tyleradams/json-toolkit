@@ -2,7 +2,39 @@
 
 import json
 import sys
+import click
 import yaml
 
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
-print(json.dumps(yaml.load(sys.stdin, Loader=yaml.SafeLoader)))
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="yaml-to-json")
+def main():
+    """
+    Convert YAML data from stdin to JSON.
+
+    Reads YAML data from standard input and outputs JSON.
+
+    \b
+    Examples:
+      echo "a: 1" | yaml-to-json
+      yaml-to-json < config.yaml > config.json
+      cat data.yaml | yaml-to-json | jq '.'
+    """
+    try:
+        data = yaml.load(sys.stdin, Loader=yaml.SafeLoader)
+        print(json.dumps(data))
+        sys.exit(0)
+    except yaml.YAMLError as e:
+        click.echo(f"Error: Invalid YAML: {e}", err=True)
+        sys.exit(1)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

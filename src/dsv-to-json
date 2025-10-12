@@ -2,16 +2,41 @@
 
 import json
 import sys
+import click
 
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
-def main():
-    delimiter = sys.argv[1]
-    if delimiter == "-z":
-        delimiter = chr(0)
-    lines = sys.stdin.readlines()
-    cells = [l.strip("\n").split(delimiter) for l in lines]
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="dsv-to-json")
+@click.argument('delimiter')
+def main(delimiter):
+    """
+    Convert delimiter-separated values from stdin to JSON.
 
-    print(json.dumps(cells))
+    Reads DSV data from standard input and outputs JSON array of arrays.
+
+    \b
+    DELIMITER: The delimiter character to use (use -z for null byte)
+
+    \b
+    Examples:
+      echo "a:b:c" | dsv-to-json ":"
+      dsv-to-json ";" < data.dsv > data.json
+      cat file.tsv | dsv-to-json $'\\t' | jq '.'
+    """
+    try:
+        if delimiter == "-z":
+            delimiter = chr(0)
+        lines = sys.stdin.readlines()
+        cells = [l.strip("\n").split(delimiter) for l in lines]
+        print(json.dumps(cells))
+        sys.exit(0)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -2,9 +2,11 @@ package main
 
 import "encoding/json"
 import "errors"
+import "flag"
 import "fmt"
 import "io/ioutil"
 import "os"
+import "path/filepath"
 import "reflect"
 
 func check(e error) {
@@ -141,75 +143,96 @@ func compareObject(path []interface{}, object1 interface{}, object2 interface{})
 }
 
 func main() {
-	if len(os.Args) != 3 {
-		fmt.Print(
-			`Usage: json-diff FILE1 FILE2
+	app := filepath.Base(os.Args[0])
 
-OVERVIEW:
-    json-diff reports differences between two json files as json.
+	fs := flag.NewFlagSet(app, flag.ContinueOnError)
+	fs.SetOutput(os.Stderr)
 
-    For each difference, json-diff reports the path in the json of the difference, the value in FILE1 (leftValue) (if present), and the value in FILE2 (rightValue) (if present).
-    If a value is only present in FILE1, rightValue will not be present.
-    If a value is only present in FILE2, leftValue will not be present.
-
-PATH NOTATION:
-    The path for a difference is an array of numbers and strings. Each number refers to an array index and each string refers to an object key.
-
-    For example, [0, "a", 2] would refer to "foo" in the json value:
-        [
-            {
-                "a": [
-                    null,
-                    null,
-                    "foo"
-                    ]
-            }
-        ]
-
-OUTPUT SCHEMA:
-    {
-      "$schema": "http://json-schema.org/schema#",
-      "items": {
-        "properties": {
-          "leftValue": {
-            "type": ["null", "boolean", "object", "array", "number", "string"]
-          },
-          "path": {
-            "type": "array",
-            "contains": ["number", "string"]
-          },
-          "rightValue": {
-            "type": ["null", "boolean", "object", "array", "number", "string"]
-          }
-        },
-        "required": [
-          "path"
-        ],
-        "type": "object"
-      },
-      "type": "array"
-    }
-`)
-		os.Exit(1)
+	fs.Usage = func() {
+		fmt.Fprintf(os.Stderr, "%s - compare two JSON files and report differences\n\n", app)
+		fmt.Fprintf(os.Stderr, "Usage:\n  %s [flags] FILE1 FILE2\n\n", app)
+		fmt.Fprintln(os.Stderr, "Overview:")
+		fmt.Fprintln(os.Stderr, "  json-diff reports differences between two JSON files as JSON.")
+		fmt.Fprintln(os.Stderr, "")
+		fmt.Fprintln(os.Stderr, "  For each difference, json-diff reports the path, the value in FILE1")
+		fmt.Fprintln(os.Stderr, "  (leftValue) if present, and the value in FILE2 (rightValue) if present.")
+		fmt.Fprintln(os.Stderr, "")
+		fmt.Fprintln(os.Stderr, "Path Notation:")
+		fmt.Fprintln(os.Stderr, "  The path is an array of numbers and strings. Each number refers to an")
+		fmt.Fprintln(os.Stderr, "  array index and each string refers to an object key.")
+		fmt.Fprintln(os.Stderr, "")
+		fmt.Fprintln(os.Stderr, "  Example: [0, \"a\", 2] refers to \"foo\" in:")
+		fmt.Fprintln(os.Stderr, "    [{\"a\": [null, null, \"foo\"]}]")
+		fmt.Fprintln(os.Stderr, "")
+		fmt.Fprintln(os.Stderr, "Exit Codes:")
+		fmt.Fprintln(os.Stderr, "  0 - Files are identical")
+		fmt.Fprintln(os.Stderr, "  1 - Files differ")
+		fmt.Fprintln(os.Stderr, "  2 - Error occurred")
+		fmt.Fprintln(os.Stderr, "")
+		fmt.Fprintln(os.Stderr, "Flags:")
+		fmt.Fprintln(os.Stderr, "  -h, -help    show help")
+		fmt.Fprintln(os.Stderr, "")
+		fmt.Fprintln(os.Stderr, "Examples:")
+		fmt.Fprintf(os.Stderr, "  %s old.json new.json\n", app)
+		fmt.Fprintf(os.Stderr, "  %s config1.json config2.json | jq '.'\n", app)
 	}
 
-	file1, err := ioutil.ReadFile(os.Args[1])
-	check(err)
-	file2, err := ioutil.ReadFile(os.Args[2])
-	check(err)
+	// Support GNU-style --help explicitly
+	for _, a := range os.Args[1:] {
+		if a == "--help" {
+			fs.Usage()
+			os.Exit(0)
+		}
+	}
+
+	if err := fs.Parse(os.Args[1:]); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			os.Exit(0)
+		}
+		os.Exit(2)
+	}
+
+	if fs.NArg() != 2 {
+		fmt.Fprintln(os.Stderr, "error: requires exactly 2 file arguments")
+		fs.Usage()
+		os.Exit(2)
+	}
+
+	file1Path := fs.Arg(0)
+	file2Path := fs.Arg(1)
+
+	file1, err := ioutil.ReadFile(file1Path)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error reading %s: %v\n", file1Path, err)
+		os.Exit(2)
+	}
+
+	file2, err := ioutil.ReadFile(file2Path)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error reading %s: %v\n", file2Path, err)
+		os.Exit(2)
+	}
 
 	var object1 interface{}
 	var object2 interface{}
+
 	err = json.Unmarshal(file1, &object1)
-	check(err)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error parsing %s: %v\n", file1Path, err)
+		os.Exit(2)
+	}
 
 	err = json.Unmarshal(file2, &object2)
-	check(err)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error parsing %s: %v\n", file2Path, err)
+		os.Exit(2)
+	}
 
 	diff := compareObject([]interface{}{}, object1, object2)
 
 	output, _ := json.Marshal(diff)
 	fmt.Println(string(output))
+
 	if len(diff) == 0 {
 		os.Exit(0)
 	}

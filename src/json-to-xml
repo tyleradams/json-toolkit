@@ -2,7 +2,10 @@
 
 import json
 import sys
+import click
 import xmltodict
+
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
 JSON_FROM_PYTHON_NAMES = {
     dict: "object",
@@ -13,14 +16,8 @@ JSON_FROM_PYTHON_NAMES = {
     None: "null"
 }
 
-
 class InvalidXMLSerializableData(Exception):
     pass
-
-
-class IncompleteIfTreeException(Exception):
-    pass
-
 
 def validate_data(data):
     if type(data) == dict and len(data.keys()) == 1:
@@ -38,21 +35,44 @@ def validate_data(data):
                 type_name)
     elif type(data) == dict and len(data.keys()) != 1:
         message += "\n    Input object does not have 1 key, it has {} keys".format(
-            data.keys())
+            len(data.keys()))
     else:
         raise Exception(
             "The code cannot handle this input, to receive support, please file a bug specifying the input")
     raise InvalidXMLSerializableData(message)
 
-
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="json-to-xml")
 def main():
-    if len(sys.argv) != 1:
-        print("Usage: json-to-xml")
+    """
+    Convert JSON to XML format.
 
-    data = json.load(sys.stdin)
-    validate_data(data)
-    print(xmltodict.unparse(data, pretty=True))
+    Reads a JSON object from stdin and outputs XML. The input JSON must
+    be an object with exactly one key, which becomes the root XML element.
 
+    \b
+    Examples:
+      echo '{"root":{"item":"value"}}' | json-to-xml
+      json-to-xml < data.json > data.xml
+      cat config.json | json-to-xml
+    """
+    try:
+        data = json.load(sys.stdin)
+        validate_data(data)
+        print(xmltodict.unparse(data, pretty=True))
+        sys.exit(0)
+    except json.JSONDecodeError as e:
+        click.echo(f"Error: Invalid JSON: {e}", err=True)
+        sys.exit(1)
+    except InvalidXMLSerializableData as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -2,21 +2,54 @@
 
 import json
 import sys
+import click
+
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
 def validate_binary(data):
     data_with_index = list(enumerate(data))
     errors = []
-    errors.extend([{"message": "Value is not an int", "index": x[0], "value": x[1]} for x in data_with_index if type(x[1]) != int])
-    errors.extend([{"message": "Value is not within [0,255]", "index": x[0], "value": x[1]} for x in data_with_index if x[1] < 0 or x[1] > 255])
+    errors.extend([{"message": "Value is not an int", "index": x[0], "value": x[1]}
+                   for x in data_with_index if type(x[1]) != int])
+    errors.extend([{"message": "Value is not within [0,255]", "index": x[0], "value": x[1]}
+                   for x in data_with_index if x[1] < 0 or x[1] > 255])
     if len(errors) != 0:
         raise Exception("Invalid data:{}".format(json.dumps(errors)))
 
-data = json.load(sys.stdin)
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="json-to-binary")
+def main():
+    """
+    Convert JSON array of bytes to binary data.
 
-validate_binary(data)
+    Reads a JSON array from stdin where each element is a byte value (0-255)
+    and outputs the corresponding binary data to stdout.
 
-a = bytearray()
-for byte in data:
-    a.append(byte)
+    \b
+    Examples:
+      echo '[72, 101, 108, 108, 111]' | json-to-binary
+      json-to-binary < data.json > output.bin
+      cat bytes.json | json-to-binary > file.bin
+    """
+    try:
+        data = json.load(sys.stdin)
+        validate_binary(data)
 
-sys.stdout.buffer.write(a)
+        a = bytearray()
+        for byte in data:
+            a.append(byte)
+
+        sys.stdout.buffer.write(a)
+        sys.exit(0)
+    except json.JSONDecodeError as e:
+        click.echo(f"Error: Invalid JSON: {e}", err=True)
+        sys.exit(1)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

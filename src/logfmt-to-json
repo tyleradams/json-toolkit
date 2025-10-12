@@ -2,14 +2,36 @@
 
 import json
 import sys
-
+import click
 import logfmt
 
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="logfmt-to-json")
 def main():
-    for l in logfmt.parse(sys.stdin):
-        print(json.dumps(l))
+    """
+    Convert logfmt format from stdin to JSON.
 
+    Reads logfmt-formatted lines from standard input and outputs one JSON
+    object per line. Each logfmt line is parsed into a JSON object.
+
+    \b
+    Examples:
+      echo "key=value foo=bar" | logfmt-to-json
+      logfmt-to-json < logs.txt
+      cat access.log | logfmt-to-json | jq '.'
+    """
+    try:
+        for l in logfmt.parse(sys.stdin):
+            print(json.dumps(l))
+        sys.exit(0)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

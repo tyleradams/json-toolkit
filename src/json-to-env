@@ -1,20 +1,44 @@
 #!/usr/bin/env python3
 
 import json
-import dotenv
-import dotenv.main
 import sys
+import click
+
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
 def escape_value(v):
     return v.replace("\n","\\n")
 
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="json-to-env")
 def main():
-    d = json.load(sys.stdin)
-    for k,v in d.items():
-        v2 = escape_value(v)
-        print(f"{k}=\"{v2}\"")
-    sys.exit(0)
+    """
+    Convert JSON object to environment variable format.
 
+    Reads a JSON object from stdin and outputs .env format data with
+    key-value pairs. Newlines in values are escaped.
+
+    \b
+    Examples:
+      echo '{"FOO":"bar"}' | json-to-env
+      json-to-env < config.json > .env
+      cat data.json | json-to-env
+    """
+    try:
+        d = json.load(sys.stdin)
+        for k, v in d.items():
+            v2 = escape_value(v)
+            print(f"{k}=\"{v2}\"")
+        sys.exit(0)
+    except json.JSONDecodeError as e:
+        click.echo(f"Error: Invalid JSON: {e}", err=True)
+        sys.exit(1)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

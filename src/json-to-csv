@@ -3,13 +3,39 @@
 import csv
 import json
 import sys
+import click
 
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.version_option("1.1.0", prog_name="json-to-csv")
 def main():
-    rows = json.load(sys.stdin)
-    csv_writer = csv.writer(sys.stdout, dialect='unix')
-    csv_writer.writerows(rows)
+    """
+    Convert JSON array to CSV format.
 
+    Reads a JSON array of arrays from stdin and outputs CSV data.
+    Each inner array becomes a row in the CSV output.
+
+    \b
+    Examples:
+      echo '[["a","b"],["c","d"]]' | json-to-csv
+      json-to-csv < data.json > data.csv
+      cat table.json | json-to-csv
+    """
+    try:
+        rows = json.load(sys.stdin)
+        csv_writer = csv.writer(sys.stdout, dialect='unix')
+        csv_writer.writerows(rows)
+        sys.exit(0)
+    except json.JSONDecodeError as e:
+        click.echo(f"Error: Invalid JSON: {e}", err=True)
+        sys.exit(1)
+    except BrokenPipeError:
+        sys.stderr.close()
+        sys.exit(0)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
