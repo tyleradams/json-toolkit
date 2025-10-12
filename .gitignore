@@ -1,5 +1,8 @@
 json-diff
-json-empty-array
 *.swp
 json-toolkit*
 target/
+logs/
+*.log
+debian/changelog
+CHANGELOG.md
