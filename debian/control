@@ -2,7 +2,10 @@ Source: json-toolkit
 Section: utils
 Priority: optional
 Maintainer: Tyler Adams <tyler@blitzblitzblitz.com>
-Build-Depends: debhelper-compat (= 12)
+Build-Depends: debhelper-compat (= 12),
+               dh-sequence-python3,
+               golang-go,
+               python3-all
 Standards-Version: 4.6.0
 Homepage: https://github.com/tyleradams/json-toolkit
 Vcs-Browser: https://github.com/tyleradams/json-toolkit
@@ -11,5 +14,29 @@ Rules-Requires-Root: no
 
 Package: json-toolkit
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         ${python3:Depends},
+         golang-go,
+         jq (>= 1.5),
+         python3,
+         python3-click,
+         python3-dotenv,
+         python3-logfmt,
+         python3-psycopg2,
+         python3-pymysql,
+         python3-toml,
+         python3-unidiff,
+         python3-xmltodict,
+         python3-yaml
 Description: Work with json data and convert non-json data to/from json
+ JSON Toolkit is a comprehensive suite of command-line utilities for working
+ with JSON and other data formats. It provides bidirectional conversion between
+ JSON and CSV, XML, YAML, TOML, HTML, logfmt, and environment variables, as well
+ as tools for JSON manipulation, schema generation, and database integration.
+ .
+ Features include:
+  * Format conversion between JSON and multiple formats
+  * JSON diff, formatting, and schema generation
+  * Database integration (PostgreSQL, MySQL, SQLite3)
+  * Unix-friendly command-line tools that work with pipes

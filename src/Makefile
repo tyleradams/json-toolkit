@@ -16,6 +16,7 @@ install :
 	install dsv-to-json $(DESTDIR)$(prefix)/bin
 	install env-to-json $(DESTDIR)$(prefix)/bin
 	install json-diff $(DESTDIR)$(prefix)/bin
+	install json-format $(DESTDIR)$(prefix)/bin
 	install json-empty-array $(DESTDIR)$(prefix)/bin
 	install json-make-schema $(DESTDIR)$(prefix)/bin
 	install json-sql $(DESTDIR)$(prefix)/bin
