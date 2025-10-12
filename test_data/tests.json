@@ -1,31 +1,7 @@
 [
   {
     "command": [
-      "./json-empty-array"
-    ],
-    "input": "[]\n",
-    "output": "",
-    "returnCode": 0
-  },
-  {
-    "command": [
-      "./json-empty-array"
-    ],
-    "input": "{}\n",
-    "output": "{}\n",
-    "returnCode": 1
-  },
-  {
-    "command": [
-      "./json-empty-array"
-    ],
-    "input": "0\n",
-    "output": "0\n",
-    "returnCode": 1
-  },
-  {
-    "command": [
-      "./json-to-csv"
+      "./src/json-to-csv"
     ],
     "input": "[[\"single cell\"]]\n",
     "output": "\"single cell\"\n",
@@ -33,7 +9,7 @@
   },
   {
     "command": [
-      "./json-format",
+      "./src/json-format",
       "-"
     ],
     "input": "{\"second\": 2, \"first\": 1}",
@@ -42,7 +18,7 @@
   },
   {
     "command": [
-      "./json-format"
+      "./src/json-format"
     ],
     "input": "[]",
     "output": "[]\n",
@@ -50,7 +26,7 @@
   },
   {
     "command": [
-      "./json-format",
+      "./src/json-format",
       "NONEXISTANT_FILE"
     ],
     "input": "[]",
@@ -59,7 +35,7 @@
   },
   {
     "command": [
-      "./json-to-csv"
+      "./src/json-to-csv"
     ],
     "input": "[[\"multiple\", \"cells\", \"single\", \"row\"]]\n",
     "output": "\"multiple\",\"cells\",\"single\",\"row\"\n",
@@ -67,7 +43,7 @@
   },
   {
     "command": [
-      "./json-to-csv"
+      "./src/json-to-csv"
     ],
     "input": "[[\"multiple\", \"cells\"], [\"multiple \", \"rows\"]]\n",
     "output": "\"multiple\",\"cells\"\n\"multiple \",\"rows\"\n",
@@ -75,7 +51,7 @@
   },
   {
     "command": [
-      "./json-to-dsv",
+      "./src/json-to-dsv",
       ","
     ],
     "input": "[[\"single cell\"]]\n",
@@ -84,7 +60,7 @@
   },
   {
     "command": [
-      "./json-to-dsv",
+      "./src/json-to-dsv",
       ","
     ],
     "input": "[[\"multiple\", \"cells\", \"single\", \"row\"]]\n",
@@ -93,7 +69,7 @@
   },
   {
     "command": [
-      "./json-to-dsv",
+      "./src/json-to-dsv",
       ","
     ],
     "input": "[[\"multiple\", \"cells\"], [\"multiple \", \"rows\"]]\n",
@@ -102,7 +78,7 @@
   },
   {
     "command": [
-      "./json-to-xml"
+      "./src/json-to-xml"
     ],
     "input": "{\"a\": 1}",
     "output": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<a>1</a>\n",
@@ -110,7 +86,7 @@
   },
   {
     "command": [
-      "./json-to-yaml"
+      "./src/json-to-yaml"
     ],
     "input": "{\"a\": 1, \"b\": 2}\n",
     "output": "a: 1\nb: 2\n",
@@ -118,7 +94,7 @@
   },
   {
     "command": [
-      "./csv-to-json"
+      "./src/csv-to-json"
     ],
     "input": "Single cell\n",
     "output": "[[\"Single cell\"]]\n",
@@ -126,7 +102,7 @@
   },
   {
     "command": [
-      "./csv-to-json"
+      "./src/csv-to-json"
     ],
     "input": "Multiple,cells,but,one,row\n",
     "output": "[[\"Multiple\", \"cells\", \"but\", \"one\", \"row\"]]\n",
@@ -134,7 +110,7 @@
   },
   {
     "command": [
-      "./csv-to-json"
+      "./src/csv-to-json"
     ],
     "input": "Multiple,cells\nand\nmultiple,rows",
     "output": "[[\"Multiple\", \"cells\"], [\"and\"], [\"multiple\", \"rows\"]]\n",
@@ -142,7 +118,7 @@
   },
   {
     "command": [
-      "./dsv-to-json",
+      "./src/dsv-to-json",
       ":"
     ],
     "input": "Single cell\n",
@@ -151,7 +127,7 @@
   },
   {
     "command": [
-      "./dsv-to-json",
+      "./src/dsv-to-json",
       ":"
     ],
     "input": "Multiple:cells:but:one:row\n",
@@ -160,7 +136,7 @@
   },
   {
     "command": [
-      "./dsv-to-json",
+      "./src/dsv-to-json",
       ";"
     ],
     "input": "Multiple cells\nand\nmultiple;rows",
@@ -169,7 +145,7 @@
   },
   {
     "command": [
-      "./xml-to-json"
+      "./src/xml-to-json"
     ],
     "input": "<a>b</a>",
     "output": "{\"a\": \"b\"}\n",
@@ -177,7 +153,7 @@
   },
   {
     "command": [
-      "./yaml-to-json"
+      "./src/yaml-to-json"
     ],
     "input": "a: b",
     "output": "{\"a\": \"b\"}\n",

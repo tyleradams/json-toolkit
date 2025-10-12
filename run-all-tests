@@ -7,6 +7,6 @@ set -euo pipefail
 
 TEST_FILE=test_data/tests.json
 TMP_FILE=$(mktemp)
-cat "${TEST_FILE}" | ./generate-test-results > "${TMP_FILE}"
-./src/json-diff "${TMP_FILE}" "${TEST_FILE}" | ./src/json-empty-array
+cat "${TEST_FILE}" | ./src/generate-test-results > "${TMP_FILE}"
+./target/json-diff "${TMP_FILE}" "${TEST_FILE}" | jq -e '. == []' > /dev/null
 rm "${TMP_FILE}"
