@@ -15,8 +15,10 @@ def flatten(ll):
 def run_command(command, stdin):
     p = subprocess.Popen(command, stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, _ = p.communicate(stdin.encode("ASCII"))
-    return output.decode("ASCII"), p.returncode
+    stdout, stderr = p.communicate(stdin.encode("ASCII"))
+    # Combine stderr and stdout (stderr first, as it typically contains error messages)
+    output = stderr.decode("ASCII") + stdout.decode("ASCII")
+    return output, p.returncode
 
 
 def run_test(test):
