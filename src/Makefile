@@ -1,35 +1,68 @@
-all : json-diff json-empty-array
+SHELL = /bin/sh
 
-json-diff : json-diff.go
-	go fmt json-diff.go
-	go build json-diff.go
+# Tools and flags (user-overridable)
+GO ?= go
+INSTALL ?= install
+INSTALL_PROGRAM ?= $(INSTALL)
+MKDIR_P ?= mkdir -p
+RM ?= rm -f
 
-json-empty-array : json-empty-array.go
-	go fmt json-empty-array.go
-	go build json-empty-array.go
+# Installation directories (should be passed from parent Makefile)
+prefix ?= /usr/local
+exec_prefix ?= $(prefix)
+bindir ?= $(exec_prefix)/bin
+DESTDIR ?=
 
-install :
-	mkdir -p $(DESTDIR)$(prefix)/bin
-	install binary-to-json $(DESTDIR)$(prefix)/bin
-	install csv-to-json $(DESTDIR)$(prefix)/bin
-	install diff-to-json $(DESTDIR)$(prefix)/bin
-	install dsv-to-json $(DESTDIR)$(prefix)/bin
-	install env-to-json $(DESTDIR)$(prefix)/bin
-	install json-diff $(DESTDIR)$(prefix)/bin
-	install json-format $(DESTDIR)$(prefix)/bin
-	install json-empty-array $(DESTDIR)$(prefix)/bin
-	install json-make-schema $(DESTDIR)$(prefix)/bin
-	install json-sql $(DESTDIR)$(prefix)/bin
-	install json-table-to-objs $(DESTDIR)$(prefix)/bin
-	install json-to-binary $(DESTDIR)$(prefix)/bin
-	install json-to-csv $(DESTDIR)$(prefix)/bin
-	install json-to-dsv $(DESTDIR)$(prefix)/bin
-	install json-to-env $(DESTDIR)$(prefix)/bin
-	install json-to-logfmt $(DESTDIR)$(prefix)/bin
-	install json-to-xml $(DESTDIR)$(prefix)/bin
-	install json-to-yaml $(DESTDIR)$(prefix)/bin
-	install logfmt-to-json $(DESTDIR)$(prefix)/bin
-	install pjito $(DESTDIR)$(prefix)/bin
-	install python-to-json-ast $(DESTDIR)$(prefix)/bin
-	install xml-to-json $(DESTDIR)$(prefix)/bin
-	install yaml-to-json $(DESTDIR)$(prefix)/bin
+# Programs to install
+PROGRAMS = \
+	binary-to-json \
+	csv-to-json \
+	diff-to-json \
+	dsv-to-json \
+	env-to-json \
+	json-format \
+	json-make-schema \
+	json-objs-to-table \
+	json-run \
+	json-sql \
+	json-table-to-objs \
+	json-to-binary \
+	json-to-csv \
+	json-to-dsv \
+	json-to-env \
+	json-to-logfmt \
+	json-to-plot \
+	json-to-xml \
+	json-to-yaml \
+	logfmt-to-json \
+	pjito \
+	python-to-json-ast \
+	xml-to-json \
+	yaml-to-json
+
+# Go programs (built separately in parent Makefile)
+GO_PROGRAMS = json-diff
+
+all: $(GO_PROGRAMS)
+
+json-diff: json-diff.go
+	$(GO) fmt json-diff.go
+	$(GO) build json-diff.go
+
+
+.PHONY: install
+install:
+	$(MKDIR_P) $(DESTDIR)$(bindir)
+	@for prog in $(PROGRAMS); do \
+		echo "  INSTALL  $$prog -> $(DESTDIR)$(bindir)/$$prog"; \
+		$(INSTALL_PROGRAM) $$prog $(DESTDIR)$(bindir)/; \
+	done
+
+.PHONY: uninstall
+uninstall:
+	@for prog in $(PROGRAMS) $(GO_PROGRAMS); do \
+		echo "  RM       $(DESTDIR)$(bindir)/$$prog"; \
+		$(RM) $(DESTDIR)$(bindir)/$$prog; \
+	done
+
+.PHONY: all install uninstall
