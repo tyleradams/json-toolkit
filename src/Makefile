@@ -30,11 +30,9 @@ PROGRAMS = \
 	json-to-csv \
 	json-to-dsv \
 	json-to-env \
-	json-to-logfmt \
 	json-to-plot \
 	json-to-xml \
 	json-to-yaml \
-	logfmt-to-json \
 	pjito \
 	python-to-json-ast \
 	xml-to-json \

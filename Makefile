@@ -33,12 +33,26 @@ Q :=
 endif
 
 # Go build targets
-GO_SOURCES := src/json-diff.go
-GO_BINARIES := $(BUILDDIR)/json-diff
+GO_SOURCES := src/json-diff.go src/logfmt-to-json.go src/json-to-logfmt.go
+GO_BINARIES := $(BUILDDIR)/json-diff $(BUILDDIR)/logfmt-to-json $(BUILDDIR)/json-to-logfmt
 
 all: $(GO_BINARIES)
 
 $(BUILDDIR)/json-diff: src/json-diff.go
+	@echo "  GO FMT  $<"
+	$(Q)$(GO) fmt $<
+	@echo "  GO BUILD $@"
+	$(Q)$(MKDIR_P) $(BUILDDIR)
+	$(Q)$(GO) build -o $@ $<
+
+$(BUILDDIR)/logfmt-to-json: src/logfmt-to-json.go
+	@echo "  GO FMT  $<"
+	$(Q)$(GO) fmt $<
+	@echo "  GO BUILD $@"
+	$(Q)$(MKDIR_P) $(BUILDDIR)
+	$(Q)$(GO) build -o $@ $<
+
+$(BUILDDIR)/json-to-logfmt: src/json-to-logfmt.go
 	@echo "  GO FMT  $<"
 	$(Q)$(GO) fmt $<
 	@echo "  GO BUILD $@"
@@ -87,6 +101,8 @@ install: all
 	$(Q)$(MKDIR_P) $(DESTDIR)$(docdir)
 	@echo "Installing Go binaries to $(DESTDIR)$(bindir)"
 	$(Q)$(INSTALL_PROGRAM) $(BUILDDIR)/json-diff $(DESTDIR)$(bindir)/
+	$(Q)$(INSTALL_PROGRAM) $(BUILDDIR)/logfmt-to-json $(DESTDIR)$(bindir)/
+	$(Q)$(INSTALL_PROGRAM) $(BUILDDIR)/json-to-logfmt $(DESTDIR)$(bindir)/
 	@echo "Installing Python/Bash utilities from src/"
 	$(Q)$(MAKE) -C src prefix=$(prefix) DESTDIR=$(DESTDIR) install
 	@echo "Installing documentation"
@@ -97,11 +113,15 @@ install: all
 install-strip: install
 	@echo "  STRIP   $(DESTDIR)$(bindir)/json-diff"
 	$(Q)strip $(DESTDIR)$(bindir)/json-diff || true
+	$(Q)strip $(DESTDIR)$(bindir)/logfmt-to-json || true
+	$(Q)strip $(DESTDIR)$(bindir)/json-to-logfmt || true
 
 .PHONY: uninstall
 uninstall:
 	@echo "  UNINSTALL"
 	$(Q)$(RM) $(DESTDIR)$(bindir)/json-diff
+	$(Q)$(RM) $(DESTDIR)$(bindir)/logfmt-to-json
+	$(Q)$(RM) $(DESTDIR)$(bindir)/json-to-logfmt
 	$(Q)$(MAKE) -C src prefix=$(prefix) DESTDIR=$(DESTDIR) uninstall
 	$(Q)$(RM) $(DESTDIR)$(docdir)/README.md
 	$(Q)$(RM) $(DESTDIR)$(docdir)/LICENSE
