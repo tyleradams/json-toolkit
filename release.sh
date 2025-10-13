@@ -237,9 +237,10 @@ phase_4_git_publish() {
     fi
 
     log_info "Creating annotated git tag: $tag"
-    if [ -n "${GPG_KEY:-${DEBSIGN_KEY:-}}" ]; then
-        git tag -s -a "$tag" -m "Release $version"
-        log_info "Created signed tag"
+    local key_id="${GPG_KEY:-${DEBSIGN_KEY:-}}"
+    if [ -n "$key_id" ]; then
+        git tag -s -u "$key_id" -a "$tag" -m "Release $version"
+        log_info "Created signed tag with key $key_id"
     else
         git tag -a "$tag" -m "Release $version"
         log_warning "Created unsigned tag (set GPG_KEY or DEBSIGN_KEY to sign)"
