@@ -119,8 +119,8 @@ package:
 	$(Q)$(MKDIR_P) $(BUILDDIR)/bin
 	$(Q)$(MAKE) -C src
 	@echo "  GBP     Generating debian/changelog from git"
-	$(Q)gbp dch --new-version=$(VERSION) --debian-tag='v%(version)s' --spawn-editor=never --git-author --distribution=focal 2>/dev/null || \
-		(echo "$(PACKAGE) ($(VERSION)) focal; urgency=medium" > debian/changelog && \
+	$(Q)gbp dch --new-version=$(VERSION) --debian-tag='v%(version)s' --spawn-editor=never --git-author --distribution=noble 2>/dev/null || \
+		(echo "$(PACKAGE) ($(VERSION)) noble; urgency=medium" > debian/changelog && \
 		 echo "" >> debian/changelog && \
 		 echo "  * Release $(VERSION)" >> debian/changelog && \
 		 echo "" >> debian/changelog && \
