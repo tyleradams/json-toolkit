@@ -128,7 +128,7 @@ package:
 	$(Q)tar czf $(BUILDDIR)/$(PACKAGE)_$(VERSION).orig.tar.gz src --transform "s#src#$(PACKAGE)-$(VERSION)#"
 	$(Q)cd $(BUILDDIR) && tar xf $(PACKAGE)_$(VERSION).orig.tar.gz
 	$(Q)cp -r debian $(BUILDDIR)/$(PACKAGE)-$(VERSION)/debian
-	$(Q)cd $(BUILDDIR)/$(PACKAGE)-$(VERSION) && debuild -S -sa
+	$(Q)cd $(BUILDDIR)/$(PACKAGE)-$(VERSION) && DEBSIGN_KEYID=$(DEBSIGN_KEY) debuild -S -sa
 
 .PHONY: publish
 publish:
