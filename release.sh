@@ -232,25 +232,33 @@ phase_4_git_publish() {
 
     # Check if tag already exists
     if git rev-parse "$tag" >/dev/null 2>&1; then
-        log_error "Tag $tag already exists"
-        exit 1
-    fi
+        log_warning "Tag $tag already exists locally"
 
-    log_info "Creating annotated git tag: $tag"
-    local key_id="${GPG_KEY:-${DEBSIGN_KEY:-}}"
-    if [ -n "$key_id" ]; then
-        git tag -s -u "$key_id" -a "$tag" -m "Release $version"
-        log_info "Created signed tag with key $key_id"
+        # Check if it exists on remote
+        if git ls-remote --tags origin | grep -q "refs/tags/$tag"; then
+            log_success "Tag $tag already pushed to origin (idempotent - skipping)"
+        else
+            log_info "Pushing existing tag to origin..."
+            git push origin "$tag"
+            log_success "Tag pushed to origin"
+        fi
     else
-        git tag -a "$tag" -m "Release $version"
-        log_warning "Created unsigned tag (set GPG_KEY or DEBSIGN_KEY to sign)"
+        log_info "Creating annotated git tag: $tag"
+        local key_id="${GPG_KEY:-${DEBSIGN_KEY:-}}"
+        if [ -n "$key_id" ]; then
+            git tag -s -u "$key_id" -a "$tag" -m "Release $version"
+            log_info "Created signed tag with key $key_id"
+        else
+            git tag -a "$tag" -m "Release $version"
+            log_warning "Created unsigned tag (set GPG_KEY or DEBSIGN_KEY to sign)"
+        fi
+
+        log_info "Pushing to origin..."
+        git push origin "$(git branch --show-current)"
+        git push origin "$tag"
+
+        log_success "Git publishing completed"
     fi
-
-    log_info "Pushing to origin..."
-    git push origin "$(git branch --show-current)"
-    git push origin "$tag"
-
-    log_success "Git publishing completed"
 }
 
 phase_5_ppa_publish() {
