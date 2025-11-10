@@ -3,7 +3,7 @@ click==8.0.0
 cx_Oracle==8.1.0
 genson==1.2.2
 psycopg2-binary==2.8.6
-PyMySQL==0.10.1
+PyMySQL==1.1.1
 python-dotenv==0.21.0
 PyYAML==5.4
 toml==0.10.2
