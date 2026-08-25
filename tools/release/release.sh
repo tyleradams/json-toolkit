@@ -73,12 +73,17 @@ fi
 
 # The toolchain gate downloads a Go release into GOPATH, and the sumdb cache
 # lives there too, so both GOCACHE and GOPATH have to be writable.
+# Export unconditionally. Setting these only inside the "unwritable" branch
+# left GOPATH unbound on any machine where the defaults are fine, and the
+# GOMODCACHE line below then tripped set -u.
 for var in GOCACHE GOPATH; do
   dir=$(go env "$var" 2>/dev/null || true)
   if [ -z "$dir" ] || ! mkdir -p "$dir" 2>/dev/null || ! [ -w "$dir" ]; then
-    export "$var"="$TMPDIR/${var,,}"; mkdir -p "${!var}"
-    warn "default $var unwritable, using ${!var}"
+    dir="$TMPDIR/${var,,}"
+    mkdir -p "$dir"
+    warn "default $var unwritable, using $dir"
   fi
+  export "$var=$dir"
 done
 export GOMODCACHE="$GOPATH/pkg/mod"
 
