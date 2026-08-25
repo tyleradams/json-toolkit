@@ -94,9 +94,13 @@ ok "build-deps satisfied"
 
 # -------------------------------------------------------- assemble sources
 info "Assemble source tree"
-SRCDIR="$OUT/$PACKAGE-$VERSION"
+# Two extractions of one tarball. The gate copy gets a binary build, which
+# leaves debian/json-toolkit/ staging behind; the upload copy is never built
+# in, so what gets signed is exactly the tarball plus debian/.
+GATEDIR="$OUT/gate/$PACKAGE-$VERSION"
+UPDIR="$OUT/upload/$PACKAGE-$VERSION"
 ORIG="$OUT/${PACKAGE}_${VERSION}.orig.tar.gz"
-[ -e "$SRCDIR" ] && mv "$SRCDIR" "$OUT/.stale-$$-$(basename "$SRCDIR")"
+mkdir -p "$OUT/gate" "$OUT/upload"
 
 # src/json-diff is a gitignored leftover from an old in-tree build. It would
 # otherwise be swept into the tarball as a stale, arch-specific binary.
@@ -104,13 +108,17 @@ tar czf "$ORIG" \
   --exclude=src/json-diff \
   --transform "s#^#$PACKAGE-$VERSION/#" \
   Makefile src go.mod go.sum vendor README.md LICENSE
-tar xf "$ORIG" -C "$OUT"
-cp -r debian "$SRCDIR/debian"
-printf '%s (%s) %s; urgency=medium\n\n  * Release %s\n\n -- %s <%s>  %s\n' \
-  "$PACKAGE" "$VERSION" "$DISTRIBUTION" "$VERSION" \
-  "$(git config user.name)" "$(git config user.email)" "$(date -R)" \
-  > "$SRCDIR/debian/changelog"
-ok "source tree at $(basename "$SRCDIR"), changelog targets $DISTRIBUTION"
+CHANGELOG_STAMP=$(date -R)
+for d in "$OUT/gate" "$OUT/upload"; do
+  cp "$ORIG" "$d/"
+  tar xf "$ORIG" -C "$d"
+  cp -r debian "$d/$PACKAGE-$VERSION/debian"
+  printf '%s (%s) %s; urgency=medium\n\n  * Release %s\n\n -- %s <%s>  %s\n' \
+    "$PACKAGE" "$VERSION" "$DISTRIBUTION" "$VERSION" \
+    "$(git config user.name)" "$(git config user.email)" "$CHANGELOG_STAMP" \
+    > "$d/$PACKAGE-$VERSION/debian/changelog"
+done
+ok "two source trees assembled, changelog targets $DISTRIBUTION"
 
 # ------------------------------------------- binary build, for the gates only
 # This .deb is never uploaded. Launchpad rebuilds from source for each arch.
@@ -118,9 +126,9 @@ ok "source tree at $(basename "$SRCDIR"), changelog targets $DISTRIBUTION"
 # the check that catches a package that installs cleanly and does the wrong
 # thing -- something no clean-room build test looks at.
 info "Build a binary package to inspect"
-( cd "$SRCDIR" && dpkg-buildpackage -us -uc -b -d ) >"$OUT/binbuild.log" 2>&1 \
+( cd "$GATEDIR" && dpkg-buildpackage -us -uc -b -d ) >"$OUT/binbuild.log" 2>&1 \
   || { tail -25 "$OUT/binbuild.log"; die "binary package build failed"; }
-DEB=$(ls -1t "$OUT/${PACKAGE}_${VERSION}_"*.deb 2>/dev/null | head -1)
+DEB=$(ls -1t "$OUT/gate/${PACKAGE}_${VERSION}_"*.deb 2>/dev/null | head -1)
 [ -n "$DEB" ] || die "no .deb produced"
 ok "built $(basename "$DEB")"
 
@@ -218,11 +226,11 @@ ok "every dependency resolves"
 
 # -------------------------------------------------------- source package
 info "Build the source package"
-CHANGES="$OUT/${PACKAGE}_${VERSION}_source.changes"
+CHANGES="$OUT/upload/${PACKAGE}_${VERSION}_source.changes"
 # Unsigned on purpose. Signing is the one act that stays with Tyler, and it is
 # also the PPA's only authentication, so an unsigned artifact is inert: it
 # cannot be uploaded by anyone who finds it.
-( cd "$SRCDIR" && dpkg-buildpackage -S -sa -d -nc -us -uc ) >"$OUT/srcbuild.log" 2>&1 \
+( cd "$UPDIR" && dpkg-buildpackage -S -sa -d -nc -us -uc ) >"$OUT/srcbuild.log" 2>&1 \
   || { tail -25 "$OUT/srcbuild.log"; die "source package build failed"; }
 [ -f "$CHANGES" ] || die "expected $CHANGES"
 ok "built $(basename "$CHANGES") (unsigned)"
