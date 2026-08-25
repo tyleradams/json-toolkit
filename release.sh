@@ -30,8 +30,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 PACKAGE_NAME="json-toolkit"
-DOCKER_IMAGE_BUILD="ubuntu:22.04"
-DOCKER_IMAGE_TEST="ubuntu:22.04"
+DOCKER_IMAGE_BUILD="ubuntu:24.04"
+DOCKER_IMAGE_TEST="ubuntu:24.04"
 PPA_NAME="${PPA_NAME:-ppa:code-faster/ppa}"
 
 # Functions
@@ -129,7 +129,7 @@ phase_2_docker_build_package() {
 
     local dockerfile_build=$(mktemp)
     cat > "$dockerfile_build" <<'EOF'
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
@@ -175,7 +175,7 @@ phase_3_docker_install_test() {
 
     local dockerfile_test=$(mktemp)
     cat > "$dockerfile_test" <<'EOF'
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
@@ -290,7 +290,7 @@ phase_6_ppa_verify() {
 
     local dockerfile_verify=$(mktemp)
     cat > "$dockerfile_verify" <<EOF
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
