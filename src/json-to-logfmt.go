@@ -9,7 +9,7 @@ import (
 	"github.com/go-logfmt/logfmt"
 )
 
-const version = "2.0.6"
+const version = "3.0.0"
 
 func main() {
 	helpFlag := flag.Bool("help", false, "show help")
