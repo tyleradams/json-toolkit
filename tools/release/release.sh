@@ -164,7 +164,8 @@ if [ -n "$DROPPED" ]; then
   for tool in $DROPPED; do
     # An intentional removal has to be stated in the changelog body, where it
     # ends up in front of a human. Silence is treated as an accident.
-    if git log -1 --format=%B | grep -q "removes $tool"; then
+    # grep -c reads all input, so no SIGPIPE; || true absorbs its exit 1 on zero.
+    if [ "$(git log -1 --format=%B | grep -c "removes $tool" || true)" != 0 ]; then
       warn "$tool dropped, declared in the commit message"
     else
       say "  ${RED}dropped:${NC} $tool"
@@ -190,16 +191,24 @@ missing=""
 while IFS= read -r dep; do
   name=$(printf '%s' "$dep" | sed 's/|.*//; s/(.*)//; s/:[a-z0-9]*$//' | tr -d ' ')
   [ -n "$name" ] || continue
-  if apt-cache policy "$name" 2>/dev/null | grep -q 'Candidate: [^(]'; then
+  # Capture first, then match. `apt-cache ... | grep -q` looks right but is a
+  # trap: grep -q exits at the first match, apt-cache takes SIGPIPE, and under
+  # `set -o pipefail` the pipeline reports 141. Every lookup then "fails".
+  policy=$(apt-cache policy "$name" 2>/dev/null || true)
+  cand=$(printf '%s\n' "$policy" | awk '/Candidate:/ {c=$2} END {print c}')
+  if [ -n "$cand" ] && [ "$cand" != "(none)" ]; then
     continue
   fi
-  # A virtual package satisfied by some provider is fine too.
-  if apt-cache showpkg "$name" 2>/dev/null | grep -q '^Reverse Provides:' \
-     && [ -n "$(apt-cache showpkg "$name" 2>/dev/null | sed -n '/^Reverse Provides:/,$p' | tail -n +2)" ]; then
+  # A purely virtual package is fine as long as something provides it.
+  showpkg=$(apt-cache showpkg "$name" 2>/dev/null || true)
+  providers=$(printf '%s\n' "$showpkg" | awk '/^Reverse Provides:/ {f=1; next} f && NF {print}')
+  if [ -n "$providers" ]; then
     continue
   fi
   missing="$missing $name"
-done < <(printf '%s' "$DEPENDS" | tr ',' '\n')
+  # printf '%s\n', not '%s': without the trailing newline `read` discards the
+  # final field, and the last dependency would never be checked.
+done < <(printf '%s\n' "$DEPENDS" | tr ',' '\n')
 
 if [ -n "$missing" ]; then
   for m in $missing; do say "  ${RED}unresolvable:${NC} $m"; done
