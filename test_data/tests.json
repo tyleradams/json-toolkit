@@ -158,5 +158,21 @@
     "input": "a: b",
     "output": "{\"a\": \"b\"}\n",
     "returnCode": 0
+  },
+  {
+    "command": [
+      "./target/json-to-logfmt"
+    ],
+    "input": "[{\"zulu\":1,\"yankee\":2,\"xray\":3,\"whiskey\":4,\"victor\":5,\"uniform\":6}]",
+    "output": "uniform=6 victor=5 whiskey=4 xray=3 yankee=2 zulu=1\n",
+    "returnCode": 0
+  },
+  {
+    "command": [
+      "./target/json-to-logfmt"
+    ],
+    "input": "[{\"b\":1,\"a\":2},{\"d\":3,\"c\":4}]",
+    "output": "a=2 b=1\nc=4 d=3\n",
+    "returnCode": 0
   }
 ]

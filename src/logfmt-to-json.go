@@ -11,7 +11,7 @@ import (
 	"github.com/go-logfmt/logfmt"
 )
 
-const version = "3.0.0"
+const version = "3.0.1"
 
 func main() {
 	helpFlag := flag.Bool("help", false, "show help")

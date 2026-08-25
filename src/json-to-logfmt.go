@@ -5,11 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/go-logfmt/logfmt"
 )
 
-const version = "3.0.0"
+const version = "3.0.1"
 
 func main() {
 	helpFlag := flag.Bool("help", false, "show help")
@@ -32,8 +33,19 @@ func main() {
 	// Convert each object to logfmt
 	encoder := logfmt.NewEncoder(os.Stdout)
 	for _, record := range data {
-		for key, value := range record {
-			if err := encoder.EncodeKeyval(key, value); err != nil {
+		// Go randomises map iteration order, so ranging over the record
+		// directly emits the same input in a different field order on every
+		// run. Sort the keys: logfmt-to-json already produces alphabetical
+		// output, because encoding/json sorts map keys on marshal, so this
+		// makes both directions agree and a round trip stable.
+		keys := make([]string, 0, len(record))
+		for key := range record {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+
+		for _, key := range keys {
+			if err := encoder.EncodeKeyval(key, record[key]); err != nil {
 				fmt.Fprintf(os.Stderr, "Error encoding logfmt: %v\n", err)
 				os.Exit(1)
 			}
@@ -54,6 +66,9 @@ Usage:
 Overview:
   json-to-logfmt reads a JSON array of objects from stdin and outputs
   logfmt-formatted lines. Each object in the array becomes one logfmt line.
+
+  Fields are emitted in alphabetical order by key, so the same input always
+  produces byte-identical output.
 
 Flags:
   -h, -help    show help
