@@ -132,6 +132,20 @@ dist: clean
 	@echo "  DIST    $(PACKAGE)-$(VERSION).tar.gz"
 	$(Q)git archive --format=tar --prefix=$(PACKAGE)-$(VERSION)/ HEAD | gzip -9 > $(PACKAGE)-$(VERSION).tar.gz
 
+# Release targets
+#
+#   make artifact VERSION=3.0.0   build and gate the release. No side effects
+#                                 outside target/. This is what Claude runs.
+#   make deploy   VERSION=3.0.0   the above, then sign, upload, tag and push.
+#                                 The GPG passphrase prompt is the authorisation.
+.PHONY: artifact
+artifact:
+	$(Q)tools/release/release.sh $(VERSION)
+
+.PHONY: deploy
+deploy:
+	$(Q)tools/release/release.sh $(VERSION) --publish
+
 # Debian packaging targets
 .PHONY: package
 package:
@@ -169,6 +183,10 @@ help:
 	@echo ""
 	@echo "Test targets:"
 	@echo "  test, check         Run all tests"
+	@echo ""
+	@echo "Release targets:"
+	@echo "  artifact VERSION=X.Y.Z   Build and gate a release (no side effects)"
+	@echo "  deploy   VERSION=X.Y.Z   Build, gate, sign, upload, tag and push"
 	@echo ""
 	@echo "Install targets:"
 	@echo "  install             Install to $(prefix) (default: /usr/local)"
