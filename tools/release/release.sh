@@ -20,6 +20,7 @@ cd "$REPO"
 PACKAGE=json-toolkit
 DISTRIBUTION=noble
 PPA_NAME="${PPA_NAME:-ppa:code-faster/ppa}"
+ARCHES="amd64 arm64"   # what Launchpad builds for this PPA
 PPA_OWNER=code-faster
 PPA_REPO=ppa
 PPA_INDEX="https://ppa.launchpadcontent.net/${PPA_OWNER}/${PPA_REPO}/ubuntu/dists/${DISTRIBUTION}/main/binary-amd64/Packages.gz"
@@ -70,11 +71,16 @@ else
   ok "tag v$VERSION is free"
 fi
 
-gocache=$(go env GOCACHE 2>/dev/null || true)
-if [ -z "$gocache" ] || ! mkdir -p "$gocache" 2>/dev/null || ! [ -w "$gocache" ]; then
-  export GOCACHE="$TMPDIR/gocache"; mkdir -p "$GOCACHE"
-  warn "default GOCACHE unwritable, using $GOCACHE"
-fi
+# The toolchain gate downloads a Go release into GOPATH, and the sumdb cache
+# lives there too, so both GOCACHE and GOPATH have to be writable.
+for var in GOCACHE GOPATH; do
+  dir=$(go env "$var" 2>/dev/null || true)
+  if [ -z "$dir" ] || ! mkdir -p "$dir" 2>/dev/null || ! [ -w "$dir" ]; then
+    export "$var"="$TMPDIR/${var,,}"; mkdir -p "${!var}"
+    warn "default $var unwritable, using ${!var}"
+  fi
+done
+export GOMODCACHE="$GOPATH/pkg/mod"
 
 command -v dpkg-buildpackage >/dev/null || die "dpkg-buildpackage missing (install dpkg-dev)"
 command -v curl >/dev/null || die "curl missing"
@@ -90,7 +96,40 @@ make test >"$OUT/test.log" 2>&1 || { tail -20 "$OUT/test.log"; die "test suite f
 ok "test suite passed"
 
 dpkg-checkbuilddeps 2>"$OUT/builddeps.log" || { cat "$OUT/builddeps.log"; die "unsatisfied build-deps"; }
-ok "build-deps satisfied"
+ok "build-deps satisfied on this machine"
+
+# ------------------------------- gate 3: build as the buildd will build it
+# The build above used whatever Go is on this machine (1.26 via the longsleep
+# PPA) for amd64 only. Launchpad uses the Go that noble ships, on every arch
+# in ARCHES. Both differences are invisible locally until the remote build
+# fails, so reproduce them here where the feedback is seconds not minutes.
+info "Gate 3: compile as the buildd will"
+NOBLE_GO_PKG=$(rmadison -u ubuntu -s "$DISTRIBUTION" golang-go 2>/dev/null | awk -F'|' 'NR==1 {gsub(/ /,"",$2); print $2}')
+if [ -z "$NOBLE_GO_PKG" ]; then
+  die "could not ask the archive which Go $DISTRIBUTION ships.
+       This gate must not pass silently; set RELEASE_SKIP_TOOLCHAIN_GATE=1 to override."
+fi
+GO_MM=$(printf '%s' "$NOBLE_GO_PKG" | sed 's/^[0-9]*://; s/[^0-9.].*//; s/^\([0-9]*\.[0-9]*\).*/\1/')
+ok "$DISTRIBUTION ships golang-go $NOBLE_GO_PKG (Go $GO_MM)"
+
+if [ "${RELEASE_SKIP_TOOLCHAIN_GATE:-}" = 1 ]; then
+  warn "toolchain gate skipped by request"
+else
+  export GOTOOLCHAIN="go${GO_MM}.0"
+  if ! go version >/dev/null 2>"$OUT/toolchain.log"; then
+    cat "$OUT/toolchain.log"
+    die "could not obtain Go $GO_MM toolchain (needs network on first run)"
+  fi
+  ok "using $(go version | awk '{print $3}') to match $DISTRIBUTION"
+  for arch in $ARCHES; do
+    for f in src/*.go; do
+      GOOS=linux GOARCH="$arch" go build -o /dev/null "$f" 2>"$OUT/gate3.log" \
+        || { cat "$OUT/gate3.log"; die "$(basename "$f") does not compile for $arch on Go $GO_MM"; }
+    done
+    ok "all Go sources compile for $arch"
+  done
+  unset GOTOOLCHAIN
+fi
 
 # -------------------------------------------------------- assemble sources
 info "Assemble source tree"
@@ -194,11 +233,13 @@ info "Gate 2: dependency resolvability"
 DEPENDS=$(dpkg-deb -f "$DEB" Depends)
 say "  $DEPENDS"
 missing=""
+allnames=""
 # Split on commas; take the first alternative; drop version constraints and
 # arch qualifiers. python3:any is an arch-qualified real package, not a typo.
 while IFS= read -r dep; do
   name=$(printf '%s' "$dep" | sed 's/|.*//; s/(.*)//; s/:[a-z0-9]*$//' | tr -d ' ')
   [ -n "$name" ] || continue
+  allnames="$allnames $name"
   # Capture first, then match. `apt-cache ... | grep -q` looks right but is a
   # trap: grep -q exits at the first match, apt-cache takes SIGPIPE, and under
   # `set -o pipefail` the pipeline reports 141. Every lookup then "fails".
@@ -222,7 +263,40 @@ if [ -n "$missing" ]; then
   for m in $missing; do say "  ${RED}unresolvable:${NC} $m"; done
   die "dependencies that no configured suite can satisfy:$missing"
 fi
-ok "every dependency resolves"
+ok "every dependency resolves on this machine"
+
+# This machine carries the longsleep Go PPA, Mint's repos and several others,
+# so "resolves here" is weaker than "resolves in noble". Ask the archive.
+# A dependency satisfiable only from a PPA installs fine locally and leaves
+# every other noble user with an uninstallable package -- which is exactly
+# how python3-logfmt survived review.
+uniq_names=$(printf '%s\n' $allnames | sort -u | tr '\n' ' ')
+mad=$(rmadison -u ubuntu -s "$DISTRIBUTION,$DISTRIBUTION-updates,$DISTRIBUTION-security" $uniq_names 2>/dev/null || true)
+if [ -z "$mad" ]; then
+  die "could not reach the archive to confirm $DISTRIBUTION has these packages.
+       This gate must not pass silently; set RELEASE_SKIP_ARCHIVE_GATE=1 to override."
+fi
+notinsuite=""
+archgap=""
+for n in $uniq_names; do
+  # Trim into a scratch variable, never into $1: assigning to a field makes
+  # awk rebuild $0 with OFS, which would strip the | separators we still need.
+  rows=$(printf '%s\n' "$mad" | awk -F'|' -v n="$n" '{k=$1; gsub(/ /,"",k)} k==n {print}')
+  if [ -z "$rows" ]; then notinsuite="$notinsuite $n"; continue; fi
+  arches=$(printf '%s\n' "$rows" | awk -F'|' '{print $4}' | tr ',' ' ')
+  for a in $ARCHES; do
+    case " $arches " in
+      *" $a "*) ;;
+      *) case " $arches " in *" all "*) ;; *) archgap="$archgap $n/$a" ;; esac ;;
+    esac
+  done
+done
+if [ -n "$notinsuite" ]; then
+  for n in $notinsuite; do say "  ${RED}not in $DISTRIBUTION:${NC} $n"; done
+  die "dependencies missing from $DISTRIBUTION:$notinsuite"
+fi
+[ -n "$archgap" ] && die "dependencies missing on some build arch:$archgap"
+ok "every dependency exists in $DISTRIBUTION for $ARCHES"
 
 # -------------------------------------------------------- source package
 info "Build the source package"
