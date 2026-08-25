@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
-
+#
+# SUPERSEDED by tools/release/release.sh -- use `make deploy VERSION=X.Y.Z`.
+#
+# This script's docker phases tested `make install` from the repo rather than
+# the built package, so they were blind to the packaging bug that would have
+# shipped 2.0.6 without its logfmt tools. The replacement builds a real .deb
+# and asserts on its payload instead. Kept only so nothing that still calls
+# this path breaks silently; delete it whenever you like.
+#
 set -euo pipefail
+
+if [ "${JSON_TOOLKIT_ALLOW_LEGACY_RELEASE:-}" != 1 ]; then
+    echo "release.sh is superseded. Use:  make deploy VERSION=X.Y.Z" >&2
+    echo "(set JSON_TOOLKIT_ALLOW_LEGACY_RELEASE=1 to run this anyway)" >&2
+    exit 1
+fi
 
 # ===== LOGGING SETUP =====
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
