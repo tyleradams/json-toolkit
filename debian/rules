@@ -2,13 +2,27 @@
 
 %:
 	dh $@
-DESTDIR=debian/json-toolkit
+DESTDIR=$(CURDIR)/debian/json-toolkit
 export DESTDIR
 prefix=/usr
 export prefix
+
+# Go binaries build from the vendored tree: no network, no module cache.
+GO111MODULE=on
+export GO111MODULE
+GOFLAGS=-mod=vendor
+export GOFLAGS
+GOPROXY=off
+export GOPROXY
+GOCACHE=$(CURDIR)/.gocache
+export GOCACHE
+
 override_dh_strip:
 	echo don\'t strip
-override_dh_auto_build:
-	echo don\'t build yet
+# dwz cannot process Go binaries (compressed .debug_abbrev sections).
+override_dh_dwz:
+	echo skipping dwz: Go binaries are not dwz-compatible
+override_dh_auto_test:
+	echo tests run in release.sh, not at package build time
 override_dh_auto_install:
 	make install

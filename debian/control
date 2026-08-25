@@ -5,7 +5,6 @@ Maintainer: Tyler Adams <tyler@blitzblitzblitz.com>
 Build-Depends: debhelper-compat (= 12),
                dh-sequence-python3,
                golang-go,
-               golang-github-go-logfmt-logfmt-dev,
                python3-all
 Standards-Version: 4.6.0
 Homepage: https://github.com/tyleradams/json-toolkit

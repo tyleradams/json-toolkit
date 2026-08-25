@@ -136,8 +136,7 @@ dist: clean
 .PHONY: package
 package:
 	@echo "  PACKAGE Building Debian source package for $(VERSION)"
-	$(Q)$(MKDIR_P) $(BUILDDIR)/bin
-	$(Q)$(MAKE) -C src
+	$(Q)$(MKDIR_P) $(BUILDDIR)
 	@echo "  GBP     Generating debian/changelog from git"
 	$(Q)gbp dch --new-version=$(VERSION) --debian-tag='v%(version)s' --spawn-editor=never --git-author --distribution=noble 2>/dev/null || \
 		(echo "$(PACKAGE) ($(VERSION)) noble; urgency=medium" > debian/changelog && \
@@ -145,7 +144,10 @@ package:
 		 echo "  * Release $(VERSION)" >> debian/changelog && \
 		 echo "" >> debian/changelog && \
 		 echo " -- $(shell git config user.name) <$(shell git config user.email)>  $(shell date -R)" >> debian/changelog)
-	$(Q)tar czf $(BUILDDIR)/$(PACKAGE)_$(VERSION).orig.tar.gz src --transform "s#src#$(PACKAGE)-$(VERSION)#"
+	$(Q)tar czf $(BUILDDIR)/$(PACKAGE)_$(VERSION).orig.tar.gz \
+		--exclude=src/json-diff \
+		--transform "s#^#$(PACKAGE)-$(VERSION)/#" \
+		Makefile src go.mod go.sum vendor README.md LICENSE
 	$(Q)cd $(BUILDDIR) && tar xf $(PACKAGE)_$(VERSION).orig.tar.gz
 	$(Q)cp -r debian $(BUILDDIR)/$(PACKAGE)-$(VERSION)/debian
 	$(Q)cd $(BUILDDIR)/$(PACKAGE)-$(VERSION) && debuild -S -sa -d -nc -k"$(DEBSIGN_KEY)"
